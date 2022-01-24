@@ -1,1 +1,1 @@
-# Pigs-on-the-moon 1
+# Pigs-on-the-moon
