@@ -2,8 +2,8 @@
 #include <string>
 #include <tuple>
 #include "hex.hpp"
-#include "construction.hpp"
-#include "base.hpp"
+#include "..\constructions\construction.hpp"
+#include "..\constructions\base.hpp"
 #include <vector>
 #include <map>
 #include <tuple>

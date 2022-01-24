@@ -1,5 +1,5 @@
 #pragma once
-#include "hex.hpp"
+#include "map\hex.hpp"
 
 class Vehicle {
 public:
