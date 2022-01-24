@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "..\map\hex.hpp"
-#include "..\vehicle.hpp"
+#include "..\actors\vehicle.hpp"
 
 class Construction {
 public:

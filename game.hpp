@@ -2,9 +2,9 @@
 #include <tuple>
 #include <vector>
 #include <string>
-#include "vehicle.hpp"
+#include "actors\vehicle.hpp"
 #include "map\map.hpp"
-#include "player.hpp"
+#include "actors\player.hpp"
 using namespace std;
 
 class Game
