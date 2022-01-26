@@ -3,6 +3,7 @@
 #include "modules/game.h"
 
 int main() {
+
     Client client;
     std::cout << client.Login("test2") << '\n';
     std::cout << client.Map() << '\n';

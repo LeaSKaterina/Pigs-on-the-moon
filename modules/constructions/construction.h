@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "../map/hex.h"
 #include "../actors/vehicle.h"
+#include "../map/hex.h"
 
 class Construction {
 private:
@@ -11,7 +11,9 @@ private:
     int id;
 
 public:
-    virtual void Play(Vehicle *);
+    virtual void Play(Vehicle *) = 0;
+
+    virtual ~Construction();
 
     explicit Construction(std::vector<Hex *> &basis);
 };

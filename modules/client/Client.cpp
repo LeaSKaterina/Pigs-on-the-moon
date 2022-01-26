@@ -57,7 +57,7 @@ void Client::SendRequest(Action action, const std::string& msg) const {
 
 Response Client::GetAnswer() const {
     auto result = Result(GetIntFromServer());
-    int size = Result(GetIntFromServer());
+    int size = GetIntFromServer();
 
     std::unique_ptr<char[]> c_msg(new char[size + 1]);
     c_msg[size] = '\0';
@@ -141,6 +141,6 @@ Response Client::Shoot(int vehicle_id, int x, int y, int z) const {
 }
 
 std::ostream &operator<<(std::ostream &out, const Response &response) {
-    out << "Response {result : " << response.result << ", answer : " << response.answer << " }";
+    out << "Response {result : " << (int)response.result << ", answer : " << response.answer << " }";
     return out;
 }

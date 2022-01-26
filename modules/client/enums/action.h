@@ -1,4 +1,4 @@
-enum Action {
+enum class Action {
     LOGIN = 1,
     LOGOUT = 2,
     MAP = 3,

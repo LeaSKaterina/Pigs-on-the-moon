@@ -1,4 +1,4 @@
-enum Result {
+enum class Result {
     OKEY = 0,
     BAD_COMMAND = 1,
     ACCESS_DENIED = 2,
