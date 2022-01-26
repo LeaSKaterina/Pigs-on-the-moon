@@ -1,7 +1,8 @@
 #ifndef PIGS_ON_THE_MOON_HEX_H
 #define PIGS_ON_THE_MOON_HEX_H
 
-//#pragma once
+#pragma once
+
 #include <cstdlib>
 #include <tuple>
 
@@ -16,16 +17,25 @@ private:
 public:
 
     Hex(int x, int y, int z);
+
     // void Init(int x, int y, int z);
     bool IsEmpty() const;
+
     bool IsSpecial() const;
-    const std::tuple<int, int, int>& GetCoordinates() const;
+
+    const std::tuple<int, int, int> &GetCoordinates() const;
+
     bool Occupy();
+
     void Free();
-    static int GetDistance (Hex& f, Hex& s);
+
+    static int GetDistance(Hex &f, Hex &s);
+
     void SetOwnerId(int id);
-    bool operator<(const Hex& rhs) const;
-    bool operator==(const Hex& rhs) const;
+
+    bool operator<(const Hex &rhs) const;
+
+    bool operator==(const Hex &rhs) const;
 };
 
 

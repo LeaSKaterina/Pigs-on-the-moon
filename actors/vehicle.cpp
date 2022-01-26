@@ -1,4 +1,3 @@
-//#pragma once
 #include "vehicle.h"
 #include "..\map\hex.h"
 
