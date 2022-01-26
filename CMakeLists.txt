@@ -9,4 +9,7 @@ link_libraries(ws2_32)
 set(CLIENT
         modules/client/Client.cpp)
 
-add_executable(Pigs_on_the_moon main.cpp ${CLIENT})
+include_directories(libs/json-3.10.5/include)
+
+add_executable(Pigs_on_the_moon main.cpp ${CLIENT} )
+#target_include_directories(Pigs_on_the_moon PUBLIC include/)
