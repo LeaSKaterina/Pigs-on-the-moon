@@ -1,6 +1,3 @@
-#ifndef PIGS_ON_THE_MOON_GAME_H
-#define PIGS_ON_THE_MOON_GAME_H
-
 #pragma once
 
 #include <tuple>
@@ -8,14 +5,14 @@
 #include <string>
 #include "actors\vehicle.h"
 #include "map\map.h"
-#include "actors\player.h"a
+#include "actors\player.h"
 
 using namespace std;
 
 class Game {
 private:
     vector<int> state;
-    vector <vector<Vehicle *>> vehicles;
+    vector<vector<Vehicle *>> vehicles;
 
     vector<int> captures;
     vector<int> kills;
@@ -27,7 +24,7 @@ private:
     int numPlayers;
     int currentPlayer;
 
-    vector <vector<int>> attackMatrix; // {"id" : "whom attack"}
+    vector<vector<int>> attackMatrix; // {"id" : "whom attack"}
     Map *map;
 
     Player *player;
@@ -41,9 +38,9 @@ public:
 
     void InitMap(int size);
 
-    void AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn);
+    void AddVehicle(int playerId, Type type, tuple<int, int, int> spawn);
 
-    void AddBase(vector <tuple<int, int, int>> &points);
+    void AddBase(vector<tuple<int, int, int>> &points);
 
     void InitPlayer(int id, string name, string password = "");
 
@@ -61,6 +58,3 @@ public:
     // get action
 
 };
-
-
-#endif //PIGS_ON_THE_MOON_GAME_H

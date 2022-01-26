@@ -28,7 +28,7 @@ bool Vehicle::Move(Hex *newPos) {
 
 int Vehicle::Shoot(Vehicle *v) { // вернет сколько очков заработал
     if (IsEnemy(v))
-        return v->GetHit(this->Damage);
+        return v->GetHit(this->damage);
     return 0;
 }
 
@@ -65,14 +65,14 @@ void Vehicle::Respawn() {
     capturePoints = 0;
 }
 
-int Vehicle::GetHit(int damage = 1) {
+int Vehicle::GetHit(int damage) {
     this->health -= damage;
     if (health <= 0)
         return destructionPoints;
     return 0;
 }
 
-bool Vehicle::IsEnemy(Vehicle *v) {
+bool Vehicle::IsEnemy(Vehicle *v) const {
     return this->playerId != v->playerId;
 }
 

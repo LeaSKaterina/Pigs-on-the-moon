@@ -4,7 +4,7 @@ Construction::Construction(std::vector<Hex *> &basis) {
     id = counter;
     counter++;
     for (auto &h: basis) {
-        h->set_owner_id(id);
+        h->SetOwnerId(id);
     }
 }
 

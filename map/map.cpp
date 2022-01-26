@@ -1,7 +1,5 @@
 #include "map.h"
-#include <string>
 #include "..\constructions\base.h"
-#include <map>
 
 Map::Map(int size) {
     this->size = size;

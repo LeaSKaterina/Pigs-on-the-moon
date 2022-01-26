@@ -1,6 +1,3 @@
-#ifndef PIGS_ON_THE_MOON_PLAYER_H
-#define PIGS_ON_THE_MOON_PLAYER_H
-
 #pragma once
 
 #include <string>
@@ -21,6 +18,3 @@ public:
 
     int GetId() const;
 };
-
-
-#endif //PIGS_ON_THE_MOON_PLAYER_H

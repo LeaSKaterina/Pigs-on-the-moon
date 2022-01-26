@@ -16,9 +16,9 @@ void Game::InitMap(int size) {
     map = new Map(size);
 }
 
-void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
+void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
     Vehicle *t = new Vehicle(type, playerId);
-    t->initSpawn(map->get(spawn));
+    t->InitSpawn(map->Get(spawn));
     vehicles[playerId].push_back(t);
 }
 
@@ -26,11 +26,11 @@ void Game::AddBase(vector <tuple<int, int, int>> &points) {
     map->AddBase(points);
 }
 
-void Game::InitPlayer(int id, string name, string password = "") {
+void Game::InitPlayer(int id, string name, string password) {
     player = new Player(id, name, password);
 }
 
-void Game::InitVariables(int playersNum = 3) {
+void Game::InitVariables(int playersNum) {
     numPlayers = playersNum;
     numTurns = numRounds * numPlayers;
     currentTurn = 0;

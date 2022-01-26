@@ -1,6 +1,3 @@
-#ifndef PIGS_ON_THE_MOON_HEX_H
-#define PIGS_ON_THE_MOON_HEX_H
-
 #pragma once
 
 #include <cstdlib>
@@ -19,6 +16,7 @@ public:
     Hex(int x, int y, int z);
 
     // void Init(int x, int y, int z);
+
     bool IsEmpty() const;
 
     bool IsSpecial() const;
@@ -37,6 +35,3 @@ public:
 
     bool operator==(const Hex &rhs) const;
 };
-
-
-#endif //PIGS_ON_THE_MOON_HEX_H

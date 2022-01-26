@@ -1,12 +1,14 @@
-#ifndef PIGS_ON_THE_MOON_VEHICLE_H
-#define PIGS_ON_THE_MOON_VEHICLE_H
-
 #pragma once
 
 #include "..\map\hex.h"
 
+enum Type {
+    MediumTank, LightTank, HeavyTank, AtSpg, Spg
+};
+
 class Vehicle {
 private:
+
     int playerId;
     int health;
     int destructionPoints;    // Очки за уничтожение
@@ -19,12 +21,9 @@ private:
 
     int GetHit(int damage = 1);
 
-    bool IsEnemy(Vehicle *v);
+    bool IsEnemy(Vehicle *v) const;
 
 public:
-    enum Type {
-        MediumTank, LightTank, HeavyTank, AtSpg, Spg
-    };
 
     Vehicle(Type type, int playerId);
 
@@ -46,5 +45,3 @@ public:
 
     void Respawn();
 };
-
-#endif //PIGS_ON_THE_MOON_VEHICLE_H
