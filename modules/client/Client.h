@@ -5,8 +5,8 @@
 #include <iostream>
 #include <memory>
 #include <valarray>
-#include "./constants/Action.h"
-#include "constants/Result.h"
+#include "./enums/action.h"
+#include "./enums/result.h"
 
 struct Response{
     Result result;

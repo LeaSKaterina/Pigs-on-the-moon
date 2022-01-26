@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../../map/hex.h"
+#include "../map/hex.h"
 #include "../actors/vehicle.h"
 
 class Construction {

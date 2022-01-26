@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../map/hex.h"
+#include "../map/hex.h"
 
 enum Type {
     MediumTank, LightTank, HeavyTank, AtSpg, Spg
