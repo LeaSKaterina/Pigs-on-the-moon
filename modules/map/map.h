@@ -3,7 +3,7 @@
 #include <vector>
 #include <tuple>
 #include "hex.h"
-#include "..\constructions\construction.h"
+#include "../constructions/construction.h"
 #include <map>
 
 using namespace std;

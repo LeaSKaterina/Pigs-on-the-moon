@@ -4,3 +4,6 @@ i.txt
 test*
 cmake-build-debug
 .gitignore
+main.cpp
+CMakeLists.txt
+.idea

@@ -1,5 +1,5 @@
 #include "vehicle.h"
-#include "..\map\hex.h"
+#include "../../map/hex.h"
 
 Vehicle::Vehicle(Type type, int playerId) {
     switch (type) {
