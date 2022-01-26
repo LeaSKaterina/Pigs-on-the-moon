@@ -1,6 +1,6 @@
 #pragma once
 
-//#include <cstdlib>
+#include <cstdlib>
 #include <tuple>
 
 struct Hex {
@@ -14,8 +14,6 @@ private:
 public:
 
     Hex(int x, int y, int z);
-
-    // void Init(int x, int y, int z);
 
     bool IsEmpty() const;
 
