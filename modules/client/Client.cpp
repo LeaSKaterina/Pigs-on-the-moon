@@ -45,19 +45,13 @@ void Client::SendRequest(Action action, const std::string& msg) const {
     for (int i = 0; i < sizeMsg; i++) {
         buffer[i + 8] = msg[i];
     }
-//    for (int i = 0; i < 8; ++i) {           //Debug code
-//        std::cout << int(buffer[i]) << ' ';
-//    }
-//    for (int i = 8; i < 8 + sizeMsg; ++i) {
-//        std::cout << buffer[i];
-//    }
-//    std::cout << '\n';                     //End debug code
+
     send(server, buffer.get(), 8 + sizeMsg, 0);
 }
 
 Response Client::GetAnswer() const {
     auto result = Result(GetIntFromServer());
-    unsigned int size = GetIntFromServer();
+    int size = GetIntFromServer();
 
 
     std::unique_ptr<char[]> cMsg(new char[size + 1]);
@@ -74,7 +68,7 @@ int Client::GetIntFromServer() const {
 
     int result = 0;
     for (int i = 0; i < 4; ++i) {
-        result += (unsigned char)buffer[i] * std::pow(2, i * 8);
+        result += (unsigned char)buffer[i] * (int)std::pow(2, i * 8);
     }
     return result;
 }

@@ -26,7 +26,7 @@ private:
     SOCKET server; // server descriptor
     const int PROTOCOL = AF_INET; //socket config
     const int SOCKET_TYPE = SOCK_STREAM; // socket config
-    WSAData WSAData;//info about connect
+    WSAData WSAData; //info about connect
 
     void SendRequest(Action action, const std::string& msg) const;
     int GetIntFromServer() const;
