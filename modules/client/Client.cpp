@@ -56,8 +56,12 @@ Response Client::GetAnswer() const {
 
     std::unique_ptr<char[]> cMsg(new char[size + 1]);
     cMsg[size] = '\0';
-    if (size != 0) recv(server, cMsg.get(), size, 0);
-    nlohmann::json ans (cMsg.get());
+    if (size) recv(server, cMsg.get(), size, 0);
+    nlohmann::json ans = size?
+            nlohmann::json::parse(cMsg.get())
+            : "";
+//    nlohmann::json ans(cMsg.get());
+    std::cerr << "start: " << cMsg.get() << " :end" << std::endl;
 
     return {result, ans};
 }
