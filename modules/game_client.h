@@ -1,12 +1,8 @@
-//
-// Created by Alex on 27.01.2022.
-//
-
 #ifndef PIGS_ON_THE_MOON_GAME_CLIENT_H
 #define PIGS_ON_THE_MOON_GAME_CLIENT_H
 
 #include "client/Client.h"
-#include "game.h"
+#include "game/game.h"
 
 class GameClient {
 public:
