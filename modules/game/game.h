@@ -38,7 +38,7 @@ public:
 
     void InitMap(int size);
 
-    void AddVehicle(int playerId, Type type, tuple<int, int, int> spawn);
+    void AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn);
 
     void AddBase(vector<tuple<int, int, int>> &points);
 

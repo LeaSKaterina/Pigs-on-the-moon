@@ -6,18 +6,14 @@
 
 class GameClient {
 public:
-    GameClient() {
-        game = new Game();
-        client = new Client();
-    }
+    GameClient();
+
     bool initGame(const std::string& name, const std::string& password = "",
                   const std::string& game_name="", int num_turns = 45, int num_players = 3,
                   bool is_observer = false);
-    ~GameClient() {
-        client->Logout();
-        delete game;
-        delete client;
-    }
+
+    ~GameClient();
+
 private:
     Game* game;
     Client* client;

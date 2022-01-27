@@ -16,7 +16,7 @@ void Game::InitMap(int size) {
     map = new Map(size);
 }
 
-void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
+void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
     Vehicle *t = new Vehicle(type, playerId);
     t->InitSpawn(map->Get(spawn));
     vehicles[playerId].push_back(t);
