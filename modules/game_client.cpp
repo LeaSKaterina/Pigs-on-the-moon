@@ -8,30 +8,30 @@ bool GameClient::initGame(const string &name, const string &password, const stri
         return false;
 
     int id = answer.answer.value("idx", -1);
-    game->InitPlayer(id, name, password);
+    this->game->InitPlayer(id, name, password);
 
     // Map
     answer = client->Map();
-    auto map_info = answer.answer.value("Map", nlohmann::json(""));
+    nlohmann::json& map_info = answer.answer;
     int size = map_info.value("size", -1);
     game->InitMap(size);
 
-    auto spawn_info = map_info.value("content", nlohmann::json(""));
-    int index = 0;
-    for (auto& player : spawn_info.items()) {
-        auto points = player.value().value("medium_tank", nlohmann::json(""));
-        for (auto& i : points){
-            game->AddVehicle(index,
-                             Vehicle::Type::MediumTank,
-                             make_tuple(
-                                     i.value("x", -1),
-                                     i.value("y", -1),
-                                     i.value("z", -1)
-                             ));
-        }
-    }
+//    auto spawn_info = map_info.value("spawn_points", nlohmann::json(""));
+//    int index = 0;
+//    for (auto& player : spawn_info.items()) {//"medium_tank". What about others? I see copy/paste > 5 * 10 = 50 code rows.
+//        auto points = player.value().value("medium_tank", nlohmann::json(""));// I think tanks info need to take from gameState()
+//        for (auto& i : points){
+//            game->AddVehicle(index,
+//                             Vehicle::Type::MediumTank,
+//                             make_tuple(
+//                                     i.value("x", -1),
+//                                     i.value("y", -1),
+//                                     i.value("z", -1)
+//                             ));
+//        }
+//    }
 
-    auto content_info = map_info.value("spawn_points", nlohmann::json(""));
+    auto content_info = map_info.value("content", nlohmann::json(""));
     auto base_info = content_info.value("base", nlohmann::json(""));
     vector<tuple<int, int, int>> base_points;
     for (auto& point : base_info) {
@@ -48,12 +48,12 @@ bool GameClient::initGame(const string &name, const string &password, const stri
 }
 
 GameClient::~GameClient() {
-    client->Logout();
-    delete game;
-    delete client;
+    this->client->Logout();
+    delete this->game;
+    delete this->client;
 }
 
 GameClient::GameClient() {
-    game = new Game();
-    client = new Client();
+    this->game = new Game();
+    this->client = new Client();
 }

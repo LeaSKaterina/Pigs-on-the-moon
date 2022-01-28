@@ -1,4 +1,4 @@
-#include "Client.h"
+#include "client.h"
 
 Client::Client() {
     if(FAILED (WSAStartup(MAKEWORD(2, 1), &this->WSAData))){// first - version, second create info
@@ -56,7 +56,7 @@ Response Client::GetAnswer() const {
 
     std::unique_ptr<char[]> cMsg(new char[size + 1]);
     cMsg[size] = '\0';
-    if (size) recv(server, cMsg.get(), size, 0);
+    if (size) recv(server, cMsg.get(), size, MSG_WAITALL);
     nlohmann::json ans = size?
             nlohmann::json::parse(cMsg.get())
             : "";

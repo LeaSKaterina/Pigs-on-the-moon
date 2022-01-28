@@ -1,7 +1,7 @@
 #ifndef PIGS_ON_THE_MOON_GAME_CLIENT_H
 #define PIGS_ON_THE_MOON_GAME_CLIENT_H
 
-#include "client/Client.h"
+#include "client/client.h"
 #include "game/game.h"
 
 class GameClient {
