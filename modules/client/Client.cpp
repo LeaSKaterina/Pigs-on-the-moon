@@ -61,7 +61,7 @@ Response Client::GetAnswer() const {
             nlohmann::json::parse(cMsg.get())
             : "";
 //    nlohmann::json ans(cMsg.get());
-    std::cerr << "start: " << cMsg.get() << " :end" << std::endl;
+//    std::cerr << "start: " << cMsg.get() << " :end" << std::endl;
 
     return {result, ans};
 }
@@ -81,8 +81,10 @@ Response Client::Login(const std::string& name, const std::string& password, con
     nlohmann::json json;
     json["name"] = name;
     json["password"] = password;
-    json["game"] = game;
-    json["num_turns"] = num_turns;
+    if(!game.empty())
+        json["game"] = game;
+    if(num_turns != 0)
+        json["num_turns"] = num_turns;
     json["num_players"] = num_players;
     json["is_observer"] = is_observer;
 
@@ -117,7 +119,9 @@ Response Client::Turn() const {
 }
 
 Response Client::Chat(const std::string& msg) const {
-    this->SendRequest(Action::CHAT, msg);
+    nlohmann::json json;
+    json["message"] = msg;
+    this->SendRequest(Action::CHAT, json.dump());
     return this->GetAnswer();
 }
 
@@ -153,6 +157,6 @@ Response Client::Shoot(const std::string &msg) const {
 }
 
 std::ostream &operator<<(std::ostream &out, const Response &response) {
-    out << "Response {result : " << (int)response.result << ", answer : " << response.answer << " }";
+    out << "Response {result : " << (int)response.result << ", answer :\n" << response.answer.dump(2) << " }";
     return out;
 }

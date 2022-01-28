@@ -36,7 +36,7 @@ public:
     ~Client();
 
     Response Login(const std::string& name, const std::string& password = "",
-                   const std::string& game="", int num_turns = 45, int num_players = 3, bool is_observer = false) const;
+                   const std::string& game="", int num_turns = 0, int num_players = 1, bool is_observer = false) const;
     Response Logout() const;
     Response Map() const;
     Response GameState() const;
