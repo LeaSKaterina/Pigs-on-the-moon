@@ -8,7 +8,13 @@ Vehicle *Game::Find(int parentId, const tuple<int, int, int> &spawn) const {
     return nullptr;
 }
 
-Game::Game() = default;
+
+int Game::GetCustomId(int realId) const { // for 3 players it can be more effective that with std::map
+    for(int id = 0; id < numPlayers; id++)
+        if(playersIdAdapter[id] == realId)
+            return id;
+    return -1;
+}
 
 Game::~Game() {
     // TODO!
@@ -18,7 +24,6 @@ Game::~Game() {
 }
 // Init
 
-// all inits must be called firstly!
 void Game::InitMap(int size) {
     map = new Map(size);
 }
@@ -32,10 +37,19 @@ void Game::InitVariables(int playersNum) {
     numTurns = numRounds * numPlayers;
     currentTurn = 0;
 
-    vehicles.resize(playersNum + 1);
-    attackMatrix.resize(playersNum + 1);
-    captures.resize(playersNum + 1);
-    kills.resize(playersNum + 1);
+//    playersNum++; // Think we can do this without += 1.
+    vehicles.resize(playersNum);
+    attackMatrix.resize(playersNum);
+    captures.resize(playersNum);
+    kills.resize(playersNum);
+    playersIdAdapter.resize(playersNum);
+}
+
+void Game::InitPlayersId(const int realId[3]) { // magic const will be fixed later
+    // TODO! if in InitVariables resize without +=1 there i = 0.
+    for(int i = 0; i < numPlayers; i++) {
+        playersIdAdapter[i] = realId[i];
+    }
 }
 
 // Add
@@ -71,6 +85,11 @@ void Game::UpdateAttackMatrix(int playerId, vector<int> attacked) {
 void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     captures[playerId] = capture;
     kills[playerId] = kill;
+}
+
+vector<tuple<Action, int, Hex *>> Game::Play() const {
+    // TODO!
+    return vector<tuple<Action, int, Hex *>>();
 }
 
 // get action

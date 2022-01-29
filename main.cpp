@@ -142,6 +142,13 @@ using namespace std;
 ////    cout << map_in.value("content", json("not_fount"));
 //}
 
+void test_get_map(){
+    tuple<int, int, int> coo = make_tuple(-1, 1, 0);
+    Game g;
+    g.InitMap(5);
+//    g.
+}
+
 int main() {
 
 //    test_json();

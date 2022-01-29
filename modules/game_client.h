@@ -8,6 +8,7 @@ class GameClient {
 public:
     GameClient();
 
+    // must be called once and first.
     bool initGame(const std::string& name, const std::string& password = "",
                   const std::string& game_name="", int num_turns = 45, int num_players = 3,
                   bool is_observer = false);
@@ -20,6 +21,10 @@ public:
 
     ~GameClient();
 
+    [[nodiscard]] bool SendTurn() const;
+
+    void SendAction() const;
+
 private:
 
     // entities
@@ -27,7 +32,7 @@ private:
     Client* client;
 
     // vars
-    bool game_is_finished = false;
+    bool gameIsFinished = false;
 };
 
 
