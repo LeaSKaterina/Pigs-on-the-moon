@@ -61,3 +61,12 @@ GameClient::GameClient() {
     this->game = new Game();
     this->client = new Client();
 }
+
+bool GameClient::GameIsFinished() const {
+    return game_is_finished;
+}
+
+void GameClient::CheckGameState() {
+    // TODO!
+    // change game_is_finished
+}

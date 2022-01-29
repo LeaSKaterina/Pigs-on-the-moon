@@ -12,11 +12,22 @@ public:
                   const std::string& game_name="", int num_turns = 45, int num_players = 3,
                   bool is_observer = false);
 
+    [[nodiscard]] bool GameIsFinished() const;
+
+    void CheckGameState();
+
+//    void CheckGameAction();  Do we really need this?
+
     ~GameClient();
 
 private:
+
+    // entities
     Game* game;
     Client* client;
+
+    // vars
+    bool game_is_finished = false;
 };
 
 

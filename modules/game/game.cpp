@@ -8,22 +8,19 @@ Vehicle *Game::Find(int parentId, const tuple<int, int, int> &spawn) const {
     return nullptr;
 }
 
-Game::Game() {}
+Game::Game() = default;
 
-Game::~Game() {}
+Game::~Game() {
+    // TODO!
+    delete player;
+    delete map;
+    // vehicles?
+}
+// Init
 
+// all inits must be called firstly!
 void Game::InitMap(int size) {
     map = new Map(size);
-}
-
-void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
-    Vehicle *t = new Vehicle(type, playerId);
-    t->InitSpawn(map->Get(spawn));
-    vehicles[playerId].push_back(t);
-}
-
-void Game::AddBase(vector <tuple<int, int, int>> &points) {
-    map->AddBase(points);
 }
 
 void Game::InitPlayer(int id, string name, string password) {
@@ -40,6 +37,20 @@ void Game::InitVariables(int playersNum) {
     captures.resize(playersNum + 1);
     kills.resize(playersNum + 1);
 }
+
+// Add
+
+void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
+    Vehicle *t = new Vehicle(type, playerId);
+    t->InitSpawn(map->Get(spawn));
+    vehicles[playerId].push_back(t);
+}
+
+void Game::AddBase(vector <tuple<int, int, int>> &points) {
+    map->AddBase(points);
+}
+
+// Update
 
 // get state
 void Game::UpdateState(int currTurn, int currPlayer) {

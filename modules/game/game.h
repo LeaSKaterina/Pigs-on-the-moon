@@ -18,18 +18,18 @@ private:
     vector<int> kills;
 
     const int numRounds = 15;
-    int numTurns;
-    int currentTurn;
+    int numTurns{};
+    int currentTurn{};
 
-    int numPlayers;
-    int currentPlayer;
+    int numPlayers{};
+    int currentPlayer{};
 
     vector<vector<int>> attackMatrix; // {"id" : "whom attack"}
-    Map *map;
+    Map *map{};
 
-    Player *player;
+    Player *player{};
 
-    Vehicle *Find(int parentId, const tuple<int, int, int> &spawn) const;
+    [[nodiscard]] Vehicle *Find(int parentId, const tuple<int, int, int> &spawn) const;
 
 public:
     Game();
