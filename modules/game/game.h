@@ -25,11 +25,11 @@ private:
     vector<int> kills;
 
     const int numRounds = 15;
-    int numTurns{};
-    int currentTurn{};
+    int numTurns;
+    int currentTurn;
 
-    int numPlayers{};
-    int currentPlayer{};
+    int numPlayers;
+    int currentPlayer;
 
     vector<vector<int>> attackMatrix; // {"id" : "whom attack"}
     Map *map;

@@ -142,11 +142,22 @@ using namespace std;
 ////    cout << map_in.value("content", json("not_fount"));
 //}
 
-void test_get_map(){
-    tuple<int, int, int> coo = make_tuple(-1, 1, 0);
-    Game g;
-    g.InitMap(5);
-//    g.
+void parse_am() {
+    char matrix_txt[] = R"(
+         {
+            "attack_matrix":
+            {
+              "406":[],
+              "303": [406],
+              "123": [303]
+            }
+         }
+    )";
+    json am = json::parse(matrix_txt);
+    auto am_in = am.value("attack_matrix", json(""));
+    for(auto& pm : am_in) {
+        cout << "|" << pm << "|" << endl;
+    }
 }
 
 int main() {
@@ -154,6 +165,7 @@ int main() {
 //    test_json();
 
 //    parse();
+    parse_am();
 
 //    parse_map_info();
 
