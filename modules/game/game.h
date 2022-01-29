@@ -1,6 +1,7 @@
 #pragma once
 
 #include <tuple>
+#include <map>
 #include <vector>
 #include <string>
 #include "../actors/vehicle.h"
@@ -16,7 +17,7 @@ private:
     vector<vector<Vehicle *>> vehicles;
 
     // new: custom id start from 0 to numPlayers - 1
-    vector<int> playersIdAdapter; // [0, 1, 2] -> [real id 0, ..]
+    map<int, int> playersIdAdapter; // [real id 1, ..]->[0, 1, 2]
 
     // order??
 
@@ -35,9 +36,7 @@ private:
 
     Player *player;
 
-    [[nodiscard]] Vehicle *Find(int parentId, const tuple<int, int, int> &spawn) const;
-
-    int GetCustomId(int realId) const;
+    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const;
 
 public:
     Game() = default;

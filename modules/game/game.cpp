@@ -1,19 +1,11 @@
 #include "game.h"
 
-Vehicle *Game::Find(int parentId, const tuple<int, int, int> &spawn) const {
-    for (auto *p: vehicles[parentId]) {
+Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
+    for (auto *p: vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
     }
     return nullptr;
-}
-
-
-int Game::GetCustomId(int realId) const { // for 3 players it can be more effective that with std::map
-    for(int id = 0; id < numPlayers; id++)
-        if(playersIdAdapter[id] == realId)
-            return id;
-    return -1;
 }
 
 Game::~Game() {
@@ -37,18 +29,15 @@ void Game::InitVariables(int playersNum) {
     numTurns = numRounds * numPlayers;
     currentTurn = 0;
 
-//    playersNum++; // Think we can do this without += 1.
     vehicles.resize(playersNum);
     attackMatrix.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
-    playersIdAdapter.resize(playersNum);
 }
 
-void Game::InitPlayersId(const int realId[3]) { // magic const will be fixed later
-    // TODO! if in InitVariables resize without +=1 there i = 0.
+void Game::InitPlayersId(const int realId[3]) { // magic const will be removed later
     for(int i = 0; i < numPlayers; i++) {
-        playersIdAdapter[i] = realId[i];
+        playersIdAdapter[realId[i]] = i;
     }
 }
 
@@ -57,7 +46,7 @@ void Game::InitPlayersId(const int realId[3]) { // magic const will be fixed lat
 void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
     Vehicle *t = new Vehicle(type, playerId);
     t->InitSpawn(map->Get(spawn));
-    vehicles[playerId].push_back(t);
+    vehicles[playersIdAdapter.at(playerId)].push_back(t);
 }
 
 void Game::AddBase(vector <tuple<int, int, int>> &points) {
@@ -74,17 +63,18 @@ void Game::UpdateState(int currTurn, int currPlayer) {
 
 void Game::UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
                               int capturePoints) {
-    Vehicle *v = Find(parentId, spawn);
+    Vehicle *v = Find(playersIdAdapter.at(parentId), spawn);
     v->Update(health, map->Get(pos), capturePoints);
 }
 
 void Game::UpdateAttackMatrix(int playerId, vector<int> attacked) {
-    attackMatrix[playerId] = move(attacked);
+    attackMatrix[playersIdAdapter.at(playerId)] = move(attacked);
 }
 
 void Game::UpdateWinPoints(int playerId, int capture, int kill) {
-    captures[playerId] = capture;
-    kills[playerId] = kill;
+    int adaptedPlayerId = playersIdAdapter.at(playerId);
+    captures[adaptedPlayerId] = capture;
+    kills[adaptedPlayerId] = kill;
 }
 
 vector<tuple<Action, int, Hex *>> Game::Play() const {
