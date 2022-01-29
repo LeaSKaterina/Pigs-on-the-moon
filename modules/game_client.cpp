@@ -30,8 +30,8 @@ bool GameClient::initGame(const string &name, const string &password, const stri
                                      i.value("y", -1),
                                      i.value("z", -1)
                              ));
-            index++;
         }
+        index++;
     }
 
     auto content_info = map_info.value("content", nlohmann::json(""));

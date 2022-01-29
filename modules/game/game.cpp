@@ -46,7 +46,7 @@ void Game::InitPlayersId(const int realId[3]) { // magic const will be removed l
 void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
     Vehicle *t = new Vehicle(type, playerId);
     t->InitSpawn(map->Get(spawn));
-    vehicles[playersIdAdapter.at(playerId)].push_back(t);
+    vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
 }
 
 void Game::AddBase(vector <tuple<int, int, int>> &points) {
