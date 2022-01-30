@@ -1,4 +1,8 @@
+
 #include "game.h"
+#include "action_controller.h"
+
+using namespace std;
 
 Vehicle *Game::Find(int parentId, const tuple<int, int, int> &spawn) const {
     for (auto *p: vehicles[parentId]) {
@@ -22,7 +26,7 @@ void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spa
     vehicles[playerId].push_back(t);
 }
 
-void Game::AddBase(vector <tuple<int, int, int>> &points) {
+void Game::AddBase(vector<tuple<int, int, int>> &points) {
     map->AddBase(points);
 }
 
@@ -60,6 +64,32 @@ void Game::UpdateAttackMatrix(int playerId, vector<int> attacked) {
 void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     captures[playerId] = capture;
     kills[playerId] = kill;
+}
+
+bool TargetIsAvailable(const tuple<int, int, int> *target) {
+    auto[x, y, z] = *target;
+    return x != -1 && y != -1 && z != -1;
+}
+
+vector<tuple<int, int, Hex *>> Game::Play() {
+    vector<tuple<int, int, Hex *>> res;
+    tuple<int, int, int> target;
+    auto v = vehicles[playersIdAdapter[player->GetId()]];
+
+    for (int i = 0; i < 5; i++) {
+        target = ActionController::getTargetForMove(v[i]->GetCurrentPosition(), map);
+        if (TargetIsAvailable(&target)) {
+            res.emplace_back(101, tanksIdAdapter[i], map->Get(target));
+        } else {
+            target = ActionController::getTargetForShoot(v[i]->GetCurrentPosition(), &attackMatrix, vehicles,
+                                                         playersIdAdapter[player->GetId()]);
+            if (TargetIsAvailable(&target)) {
+                res.emplace_back(102, tanksIdAdapter[i], map->Get(target));
+            }
+        }
+    }
+
+    return res;
 }
 
 // get action

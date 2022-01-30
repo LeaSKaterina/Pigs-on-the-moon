@@ -6,6 +6,8 @@
 #include "../actors/vehicle.h"
 #include "../actors/player.h"
 #include "../map/map.h"
+//#include "../enums/action.h"
+
 
 using namespace std;
 
@@ -13,6 +15,8 @@ class Game {
 private:
     vector<int> state;
     vector<vector<Vehicle *>> vehicles;
+    vector<int> tanksIdAdapter;
+    vector<int> playersIdAdapter;
 
     vector<int> captures;
     vector<int> kills;
@@ -56,5 +60,7 @@ public:
 
     void UpdateWinPoints(int playerId, int capture, int kill);
     // get action
+
+    vector<std::tuple<int, int, Hex*>> Play();
 
 };

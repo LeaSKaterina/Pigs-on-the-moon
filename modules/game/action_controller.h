@@ -2,11 +2,22 @@
 #include "../map/hex.h"
 #include "../map/map.h"
 
-class MoveController {
+class ActionController {
 private:
     static void ModuleDecrement(int &n);
-    static void ReduceModuleBy(int &n, int amount);
+
+    static void ModuleIncrement(int &n);
+
+    static void ReduceModule(int &n, int amount);
 
 public:
-    static Hex* getNextHex(Hex& hex, Map& map);
+    static std::tuple<int, int, int> getTargetForMove(std::tuple<int, int, int> coordinates, Map *map);
+
+    static std::tuple<int, int, int> getNextOnAxis(std::tuple<int, int, int> coordinates, Map *map);
+
+    static std::tuple<int, int, int>
+    getTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> *attackMatrix,
+                      vector<vector<Vehicle *>> vehicles, int playerId);
+
+
 };
