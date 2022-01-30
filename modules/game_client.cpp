@@ -50,6 +50,14 @@ bool GameClient::initGame(const string &name, const string &password, const stri
     return true;
 }
 
+tuple<int, int, int> GameClient::MakePosTuple(nlohmann::json coordinate) {
+    return make_tuple(
+            coordinate.value("x", -1),
+            coordinate.value("y", -1),
+            coordinate.value("z", -1)
+    );
+}
+
 GameClient::~GameClient() {
     client->Logout();
     delete game;
@@ -62,35 +70,72 @@ GameClient::GameClient() {
 }
 
 bool GameClient::GameIsFinished() const {
-    return gameIsFinished;
+    return game->IsFinished();
 }
 
 void GameClient::CheckGameState() {
-    // TODO!
-    // change gameIsFinished there
     auto answer = client->GameState();
+
     // attack matrix
+
     auto am = answer.answer.value("attack_matrix", nlohmann::json(""));
+//    const int vector_size = game->GetNumPlayers();
+    for(auto& pm : am.items()) {
+        // player id = pm.key, vector of attacks = pm.value
+        // to upd : is there a way to do vector without a loop ?
 
-//    for (auto& player : spawn_info.items()) {
-//        auto points = player.value().value("medium_tank", nlohmann::json(""));
-//        for (auto& i : points){
-//            game->AddVehicle(index,
-//                             Vehicle::Type::MediumTank,
-//                             make_tuple(
-//                                     i.value("x", -1),
-//                                     i.value("y", -1),
-//                                     i.value("z", -1)
-//                             ));
-//            index++;
-//        }
-//    }
+        vector<int> v_attacked;
+//        auto& arr_attacked = pm.value();
+        for(int i : pm.value()) {
+            v_attacked.push_back(i);
+        }
+        game->UpdateAttackMatrix(stoi(pm.key()), v_attacked);
+    }
 
-    // current player_turn
-    // finished
-    // players -- id!
+    // current turn | player | finished
+
+    game->UpdateState(
+            answer.answer.value("current_turn", -1),
+            answer.answer.value("current_player_idx", -1),
+            answer.answer.value("finished", 0)
+            );
+
     // vehicles
+
+    auto vehicles = answer.answer.value("vehicles", nlohmann::json(""));
+    for(auto& v : vehicles.items()) {
+        auto& vehicle_info = v.value();
+
+        auto position = vehicle_info.value("position", nlohmann::json(""));
+        auto spawn_position = vehicle_info.value("spawn_position", nlohmann::json(""));
+
+//        cout << "| " << v.key() << " | " << v.value() << " |" << endl;
+        auto pos = MakePosTuple(
+                vehicle_info.value("position", nlohmann::json(""))
+                );
+        auto spawn_pos = MakePosTuple(
+                vehicle_info.value("position", nlohmann::json(""))
+        );
+        game->UpdateVehicleState(
+                vehicle_info.value("player_id", -1),
+                spawn_pos,
+                pos,
+                vehicle_info.value("health", -1),
+                vehicle_info.value("capture_points", -1));
+        // TODO? mb ref in uvs;
+    }
+
     // win_points
+
+    auto win_points = answer.answer.value("win_points", nlohmann::json(""));
+    for(auto& player : vehicles.items()) {
+        auto& win_points_info = player.value();
+        game->UpdateWinPoints(
+                stoi(player.key()),
+                win_points_info.value("capture", 0),
+                win_points_info.value("kill", 0)
+                );
+    }
 }
 
 bool GameClient::SendTurn() const {
@@ -99,6 +144,10 @@ bool GameClient::SendTurn() const {
 }
 
 void GameClient::SendAction() const {
+    // TODO!
+}
+
+void GameClient::InitPlayersId() {
     // TODO!
 }
 

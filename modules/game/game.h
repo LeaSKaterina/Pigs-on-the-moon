@@ -18,6 +18,7 @@ private:
 
     // new: custom id start from 0 to numPlayers - 1
     map<int, int> playersIdAdapter; // [real id 1, ..]->[0, 1, 2]
+    vector<int> tanksIdAdapter; // save real id for server
 
     // order??
 
@@ -30,6 +31,8 @@ private:
 
     int numPlayers;
     int currentPlayer;
+
+    bool isFinished = false;
 
     vector<vector<int>> attackMatrix; // {"id" : "whom attack"}
     Map *map;
@@ -59,7 +62,7 @@ public:
     void AddBase(vector<tuple<int, int, int>> &points);
 
     // get state
-    void UpdateState(int currTurn, int currPlayer);
+    void UpdateState(int currTurn, int currPlayer, bool finished = false);
 
     void UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
                             int capturePoints);
@@ -72,4 +75,10 @@ public:
 
     // get action
     // ...
+
+    // Getters
+
+    [[nodiscard]] int GetNumPlayers() const;
+
+    [[nodiscard]] bool IsFinished() const;
 };

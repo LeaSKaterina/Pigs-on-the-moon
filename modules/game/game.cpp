@@ -56,9 +56,10 @@ void Game::AddBase(vector <tuple<int, int, int>> &points) {
 // Update
 
 // get state
-void Game::UpdateState(int currTurn, int currPlayer) {
+void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     currentTurn = currTurn;
     currentPlayer = currPlayer;
+    isFinished = finished;
 }
 
 void Game::UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
@@ -80,6 +81,14 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
 vector<tuple<Action, int, Hex *>> Game::Play() const {
     // TODO!
     return vector<tuple<Action, int, Hex *>>();
+}
+
+int Game::GetNumPlayers() const {
+    return numPlayers;
+}
+
+bool Game::IsFinished() const {
+    return isFinished;
 }
 
 // get action
