@@ -113,7 +113,7 @@ void GameClient::CheckGameState() {
                 vehicle_info.value("position", nlohmann::json(""))
                 );
         auto spawn_pos = MakePosTuple(
-                vehicle_info.value("position", nlohmann::json(""))
+                vehicle_info.value("spawn_position", nlohmann::json(""))
         );
         game->UpdateVehicleState(
                 vehicle_info.value("player_id", -1),
@@ -127,7 +127,8 @@ void GameClient::CheckGameState() {
     // win_points
 
     auto win_points = answer.answer.value("win_points", nlohmann::json(""));
-    for(auto& player : vehicles.items()) {
+    cerr <<"DEBUG: " << win_points << endl;
+    for(auto& player : win_points.items()) {
         auto& win_points_info = player.value();
         game->UpdateWinPoints(
                 stoi(player.key()),
@@ -157,6 +158,7 @@ void GameClient::SendAction() const {
                 client->Shoot(vehicle_id, x, y, z);
                 break;
             default:
+                cerr << "DEFAULT ACTIVE" << endl;
                 break;
         }
     }

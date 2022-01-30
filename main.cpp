@@ -86,27 +86,36 @@ tuple<int, int, int> MakePosTuple(nlohmann::json&);
 ////    cout << map_in.value("content", json("not_fount"));
 //}
 
-//void parse_am() {
-//    char matrix_txt[] = R"(
-//         {
-//            "attack_matrix":
-//            {
-//              "406":[],
-//              "303": [406, 123],
-//              "123": [303]
-//            }
-//         }
-//    )";
-//    json am = json::parse(matrix_txt);
-//    auto am_in = am.value("attack_matrix", json(""));
-//    for(auto& pm : am_in.items()) {
-//        cout << "|" << pm.key() << "|" << pm.value() << "|" << endl;
-//        cout << "size: " << pm.value().size() << endl;
-//        for(int i : pm.value())
-//            cout << "nex v: " << i << ' ';
-//        cout << endl;
-//    }
-//}
+void parse_am() {
+    char matrix_txt[] = R"(
+         {
+            "win_points":
+            {
+              "406":
+              {
+                "capture":0,
+                "kill":0
+              },
+                 "1239":
+              {
+                "capture":0,
+                "kill":0
+              }
+            }
+         }
+    )";
+    json am = json::parse(matrix_txt);
+    auto am_in = am.value("win_points", json(""));
+    for(auto& pm : am_in.items()) {
+        string key = pm.key();
+        int k_ = stoi(key);
+        cout << "|" << k_ << "|" << pm.value() << "|" << endl;
+        cout << "size: " << pm.value().size() << endl;
+        for(int i : pm.value())
+            cout << "nex v: " << i << ' ';
+        cout << endl;
+    }
+}
 
 int main() {
     GameClient gc;
@@ -121,6 +130,7 @@ int main() {
         gc.SendTurn();
     }
 
+//    parse_am();
 
     cout << "Success";
 }
