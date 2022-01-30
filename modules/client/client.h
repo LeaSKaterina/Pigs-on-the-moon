@@ -46,9 +46,7 @@ public:
     Response Turn() const;
     Response Chat(const std::string& msg) const;
     Response Move(int vehicle_id, int x, int y, int z) const;
-    Response Move(const std::string& msg) const;
     Response Shoot(int vehicle_id, int x, int y, int z) const;
-    Response Shoot(const std::string& msg) const;
 
     static void PrintLogInfo(const std::string& info);
 };

@@ -158,16 +158,6 @@ Response Client::Shoot(int vehicle_id, int x, int y, int z) const {
     return this->GetAnswer();
 }
 
-Response Client::Move(const std::string& msg) const {
-    this->SendRequest(Action::MOVE, msg);
-    return this->GetAnswer();
-}
-
-Response Client::Shoot(const std::string &msg) const {
-    this->SendRequest(Action::SHOOT, msg);
-    return this->GetAnswer();
-}
-
 std::ostream &operator<<(std::ostream &out, const Response &response) {
     out << "Response {result : " << (int)response.result << ", answer :\n" << response.answer.dump(2) << " }\n";
     return out;

@@ -22,7 +22,7 @@ public:
 
     ~GameClient();
 
-    [[nodiscard]] bool SendTurn() const;
+    bool SendTurn() const;
 
     void SendAction() const;
     void InitPlayersId();
