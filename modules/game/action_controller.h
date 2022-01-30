@@ -10,6 +10,9 @@ private:
 
     static void ReduceModule(int &n, int amount);
 
+    static void IncreaseModule(int &n, int amount);
+
+
 public:
     static std::tuple<int, int, int> getTargetForMove(std::tuple<int, int, int> coordinates, Map *map);
 
