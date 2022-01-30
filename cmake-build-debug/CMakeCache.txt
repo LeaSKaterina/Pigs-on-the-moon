@@ -107,13 +107,13 @@ CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
 CMAKE_GNUtoMS:BOOL=OFF
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/Project
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/Pigs_on_the_moon
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/JetBrains/CLion 2021.3.2/bin/mingw/bin/ld.exe
 
 //make program
-CMAKE_MAKE_PROGRAM:FILEPATH=C:/PROGRA~2/JETBRA~1/CLION2~1.2/bin/ninja/win/ninja.exe
+CMAKE_MAKE_PROGRAM:FILEPATH=C:/Program Files (x86)/JetBrains/CLion 2021.3.2/bin/ninja/win/ninja.exe
 
 //Flags used by the linker during the creation of modules during
 // all build types.
@@ -241,15 +241,6 @@ Pigs_on_the_moon_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 Pigs_on_the_moon_SOURCE_DIR:STATIC=D:/Pigs-on-the-moon
-
-//Value Computed by CMake
-Project_BINARY_DIR:STATIC=D:/Pigs-on-the-moon/cmake-build-debug
-
-//Value Computed by CMake
-Project_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-Project_SOURCE_DIR:STATIC=D:/Pigs-on-the-moon
 
 
 ########################
