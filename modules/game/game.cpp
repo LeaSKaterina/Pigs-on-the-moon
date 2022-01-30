@@ -41,7 +41,7 @@ void Game::InitPlayersId(const vector<int>& realId) {
     }
 }
 
-void Game::InitVehiclesIds(const vector<int> &realId) {
+void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
     // TODO!
 }
 
