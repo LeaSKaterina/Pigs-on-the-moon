@@ -184,7 +184,9 @@ void GameClient::InitPlayersId() {
         auto& vehicle_info = v.value();
         int player_id = vehicle_info.value("player_id", -1);
         int vehicle_id = stoi(v.key());
-        if(!vehicles_ids.empty() && current_player_id != -1 && current_player_id != player_id) {
+        if (current_player_id == -1)
+            current_player_id = player_id;
+        if(current_player_id != player_id) {
             game->InitVehiclesIds(current_player_id, vehicles_ids);
             vehicles_ids.clear();
             current_player_id = player_id;
