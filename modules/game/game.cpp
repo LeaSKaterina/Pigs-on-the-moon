@@ -28,7 +28,7 @@ void Game::InitMap(int size) {
 void Game::InitPlayer(int id, string name, string password) {
     player = new Player(id, name, password);
 }
-
+// There
 void Game::InitVariables(int playersNum) {
     numPlayers = playersNum;
     numTurns = numRounds * numPlayers;
@@ -47,7 +47,12 @@ void Game::InitPlayersId(const vector<int>& realId) {
 }
 
 void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
-    // TODO!
+    if(playerId != player->GetId())
+        return;
+    // TODO _
+    for (int i = 0; i < realId.size() && i < numPlayers; i++) {
+        tanksIdAdapter[i] = realId[i];
+    }
 }
 
 // Add
