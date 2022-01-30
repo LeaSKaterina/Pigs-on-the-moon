@@ -112,8 +112,9 @@ int main() {
     GameClient gc;
     gc.initGame("test14");
     while(gc.SendTurn() != true);
+    gc.InitPlayersId();
     while(gc.GameIsFinished() != true){
-        gc.InitPlayersId();
+        gc.CheckGameState();
         gc.SendAction();
 //        std::cout << gc.getClient()->GameState();
         std::cerr << "\n---------------------------------------\n";
