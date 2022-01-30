@@ -100,7 +100,7 @@ std::tuple<int,int,int> ActionController::getTargetForMove(std::tuple<int,int,in
 //    std::cout<< x << " " << y << " " <<  z << " " << endl;
 //    std::cout<< &x << " " << &y << " " <<  &z << " " << endl;
 
-//    if (map->Get(res)->IsEmpty()) return res;
+    if (map->Get(res)->IsEmpty()) return res;
 //
 //    if (maxAbs == &x){
 //        ModuleIncrement(y);
@@ -118,6 +118,7 @@ std::tuple<int,int,int> ActionController::getTargetForMove(std::tuple<int,int,in
 //    res = make_tuple(x,y,z);
 //    if (map->Get(res)->IsEmpty()) return res;
 
+//    return res;
     return std::make_tuple(-1,-1,-1); // нам не нужно перемещаться
 }
 
