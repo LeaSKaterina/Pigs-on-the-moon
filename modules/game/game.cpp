@@ -38,6 +38,8 @@ void Game::InitVariables(int playersNum) {
     attackMatrix.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
+    tanksIdAdapter.resize(5);
+    // TODO! magic constant
 }
 
 void Game::InitPlayersId(const vector<int>& realId) {
