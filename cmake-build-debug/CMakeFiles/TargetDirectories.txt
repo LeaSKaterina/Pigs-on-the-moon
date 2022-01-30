@@ -1,3 +1,0 @@
-D:/Pigs-on-the-moon/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/Pigs-on-the-moon/cmake-build-debug/CMakeFiles/Pigs_on_the_moon.dir
-D:/Pigs-on-the-moon/cmake-build-debug/CMakeFiles/rebuild_cache.dir
