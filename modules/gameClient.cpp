@@ -1,4 +1,4 @@
-#include "game_client.h"
+#include "gameClient.h"
 
 bool GameClient::initGame(const string &name, const string &password, const string &game_name, int num_turns,
                           int num_players, bool is_observer)  {
@@ -64,9 +64,9 @@ GameClient::~GameClient() {
     delete client;
 }
 
-GameClient::GameClient() {
+GameClient::GameClient(bool debug) {
     game = new Game();
-    client = new Client();
+    client = new Client(debug);
 }
 
 bool GameClient::GameIsFinished() const {
@@ -127,7 +127,7 @@ void GameClient::CheckGameState() {
     // win_points
 
     auto win_points = answer.answer.value("win_points", nlohmann::json(""));
-    cerr <<"DEBUG: " << win_points << endl;
+//    cerr <<"DEBUG: " << win_points << endl;
     for(auto& player : win_points.items()) {
         auto& win_points_info = player.value();
         game->UpdateWinPoints(
@@ -158,7 +158,7 @@ void GameClient::SendAction() const {
                 client->Shoot(vehicle_id, x, y, z);
                 break;
             default:
-                cerr << "DEFAULT ACTIVE" << endl;
+//                cerr << "DEFAULT ACTIVE" << endl;
                 break;
         }
     }

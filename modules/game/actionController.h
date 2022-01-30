@@ -1,6 +1,12 @@
+#ifndef PIGS_ON_THE_MOON_GAME_ACTIONCONTROLLER_H
+#define PIGS_ON_THE_MOON_GAME_ACTIONCONTROLLER_H
+
 //#include <tuple>
+#include <cstdlib>
+#include "iostream"
 #include "../map/hex.h"
 #include "../map/map.h"
+
 
 class ActionController {
 private:
@@ -24,3 +30,6 @@ public:
 
 
 };
+
+
+#endif //PIGS_ON_THE_MOON_GAME_ACTIONCONTROLLER_H

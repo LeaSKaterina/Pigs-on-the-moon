@@ -1,6 +1,5 @@
 #include "hex.h"
 
-
 Hex::Hex(int x, int y, int z) {
     coordinates = std::make_tuple(x, y, z);
 }

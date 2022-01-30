@@ -1,7 +1,4 @@
-#include "action_controller.h"
-
-#include <cstdlib>
-#include "iostream"
+#include "actionController.h"
 
 void ActionController::ReduceModule(int &n, const int amount){
     for (int i = 0; i < amount; i++){

@@ -1,14 +1,12 @@
 #include <iostream>
 //#include "modules/client/Client.h"
 //#include "modules/game.h"
-#include "modules/game_client.h"
+#include "modules/gameClient.h"
 
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 using namespace std;
-
-tuple<int, int, int> MakePosTuple(nlohmann::json&);
 
 //void parse_map_info() {
 //    char map_txt[] = R"(
@@ -86,39 +84,40 @@ tuple<int, int, int> MakePosTuple(nlohmann::json&);
 ////    cout << map_in.value("content", json("not_fount"));
 //}
 
-void parse_am() {
-    char matrix_txt[] = R"(
-         {
-            "win_points":
-            {
-              "406":
-              {
-                "capture":0,
-                "kill":0
-              },
-                 "1239":
-              {
-                "capture":0,
-                "kill":0
-              }
-            }
-         }
-    )";
-    json am = json::parse(matrix_txt);
-    auto am_in = am.value("win_points", json(""));
-    for(auto& pm : am_in.items()) {
-        string key = pm.key();
-        int k_ = stoi(key);
-        cout << "|" << k_ << "|" << pm.value() << "|" << endl;
-        cout << "size: " << pm.value().size() << endl;
-        for(int i : pm.value())
-            cout << "nex v: " << i << ' ';
-        cout << endl;
-    }
-}
+//void parse_am() {
+//    char matrix_txt[] = R"(
+//         {
+//            "win_points":
+//            {
+//              "406":
+//              {
+//                "capture":0,
+//                "kill":0
+//              },
+//                 "1239":
+//              {
+//                "capture":0,
+//                "kill":0
+//              }
+//            }
+//         }
+//    )";
+//    json am = json::parse(matrix_txt);
+//    auto am_in = am.value("win_points", json(""));
+//    for(auto& pm : am_in.items()) {
+//        string key = pm.key();
+//        int k_ = stoi(key);
+//        cout << "|" << k_ << "|" << pm.value() << "|" << endl;
+//        cout << "size: " << pm.value().size() << endl;
+//        for(int i : pm.value())
+//            cout << "nex v: " << i << ' ';
+//        cout << endl;
+//    }
+//}
 
 int main() {
-    GameClient gc;
+    bool debug = false;
+    GameClient gc(debug);
     gc.initGame("test14");
     while(gc.SendTurn() != true);
     gc.InitPlayersId();
@@ -126,12 +125,12 @@ int main() {
         gc.CheckGameState();
         gc.SendAction();
 //        std::cout << gc.getClient()->GameState();
-        std::cerr << "\n---------------------------------------\n";
+        if(debug)
+            std::cerr << "\n---------------------------------------\n";
         gc.SendTurn();
     }
-
+    std::cout << "Game is finished : " << std::boolalpha << gc.GameIsFinished() << '\n';
 //    parse_am();
 
-    cout << "Success";
 }
 

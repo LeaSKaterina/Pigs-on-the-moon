@@ -1,7 +1,4 @@
-
 #include "game.h"
-#include "action_controller.h"
-
 using namespace std;
 
 Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
@@ -107,8 +104,7 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
     for (int i = 0; i < 5; i++) {
         target = ActionController::getTargetForMove(v[i]->GetCurrentPosition(), map);
         if (TargetIsAvailable(&target)) {
-            res.push_back(std::make_tuple(Action::MOVE, tanksIdAdapter[i], map->Get(target)));
-//            res.emplace_back(std::make_tuple(Action::MOVE, tanksIdAdapter[i], map->Get(target)));
+            res.emplace_back(Action::MOVE, tanksIdAdapter[i], map->Get(target));
         } else {
             target = ActionController::getTargetForShoot(v[i]->GetCurrentPosition(), attackMatrix, vehicles,
                                                          playersIdAdapter.at(player->GetId()));

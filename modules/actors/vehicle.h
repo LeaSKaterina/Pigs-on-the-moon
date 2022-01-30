@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PIGS_ON_THE_MOON_ACTORS_VEHICLE_H
+#define PIGS_ON_THE_MOON_ACTORS_VEHICLE_H
 
 #include "../map/hex.h"
 
@@ -47,3 +48,7 @@ private:
 
     bool IsEnemy(Vehicle *v) const;
 };
+
+
+
+#endif //PIGS_ON_THE_MOON_ACTORS_VEHICLE_H

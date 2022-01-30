@@ -1,5 +1,5 @@
-#ifndef PIGS_ON_THE_MOON_GAME_CLIENT_H
-#define PIGS_ON_THE_MOON_GAME_CLIENT_H
+#ifndef PIGS_ON_THE_MOON_GAMECLIENT_H
+#define PIGS_ON_THE_MOON_GAMECLIENT_H
 
 #include "../libs/json-3.10.5/include/nlohmann/json.hpp"
 #include "client/client.h"
@@ -7,7 +7,7 @@
 
 class GameClient {
 public:
-    GameClient();
+    GameClient(bool debug = true);
 
     // must be called once and first.
     bool initGame(const std::string& name, const std::string& password = "",
@@ -42,4 +42,4 @@ private:
 
 
 
-#endif //PIGS_ON_THE_MOON_GAME_CLIENT_H
+#endif //PIGS_ON_THE_MOON_GAMECLIENT_H

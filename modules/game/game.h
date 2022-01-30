@@ -1,9 +1,11 @@
-#pragma once
+#ifndef PIGS_ON_THE_MOON_GAME_GAME_H
+#define PIGS_ON_THE_MOON_GAME_GAME_H
 
 #include <tuple>
 #include <map>
 #include <vector>
 #include <string>
+#include "actionController.h"
 #include "../actors/vehicle.h"
 #include "../actors/player.h"
 #include "../map/map.h"
@@ -85,3 +87,7 @@ public:
 
     [[nodiscard]] bool IsFinished() const;
 };
+
+
+
+#endif //PIGS_ON_THE_MOON_GAME_GAME_H

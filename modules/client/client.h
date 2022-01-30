@@ -1,11 +1,11 @@
-#pragma once
+#ifndef PIGS_ON_THE_MOON_CLIENT_CLIENT_H
+#define PIGS_ON_THE_MOON_CLIENT_CLIENT_H
 
 #include <winsock2.h>
 #include <winerror.h>
 #include <iostream>
 #include <memory>
 #include <valarray>
-#pragma once
 #include "../enums/action.h"
 #include "../enums/result.h"
 
@@ -52,3 +52,4 @@ public:
 };
 
 
+#endif //PIGS_ON_THE_MOON_CLIENT_CLIENT_H
