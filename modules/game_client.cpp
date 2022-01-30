@@ -193,6 +193,8 @@ void GameClient::InitPlayersId() {
         }
         vehicles_ids.push_back(vehicle_id);
     }
+    if(!vehicles_ids.empty())
+        game->InitVehiclesIds(current_player_id, vehicles_ids);
 }
 
 Client *GameClient::getClient() const {

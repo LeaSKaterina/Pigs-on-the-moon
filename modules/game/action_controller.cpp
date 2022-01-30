@@ -41,40 +41,36 @@ std::tuple<int,int,int> ActionController::getNextOnAxis(std::tuple<int,int,int> 
 
     if (map->Get(res)->IsEmpty()) return res;
 
+    if (x == 0){
+        ModuleIncrement(y);
+        x = 0 - y - z;
+    }
+    if (y == 0){
+        ModuleIncrement(z);
+        y = 0 - x - z;
+    }
+    if (z == 0){
+        ModuleIncrement(x);
+        z = 0 - x - y;
+    }
+
+    if (map->Get(res)->IsEmpty()) return res;
+
+    // не работает, ибо (x,y,z) изменены
 //    if (x == 0){
-//        ModuleIncrement(x);
-//        ModuleDecrement(y);
-//        ReduceModule(z, 2);
+//        ModuleIncrement(z);
+//        x = 0 - y - z;
 //    }
 //    if (y == 0){
-//        ModuleIncrement(y);
-//        ModuleDecrement(x);
-//        ReduceModule(z, 2);
+//        ModuleIncrement(x);
+//        y = 0 - x - z;
 //    }
 //    if (z == 0){
-//        ModuleIncrement(z);
-//        ModuleDecrement(x);
-//        ReduceModule(y, 2);
+//        ModuleIncrement(y);
+//        z = 0 - x - y;
 //    }
 //
 //    if (map->Get(res)->IsEmpty()) return res;
-//
-//    if (x == 0){
-//        ModuleDecrement(x);
-//        ModuleDecrement(y);
-//        ReduceModule(z, 2);
-//    }
-//    if (y == 0){
-//        ModuleDecrement(y);
-//        ModuleDecrement(x);
-//        ReduceModule(z, 2);
-//    }
-//    if (z == 0){
-//        ModuleDecrement(z);
-//        ModuleDecrement(x);
-//        ReduceModule(y, 2);
-//    }
-
     return std::make_tuple(-1,-1,-1); // нам не нужно перемещаться
 
 }
@@ -101,22 +97,26 @@ std::tuple<int,int,int> ActionController::getTargetForMove(std::tuple<int,int,in
 //    std::cout<< &x << " " << &y << " " <<  &z << " " << endl;
 
     if (map->Get(res)->IsEmpty()) return res;
-//
-//    if (maxAbs == &x){
-//        ModuleIncrement(y);
-//        ModuleDecrement(z);
-//    }
-//    if (maxAbs == &y){
-//        ModuleIncrement(x);
-//        ModuleDecrement(z);
-//    }
-//    if (maxAbs == &z){
-//        ModuleIncrement(x);
-//        ModuleDecrement(y);
-//    }
-//
-//    res = make_tuple(x,y,z);
-//    if (map->Get(res)->IsEmpty()) return res;
+
+
+    //если res получился на оси - отдельное поведение (оси зло)
+
+    if (maxAbs == &x){
+        ModuleIncrement(y);
+        ModuleDecrement(z);
+    }
+    if (maxAbs == &y){
+        ModuleIncrement(x);
+        ModuleDecrement(z);
+    }
+    if (maxAbs == &z){
+        ModuleIncrement(x);
+        ModuleDecrement(y);
+    }
+
+    res = make_tuple(x,y,z);
+    if (map->Get(res)->IsEmpty()) return res;
+
 
 //    return res;
     return std::make_tuple(-1,-1,-1); // нам не нужно перемещаться
@@ -127,23 +127,3 @@ ActionController::getTargetForShoot(std::tuple<int, int, int> coordinates, vecto
                                     vector<vector<Vehicle *>> vehicles, int playerId) {
     return std::tuple<int, int, int>(-1,-1,-1);
 } // какая-то логика выстрела. если не стрелять - возвращает (-1,-1,-1)
-
-
-
-/*
-int Hex::GetDistance(Hex &f, Hex &s) {
-
-    auto&[x2, y2, z2] = s.coordinates;
-    return (abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)) / 2;
-}
-*/
-
-/*
-void MakeDecision(){
-    if (map.Get(std::make_tuple(x, y, z))->IsEmpty()){
-        return std::make_tuple(x, y, z);
-    } else {
-        return std::make_tuple(-1,-1,-1);
-    }
-
-}*/
