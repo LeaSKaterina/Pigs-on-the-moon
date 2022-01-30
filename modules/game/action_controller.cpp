@@ -122,7 +122,7 @@ std::tuple<int,int,int> ActionController::getTargetForMove(std::tuple<int,int,in
 }
 
 std::tuple<int, int, int>
-ActionController::getTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> *attackMatrix,
+ActionController::getTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
                                     vector<vector<Vehicle *>> vehicles, int playerId) {
     return std::tuple<int, int, int>(-1,-1,-1);
 } // какая-то логика выстрела. если не стрелять - возвращает (-1,-1,-1)

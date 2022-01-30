@@ -82,35 +82,32 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
-vector<tuple<Action, int, Hex *>> Game::Play() const {
-    // TODO!
-    return vector<tuple<Action, int, Hex *>>();
-}
-
 bool TargetIsAvailable(const tuple<int, int, int> *target) {
     auto[x, y, z] = *target;
     return x != -1 && y != -1 && z != -1;
 }
 
-vector<tuple<int, int, Hex *>> Game::Play() {
-    vector<tuple<int, int, Hex *>> res;
+vector<tuple<Action, int, Hex *>> Game::Play() const {
+    vector<tuple<Action, int, Hex *>> res;
     tuple<int, int, int> target;
-    auto v = vehicles[playersIdAdapter[player->GetId()]];
+    auto v = vehicles[playersIdAdapter.at(player->GetId())];
 
     for (int i = 0; i < 5; i++) {
         target = ActionController::getTargetForMove(v[i]->GetCurrentPosition(), map);
         if (TargetIsAvailable(&target)) {
-            res.emplace_back(101, tanksIdAdapter[i], map->Get(target));
+            res.emplace_back(Action::MOVE, tanksIdAdapter[i], map->Get(target));
         } else {
-            target = ActionController::getTargetForShoot(v[i]->GetCurrentPosition(), &attackMatrix, vehicles,
-                                                         playersIdAdapter[player->GetId()]);
+            target = ActionController::getTargetForShoot(v[i]->GetCurrentPosition(), attackMatrix, vehicles,
+                                                         playersIdAdapter.at(player->GetId()));
             if (TargetIsAvailable(&target)) {
-                res.emplace_back(102, tanksIdAdapter[i], map->Get(target));
+                res.emplace_back(Action::SHOOT, tanksIdAdapter[i], map->Get(target));
             }
         }
     }
 
     return res;
+//    return vector<tuple<Action, int, Hex *>>();
 }
+
 
 // get action

@@ -16,7 +16,7 @@ public:
     static std::tuple<int, int, int> getNextOnAxis(std::tuple<int, int, int> coordinates, Map *map);
 
     static std::tuple<int, int, int>
-    getTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> *attackMatrix,
+    getTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
                       vector<vector<Vehicle *>> vehicles, int playerId);
 
 
