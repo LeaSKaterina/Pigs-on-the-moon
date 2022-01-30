@@ -8,15 +8,31 @@ class GameClient {
 public:
     GameClient();
 
+    // must be called once and first.
     bool initGame(const std::string& name, const std::string& password = "",
                   const std::string& game_name="", int num_turns = 45, int num_players = 3,
                   bool is_observer = false);
 
+    [[nodiscard]] bool GameIsFinished() const;
+
+    void CheckGameState();
+
+//    void CheckGameAction();  Do we really need this?
+
     ~GameClient();
 
+    [[nodiscard]] bool SendTurn() const;
+
+    void SendAction() const;
+
 private:
+
+    // entities
     Game* game;
     Client* client;
+
+    // vars
+    bool gameIsFinished = false;
 };
 
 
