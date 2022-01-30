@@ -9,6 +9,12 @@ void ActionController::ReduceModule(int &n, const int amount){
     }
 }
 
+void ActionController::IncreaseModule(int &n, const int amount){
+    for (int i = 0; i < amount; i++){
+        ModuleIncrement(n);
+    }
+}
+
 void ActionController::ModuleDecrement(int &n){
     if (n == 0) return;
     if (n>0) n--;
@@ -21,9 +27,14 @@ void ActionController::ModuleIncrement(int &n){
     else n--;
 }
 
+void restore(int& x, int& y, int& z, const std::tuple<int,int,int> coordinates){
+    x = get<0>(coordinates);
+    y = get<1>(coordinates);
+    z = get<2>(coordinates);
+}
+
 std::tuple<int,int,int> ActionController::getNextOnAxis(std::tuple<int,int,int> coordinates, Map* map) {
     auto[x, y, z] = coordinates;
-
     if (x == 0){
         ReduceModule(y, 2);
         ReduceModule(z, 2);
@@ -36,47 +47,55 @@ std::tuple<int,int,int> ActionController::getNextOnAxis(std::tuple<int,int,int> 
         ReduceModule(x, 2);
         ReduceModule(y, 2);
     }
-
     tuple<int,int,int> res = make_tuple(x,y,z);
-
     if (map->Get(res)->IsEmpty()) return res;
 
+    restore(x,y,z,coordinates);
     if (x == 0){
+        ReduceModule(y,2);
+        ModuleIncrement(z);
+        x = 0 - y - z;
+    }
+    if (y == 0){
+        ReduceModule(z,2);
+        ModuleIncrement(x);
+        y = 0 - x - z;
+    }
+    if (z == 0){
+        ReduceModule(x,2);
+        ModuleIncrement(y);
+        z = 0 - x - y;
+    }
+    res = make_tuple(x,y,z);
+    if (map->Get(res)->IsEmpty()) return res;
+
+    restore(x,y,z,coordinates);
+    if (x == 0){
+        ReduceModule(z,2);
         ModuleIncrement(y);
         x = 0 - y - z;
     }
     if (y == 0){
+        ReduceModule(x,2);
         ModuleIncrement(z);
         y = 0 - x - z;
     }
     if (z == 0){
+        ReduceModule(y,2);
         ModuleIncrement(x);
         z = 0 - x - y;
     }
-
+    res = make_tuple(x,y,z);
     if (map->Get(res)->IsEmpty()) return res;
 
-    // не работает, ибо (x,y,z) изменены
-//    if (x == 0){
-//        ModuleIncrement(z);
-//        x = 0 - y - z;
-//    }
-//    if (y == 0){
-//        ModuleIncrement(x);
-//        y = 0 - x - z;
-//    }
-//    if (z == 0){
-//        ModuleIncrement(y);
-//        z = 0 - x - y;
-//    }
-//
-//    if (map->Get(res)->IsEmpty()) return res;
+
     return std::make_tuple(-1,-1,-1); // нам не нужно перемещаться
 
 }
 
 std::tuple<int,int,int> ActionController::getTargetForMove(std::tuple<int,int,int> coordinates, Map* map){
-    auto[x, y, z] = coordinates;
+    auto [x, y, z] = coordinates;
+
     if (x == 0 || y == 0 || z == 0)
         return getNextOnAxis(coordinates, map);
 
@@ -93,30 +112,47 @@ std::tuple<int,int,int> ActionController::getTargetForMove(std::tuple<int,int,in
     ModuleDecrement(*maxAbs);
 
     tuple<int,int,int> res = make_tuple(x,y,z);
-//    std::cout<< x << " " << y << " " <<  z << " " << endl;
-//    std::cout<< &x << " " << &y << " " <<  &z << " " << endl;
-
     if (map->Get(res)->IsEmpty()) return res;
 
 
-    //если res получился на оси - отдельное поведение (оси зло)
+    restore(x,y,z,coordinates);
+
 
     if (maxAbs == &x){
-        ModuleIncrement(y);
-        ModuleDecrement(z);
+        ReduceModule(x,2);
+        y = 0 - x - z;
     }
     if (maxAbs == &y){
-        ModuleIncrement(x);
-        ModuleDecrement(z);
+        ReduceModule(y,2);
+        z = 0 - x - y;
     }
     if (maxAbs == &z){
-        ModuleIncrement(x);
-        ModuleDecrement(y);
+        ReduceModule(z,2);
+        x = 0 - y - z;
     }
 
     res = make_tuple(x,y,z);
-    if (map->Get(res)->IsEmpty()) return res; //there
 
+    if (map->Get(res)->IsEmpty()) return res;
+
+    restore(x,y,z,coordinates);
+
+
+    if (maxAbs == &x){
+        ReduceModule(x,2);
+        z = 0 - x - y;
+    }
+    if (maxAbs == &y){
+        ReduceModule(y,2);
+        x = 0 - y - z;
+    }
+    if (maxAbs == &z){
+        ReduceModule(z,2);
+        y = 0 - x - z;
+    }
+
+    res = make_tuple(x,y,z);
+    if (map->Get(res)->IsEmpty()) return res;
 
 //    return res;
     return std::make_tuple(-1,-1,-1); // нам не нужно перемещаться
