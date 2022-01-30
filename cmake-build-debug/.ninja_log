@@ -1,0 +1,14 @@
+# ninja log v5
+15	1515	6651924960863999	CMakeFiles/Pigs_on_the_moon.dir/modules/game/game.cpp.obj	4c9a0576e81d1aec
+133	2712	6651905392814605	CMakeFiles/Pigs_on_the_moon.dir/modules/map/map.cpp.obj	97968c6b6ff8e658
+66	1616	6651594459219110	CMakeFiles/Pigs_on_the_moon.dir/modules/actors/player.cpp.obj	8e162ebdfc3b8c49
+56	1967	6651905383724649	CMakeFiles/Pigs_on_the_moon.dir/modules/actors/vehicle.cpp.obj	7d0a755a8488aba0
+1871	2887	6651905395560024	CMakeFiles/Pigs_on_the_moon.dir/modules/constructions/base.cpp.obj	9035b120fd453bee
+9	9450	6651925936636065	CMakeFiles/Pigs_on_the_moon.dir/main.cpp.obj	326d7ec4f6333455
+77	1869	6651905382742186	CMakeFiles/Pigs_on_the_moon.dir/modules/constructions/construction.cpp.obj	6318a9133ca3b490
+1324	2572	6651594469088029	CMakeFiles/Pigs_on_the_moon.dir/modules/map/hex.cpp.obj	63e377d139ded879
+39	11598	6651905482168851	CMakeFiles/Pigs_on_the_moon.dir/modules/game_client.cpp.obj	c0033689c4e95dce
+35	8878	6651663143707699	CMakeFiles/Pigs_on_the_moon.dir/modules/client/client.cpp.obj	3c4e484ef1618403
+9452	13556	6651925977676789	Pigs_on_the_moon.exe	2b2f9c6e4612697d
+4	2394	6652176857368091	build.ninja	93237c2a41f787f6
+98	1209	6651924957734344	CMakeFiles/Pigs_on_the_moon.dir/modules/game/action_controller.cpp.obj	68b9455aeedc197c

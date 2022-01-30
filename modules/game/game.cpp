@@ -1,4 +1,8 @@
+
 #include "game.h"
+#include "action_controller.h"
+
+using namespace std;
 
 Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
     for (auto *p: vehicles[adaptedPlayerId]) {
@@ -19,6 +23,7 @@ Game::~Game() {
 void Game::InitMap(int size) {
     map = new Map(size);
 }
+
 
 void Game::InitPlayer(int id, string name, string password) {
     player = new Player(id, name, password);
@@ -80,6 +85,32 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
 vector<tuple<Action, int, Hex *>> Game::Play() const {
     // TODO!
     return vector<tuple<Action, int, Hex *>>();
+}
+
+bool TargetIsAvailable(const tuple<int, int, int> *target) {
+    auto[x, y, z] = *target;
+    return x != -1 && y != -1 && z != -1;
+}
+
+vector<tuple<int, int, Hex *>> Game::Play() {
+    vector<tuple<int, int, Hex *>> res;
+    tuple<int, int, int> target;
+    auto v = vehicles[playersIdAdapter[player->GetId()]];
+
+    for (int i = 0; i < 5; i++) {
+        target = ActionController::getTargetForMove(v[i]->GetCurrentPosition(), map);
+        if (TargetIsAvailable(&target)) {
+            res.emplace_back(101, tanksIdAdapter[i], map->Get(target));
+        } else {
+            target = ActionController::getTargetForShoot(v[i]->GetCurrentPosition(), &attackMatrix, vehicles,
+                                                         playersIdAdapter[player->GetId()]);
+            if (TargetIsAvailable(&target)) {
+                res.emplace_back(102, tanksIdAdapter[i], map->Get(target));
+            }
+        }
+    }
+
+    return res;
 }
 
 // get action

@@ -1,0 +1,7 @@
+.vscode
+*exe
+i.txt
+test*
+cmake-build-debug
+.gitignore
+.idea

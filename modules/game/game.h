@@ -7,7 +7,12 @@
 #include "../actors/vehicle.h"
 #include "../actors/player.h"
 #include "../map/map.h"
+<<<<<<< HEAD
 #include "../enums/action.h"
+=======
+//#include "../enums/action.h"
+
+>>>>>>> action_branch
 
 using namespace std;
 
@@ -15,6 +20,8 @@ class Game {
 private:
     vector<int> state;
     vector<vector<Vehicle *>> vehicles;
+    vector<int> tanksIdAdapter;
+    vector<int> playersIdAdapter;
 
     // new: custom id start from 0 to numPlayers - 1
     map<int, int> playersIdAdapter; // [real id 1, ..]->[0, 1, 2]
@@ -67,6 +74,7 @@ public:
     void UpdateAttackMatrix(int playerId, vector<int> attacked);
 
     void UpdateWinPoints(int playerId, int capture, int kill);
+
 
     [[nodiscard]] vector<tuple<Action, int, Hex*>> Play() const;
 
