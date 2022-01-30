@@ -164,7 +164,6 @@ void GameClient::SendAction() const {
 
 // must be called only when all players are connected
 void GameClient::InitPlayersId() {
-    // TODO!
     auto answer = client->GameState();
     vector<int> real_ids;
 
@@ -177,7 +176,7 @@ void GameClient::InitPlayersId() {
     game->InitPlayersId(real_ids);
 
     // vehicle id
-
+    // TODO! recode
     vector<int> vehicles_ids;
     int current_player_id = -1;
     auto vehicles = answer.answer.value("vehicles", nlohmann::json(""));
