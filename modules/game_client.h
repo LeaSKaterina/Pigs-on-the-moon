@@ -1,6 +1,7 @@
 #ifndef PIGS_ON_THE_MOON_GAME_CLIENT_H
 #define PIGS_ON_THE_MOON_GAME_CLIENT_H
 
+#include "../libs/json-3.10.5/include/nlohmann/json.hpp"
 #include "client/client.h"
 #include "game/game.h"
 
@@ -31,8 +32,9 @@ private:
     Game* game;
     Client* client;
 
-    // vars
-    bool gameIsFinished = false;
+    void InitPlayersId();
+    tuple<int, int, int> MakePosTuple(nlohmann::json coordinate);
+
 };
 
 

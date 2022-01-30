@@ -40,10 +40,14 @@ void Game::InitVariables(int playersNum) {
     kills.resize(playersNum);
 }
 
-void Game::InitPlayersId(const int realId[3]) { // magic const will be removed later
+void Game::InitPlayersId(const vector<int>& realId) {
     for(int i = 0; i < numPlayers; i++) {
         playersIdAdapter[realId[i]] = i;
     }
+}
+
+void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
+    // TODO!
 }
 
 // Add
@@ -51,7 +55,7 @@ void Game::InitPlayersId(const int realId[3]) { // magic const will be removed l
 void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
     Vehicle *t = new Vehicle(type, playerId);
     t->InitSpawn(map->Get(spawn));
-    vehicles[playersIdAdapter.at(playerId)].push_back(t);
+    vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
 }
 
 void Game::AddBase(vector <tuple<int, int, int>> &points) {
@@ -61,9 +65,10 @@ void Game::AddBase(vector <tuple<int, int, int>> &points) {
 // Update
 
 // get state
-void Game::UpdateState(int currTurn, int currPlayer) {
+void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     currentTurn = currTurn;
     currentPlayer = currPlayer;
+    isFinished = finished;
 }
 
 void Game::UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
@@ -109,5 +114,12 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
 //    return vector<tuple<Action, int, Hex *>>();
 }
 
+int Game::GetNumPlayers() const {
+    return numPlayers;
+}
+
+bool Game::IsFinished() const {
+    return isFinished;
+}
 
 // get action

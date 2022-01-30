@@ -25,3 +25,7 @@
 54	1430	6652183849469768	CMakeFiles/Pigs_on_the_moon.dir/modules/game/action_controller.cpp.obj	68b9455aeedc197c
 10	2113	6652183856219724	CMakeFiles/Pigs_on_the_moon.dir/modules/game/game.cpp.obj	4c9a0576e81d1aec
 2113	6824	6652183903065328	Pigs_on_the_moon.exe	2b2f9c6e4612697d
+54	2389	6652202542518122	CMakeFiles/Pigs_on_the_moon.dir/modules/game/game.cpp.obj	4c9a0576e81d1aec
+40	14804	6652202666609935	CMakeFiles/Pigs_on_the_moon.dir/modules/game_client.cpp.obj	c0033689c4e95dce
+7	15967	6652202678313645	CMakeFiles/Pigs_on_the_moon.dir/main.cpp.obj	326d7ec4f6333455
+15968	18691	6652202705499385	Pigs_on_the_moon.exe	2b2f9c6e4612697d
