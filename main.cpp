@@ -10,64 +10,6 @@ using namespace std;
 
 tuple<int, int, int> MakePosTuple(nlohmann::json&);
 
-//void test_json() {
-//    // create a JSON object with different entry types
-//    json j =
-//    {
-//            {"integer", 1},
-//            {"boolean", false},
-//            {"string", "Welcome to CppSecrets!!!"},
-//            {"object", {{"one", 1}, {"two", 2}}},
-//            {"array", {1, 2, 3}}
-//    };
-//
-//    // accessing existing values in the above given Json.
-//    int integer_value = j.value("integer", 0);
-//    bool boolean_value = j.value("boolean", false);
-//    std::cout << integer_value <<endl;
-//    std::cout << boolean_value<<endl;
-//
-//    // accessing non existing values. As they are non existing
-//    // they give us the default values provided in the second parameter.
-//    std::string string_value = j.value("Strings", "oops");
-//    std::cout<<string_value<<endl;
-//}
-
-//void parse() {
-//    char* msg = "{\"result\" : 0, \"answer\" : \"\" }";
-//
-//    char text[] = R"(
-//     {
-//         "colors": {
-//	                "color": "black",
-//		        "category": "hue",
-//		        "type": "primary",
-//	                       "code": {
-//			        "rgba": [255,255,255,1],
-//			        "hex": "#000"
-//			      }
-//		     }
-//     }
-//     )";
-//
-//    char* emptyMsg = "";
-//
-//    json b = json::parse(text);
-////    nlohmann::json a = json::parse(msg);
-//    json a(msg);
-////    auto c = json::parse(emptyMsg); // error
-////    int x = a.value("fi", -1);
-////    if (x == -1)
-////        cout << "fail";
-////    else
-////        cout << "ok";
-//    cout << a << endl;
-//    for (auto& x : a.items())
-//        std::cout << "key is : " << x.key()
-//                  << ", value is : " << x.value() << '\n';
-//
-//}
-
 //void parse_map_info() {
 //    char map_txt[] = R"(
 //    {
@@ -144,112 +86,41 @@ tuple<int, int, int> MakePosTuple(nlohmann::json&);
 ////    cout << map_in.value("content", json("not_fount"));
 //}
 
-void parse_am() {
-    char matrix_txt[] = R"(
-         {
-            "attack_matrix":
-            {
-              "406":[],
-              "303": [406, 123],
-              "123": [303]
-            }
-         }
-    )";
-    json am = json::parse(matrix_txt);
-    auto am_in = am.value("attack_matrix", json(""));
-    for(auto& pm : am_in.items()) {
-        cout << "|" << pm.key() << "|" << pm.value() << "|" << endl;
-        cout << "size: " << pm.value().size() << endl;
-        for(int i : pm.value())
-            cout << "nex v: " << i << ' ';
-        cout << endl;
-    }
-}
-
-void parse_v() {
-    char vehicle_txt[] = R"(
-         {
-            "vehicles":
-            {
-                  "1":
-                  {
-                    "capture_points":0,
-                    "health":2,
-                    "player_id":406,
-                    "position": {"x":-7,"y":-3,"z":10},
-                    "spawn_position":{"x":-7,"y":-3,"z":10},
-                    "vehicle_type":"medium_tank"
-                  },
-                  "2":
-                  {
-                    "capture_points":0,
-                    "health":2,
-                    "player_id":406,
-                    "position":{"x":-6,"y":-4,"z":10},
-                    "spawn_position":{"x":-6,"y":-4,"z":10},
-                    "vehicle_type":"medium_tank"
-                  },
-                  "3":
-                  {
-                    "capture_points":0,
-                    "health":2,
-                    "player_id":406,
-                    "position":{"x":-5,"y":-5,"z":10},
-                    "spawn_position":{"x":-5,"y":-5,"z":10},
-                    "vehicle_type":"medium_tank"
-                  }
-            }
-        }
-    )";
-    json veh = json::parse(vehicle_txt);
-    auto vehicles_info = veh.value("vehicles", json(""));
-    for(auto& v : vehicles_info.items()) {
-        cout << "| " << v.key() << " | " << v.value() << " |" << endl;
-        auto pos = v.value().value("position", json(""));
-//        cout << 'x' << pos.value("x", -1) << pos.value("z", -1 )<<endl;
-        MakePosTuple(pos);
-    }
-}
+//void parse_am() {
+//    char matrix_txt[] = R"(
+//         {
+//            "attack_matrix":
+//            {
+//              "406":[],
+//              "303": [406, 123],
+//              "123": [303]
+//            }
+//         }
+//    )";
+//    json am = json::parse(matrix_txt);
+//    auto am_in = am.value("attack_matrix", json(""));
+//    for(auto& pm : am_in.items()) {
+//        cout << "|" << pm.key() << "|" << pm.value() << "|" << endl;
+//        cout << "size: " << pm.value().size() << endl;
+//        for(int i : pm.value())
+//            cout << "nex v: " << i << ' ';
+//        cout << endl;
+//    }
+//}
 
 int main() {
-
-//    test_json();
-
-//    parse();
-//    parse_am();
-    parse_v();
-//    parse_map_info();
-
-//    Client client;
-//    std::cout << client.Login("test18722") << '\n';
-//    std::cout << client.Map() << '\n';
-//    cout << client.GameActions();
-//    cout << client.GameState();
-//    cout << client.Turn();
-//    cout << client.Move(1, -1, 2, 3);
-//    cout << client.GameActions();
-//    cout << client.GameState();
-//    cout << client.Turn();
-//    std::cout << client.Logout() << '\n';
-
-    Game game;
-    game.InitMap(11);
-    game.Play();
+    GameClient gc;
+    gc.initGame("test14");
+    while(gc.SendTurn() != true);
+    while(gc.GameIsFinished() != true){
+        gc.InitPlayersId();
+        gc.SendAction();
+//        std::cout << gc.getClient()->GameState();
+        std::cerr << "\n---------------------------------------\n";
+        gc.SendTurn();
+    }
 
 
-
-//
-//    return 0;
-//    GameClient gc;
-//    gc.initGame("test14");
     cout << "Success";
 }
 
-tuple<int, int, int> MakePosTuple(nlohmann::json& coordinate)
-{
-    cout << "x = " << coordinate.value("x", -1)
-    << " y = " << coordinate.value("y", -1)
-    << " z = " << coordinate.value("z", -1)
-    << endl;
-    return make_tuple(0, 0, 0);
-}

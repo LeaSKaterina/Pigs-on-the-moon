@@ -193,4 +193,8 @@ void GameClient::InitPlayersId() {
     }
 }
 
+Client *GameClient::getClient() const {
+    return client;
+}
+
 

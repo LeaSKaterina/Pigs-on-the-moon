@@ -1,6 +1,6 @@
 #include "client.h"
 
-Client::Client() {
+Client::Client(bool debug) : debug(debug){
     if(FAILED (WSAStartup(MAKEWORD(2, 1), &this->WSAData))){// first - version, second create info
         PrintLogInfo("WSAStartup creation failed with error: " + std::to_string(WSAGetLastError()));
     }
@@ -46,6 +46,18 @@ void Client::SendRequest(Action action, const std::string& msg) const {
         buffer[i + 8] = msg[i];
     }
 
+    if(debug){
+        for (int i = 0; i < 4; ++i) {
+            std::cerr << (int)buffer[i] << ' ';
+        }
+        for (int i = 0; i < 4; ++i) {
+            std::cerr << (int)buffer[i + 4] << ' ';
+        }
+        for (int i = 8; i < 8 + sizeMsg; ++i) {
+            std::cerr << buffer[i];
+        }std::cerr << '\n';
+    }
+
     send(server, buffer.get(), 8 + sizeMsg, 0);
 }
 
@@ -59,7 +71,7 @@ Response Client::GetAnswer() const {
     if (size) recv(server, cMsg.get(), size, MSG_WAITALL);
     nlohmann::json ans = size?
             nlohmann::json::parse(cMsg.get())
-            : "";
+            : nlohmann::json();
 //    nlohmann::json ans(cMsg.get());
 //    std::cerr << "start: " << cMsg.get() << " :end" << std::endl;
 
@@ -157,6 +169,6 @@ Response Client::Shoot(const std::string &msg) const {
 }
 
 std::ostream &operator<<(std::ostream &out, const Response &response) {
-    out << "Response {result : " << (int)response.result << ", answer :\n" << response.answer.dump(2) << " }";
+    out << "Response {result : " << (int)response.result << ", answer :\n" << response.answer.dump(2) << " }\n";
     return out;
 }

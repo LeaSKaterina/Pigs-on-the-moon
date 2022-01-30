@@ -31,8 +31,10 @@ private:
     void SendRequest(Action action, const std::string& msg) const;
     int GetIntFromServer() const;
     Response GetAnswer() const;
+
+    bool debug;
 public:
-    Client();
+    Client(bool debug = true);
     ~Client();
 
     Response Login(const std::string& name, const std::string& password = "",

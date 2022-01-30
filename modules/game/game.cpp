@@ -41,7 +41,7 @@ void Game::InitVariables(int playersNum) {
 }
 
 void Game::InitPlayersId(const vector<int>& realId) {
-    for(int i = 0; i < numPlayers; i++) {
+    for(int i = 0; i < realId.size(); i++) {
         playersIdAdapter[realId[i]] = i;
     }
 }
