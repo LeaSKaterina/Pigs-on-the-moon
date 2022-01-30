@@ -5,7 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <valarray>
-
+#pragma once
 #include "../enums/action.h"
 #include "../enums/result.h"
 

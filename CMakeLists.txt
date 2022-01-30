@@ -9,7 +9,7 @@ set(CLIENT modules/client/client.cpp)
 set(ACTORS modules/actors/player.cpp modules/actors/vehicle.cpp)
 set(CONSTRUCTIONS modules/constructions/construction.cpp modules/constructions/base.cpp)
 set(MAP modules/map/map.cpp modules/map/hex.cpp)
-set(GAME modules/game/game.cpp modules/game_client.cpp modules/game_client.h)
+set(GAME modules/game/game.cpp modules/game_client.cpp modules/game_client.h modules/game/action_controller.cpp modules/game/action_controller.h)
 
 include_directories(libs/json-3.10.5/include)
 

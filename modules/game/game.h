@@ -73,6 +73,7 @@ public:
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
+
     [[nodiscard]] vector<tuple<Action, int, Hex*>> Play() const;
 
     // get action

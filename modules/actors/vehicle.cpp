@@ -53,6 +53,10 @@ const std::tuple<int, int, int> &Vehicle::GetSpawn() const {
     return spawnPosition->GetCoordinates();
 }
 
+const std::tuple<int, int, int> &Vehicle::GetCurrentPosition() const {
+    return currentPosition->GetCoordinates();
+}
+
 void Vehicle::InitSpawn(Hex *p) {
     spawnPosition = p;
     currentPosition = spawnPosition;

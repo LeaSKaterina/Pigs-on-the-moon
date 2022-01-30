@@ -25,6 +25,8 @@ public:
 
     const std::tuple<int, int, int> &GetSpawn() const;
 
+    const std::tuple<int, int, int> &GetCurrentPosition() const;
+
     void InitSpawn(Hex *p);
 
     void Respawn();

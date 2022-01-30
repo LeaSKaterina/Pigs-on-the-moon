@@ -232,8 +232,12 @@ int main() {
 //    cout << client.Turn();
 //    std::cout << client.Logout() << '\n';
 
-//    Game game;
-//    game.InitMap(11);
+    Game game;
+    game.InitMap(11);
+    game.Play();
+
+
+
 //
 //    return 0;
 //    GameClient gc;
