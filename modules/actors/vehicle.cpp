@@ -40,7 +40,9 @@ void Vehicle::DropCapture() {
 }
 
 void Vehicle::Update(int health, Hex *newPos, int capture) {
+    currentPosition->Free();
     currentPosition = newPos;
+    currentPosition->Occupy();
     this->health = health;
     capturePoints = capture;
 }

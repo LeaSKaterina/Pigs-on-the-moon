@@ -115,7 +115,7 @@ std::tuple<int,int,int> ActionController::getTargetForMove(std::tuple<int,int,in
     }
 
     res = make_tuple(x,y,z);
-    if (map->Get(res)->IsEmpty()) return res;
+    if (map->Get(res)->IsEmpty()) return res; //there
 
 
 //    return res;

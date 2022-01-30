@@ -52,7 +52,7 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
     if(playerId != player->GetId())
         return;
     // TODO _
-    for (int i = 0; i < realId.size() && i < numPlayers; i++) {
+    for (int i = 0; i < realId.size(); i++) {
         tanksIdAdapter[i] = realId[i];
     }
 }
@@ -96,7 +96,7 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
 
 bool TargetIsAvailable(const tuple<int, int, int> *target) {
     auto[x, y, z] = *target;
-    return x != -1 && y != -1 && z != -1;
+    return !(x == -1 && y == -1 && z == -1);
 }
 
 vector<tuple<Action, int, Hex *>> Game::Play() const {
