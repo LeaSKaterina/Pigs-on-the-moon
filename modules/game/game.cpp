@@ -47,7 +47,12 @@ void Game::InitPlayersId(const vector<int>& realId) {
 }
 
 void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
-    // TODO!
+    if(playerId != player->GetId())
+        return;
+
+    for (int i = 0; i < numPlayers; i++) {
+        tanksIdAdapter[i] = realId[i];
+    }
 }
 
 // Add
