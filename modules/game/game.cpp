@@ -35,10 +35,14 @@ void Game::InitVariables(int playersNum) {
     kills.resize(playersNum);
 }
 
-void Game::InitPlayersId(const int realId[3]) { // magic const will be removed later
+void Game::InitPlayersId(const vector<int>& realId) {
     for(int i = 0; i < numPlayers; i++) {
         playersIdAdapter[realId[i]] = i;
     }
+}
+
+void Game::InitVehiclesIds(const vector<int> &realId) {
+    // TODO!
 }
 
 // Add

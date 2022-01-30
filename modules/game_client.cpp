@@ -109,7 +109,6 @@ void GameClient::CheckGameState() {
         auto position = vehicle_info.value("position", nlohmann::json(""));
         auto spawn_position = vehicle_info.value("spawn_position", nlohmann::json(""));
 
-//        cout << "| " << v.key() << " | " << v.value() << " |" << endl;
         auto pos = MakePosTuple(
                 vehicle_info.value("position", nlohmann::json(""))
                 );
@@ -144,11 +143,55 @@ bool GameClient::SendTurn() const {
 }
 
 void GameClient::SendAction() const {
-    // TODO!
+    auto actions = game->Play();
+    for(auto& act : actions) {
+        auto& [action_type, vehicle_id, coordinate] = act;
+        auto& [x, y, z] = coordinate->GetCoordinates();
+        // TODO? Is there any check needed? as Hex* == nullptr
+        switch (action_type) {
+            case Action::MOVE:
+                client->Move(vehicle_id, x, y, z);
+                // TODO make other move/shoot in Client private
+                break;
+            case Action::SHOOT:
+                client->Shoot(vehicle_id, x, y, z);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
+// must be called only when all players are connected
 void GameClient::InitPlayersId() {
     // TODO!
+    auto answer = client->GameState();
+    vector<int> real_ids;
+
+    // players id
+
+    auto am = answer.answer.value("attack_matrix", nlohmann::json(""));
+    for(auto& pm : am.items()) {
+        real_ids.push_back(stoi(pm.key()));
+    }
+    game->InitPlayersId(real_ids);
+
+    // vehicle id
+
+    vector<int> vehicles_ids;
+    int current_player_id = -1;
+    auto vehicles = answer.answer.value("vehicles", nlohmann::json(""));
+    for(auto& v : vehicles.items()) {
+        auto& vehicle_info = v.value();
+        int player_id = vehicle_info.value("player_id", -1);
+        int vehicle_id = stoi(v.key());
+        if(!vehicles_ids.empty() && current_player_id != -1 && current_player_id != player_id) {
+            game->InitVehiclesIds(current_player_id, vehicles_ids);
+            vehicles_ids.clear();
+            current_player_id = player_id;
+        }
+        vehicles_ids.push_back(vehicle_id);
+    }
 }
 
 

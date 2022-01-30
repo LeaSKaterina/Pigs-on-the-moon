@@ -54,7 +54,9 @@ public:
 
     void InitVariables(int playersNum = 3);
 
-    void InitPlayersId(const int realId[3]);
+    void InitPlayersId(const vector<int>& realId);
+
+    void InitVehiclesIds(int playerId, const vector<int>& realId);
 
     // add methods
     void AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn);
