@@ -5,7 +5,7 @@
 
 #include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 using namespace std;
 
 //void parse_map_info() {
@@ -116,21 +116,22 @@ using namespace std;
 //}
 
 int main() {
-    bool debug = false;
-    GameClient gc(debug);
-    gc.initGame("test14");
-    while(gc.SendTurn() != true);
-    gc.InitPlayersId();
-    while(gc.GameIsFinished() != true){
-        gc.CheckGameState();
-        gc.SendAction();
+    bool debug = true;
+//    GameClient gc(debug);
+//    gc.initGame("test14");
+//    while(gc.SendTurn() != true);
+//    gc.InitPlayersId();
+//    while(gc.GameIsFinished() != true){
+//        gc.CheckGameState();
+//        gc.SendAction();
 //        std::cout << gc.getClient()->GameState();
-        if(debug)
-            std::cerr << "\n---------------------------------------\n";
-        gc.SendTurn();
-    }
-    std::cout << "Game is finished : " << std::boolalpha << gc.GameIsFinished() << '\n';
+//        if(debug)
+//            std::cerr << "\n---------------------------------------\n";
+//        gc.SendTurn();
+//    }
+//    std::cout << "Game is finished : " << std::boolalpha << gc.GameIsFinished() << '\n';
 //    parse_am();
+
 
 }
 
