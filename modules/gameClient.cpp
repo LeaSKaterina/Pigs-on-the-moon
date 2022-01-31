@@ -127,7 +127,7 @@ void GameClient::CheckGameState() {
     // win_points
 
     auto win_points = answer.answer.value("win_points", nlohmann::ordered_json(""));
-//    cerr <<"DEBUG: " << win_points << endl;
+    cerr <<"DEBUG: " << win_points << endl;
     for(auto& player : win_points.items()) {
         auto& win_points_info = player.value();
         game->UpdateWinPoints(
@@ -201,6 +201,10 @@ void GameClient::InitPlayersId() {
 
 Client *GameClient::getClient() const {
     return client;
+}
+
+bool GameClient::isOurTurn() {
+    return true;
 }
 
 

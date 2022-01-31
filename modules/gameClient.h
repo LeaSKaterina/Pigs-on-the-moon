@@ -29,6 +29,8 @@ public:
 
     Client *getClient() const;
 
+    bool isOurTurn();
+
 private:
 
     // entities

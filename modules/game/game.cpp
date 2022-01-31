@@ -71,7 +71,7 @@ void Game::AddBase(vector <tuple<int, int, int>> &points) {
 // get state
 void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     currentTurn = currTurn;
-    currentPlayer = currPlayer;
+    currentPlayerId = currPlayer;
     isFinished = finished;
 }
 
