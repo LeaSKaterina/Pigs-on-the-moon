@@ -69,9 +69,9 @@ Response Client::GetAnswer() const {
     std::unique_ptr<char[]> cMsg(new char[size + 1]);
     cMsg[size] = '\0';
     if (size) recv(server, cMsg.get(), size, MSG_WAITALL);
-    nlohmann::json ans = size?
-            nlohmann::json::parse(cMsg.get())
-            : nlohmann::json();
+    nlohmann::ordered_json ans = size ?
+                                 nlohmann::ordered_json::parse(cMsg.get())
+                                      : nlohmann::ordered_json();
 //    nlohmann::json ans(cMsg.get());
 //    std::cerr << "start: " << cMsg.get() << " :end" << std::endl;
 
@@ -90,7 +90,7 @@ int Client::GetIntFromServer() const {
 }
 
 Response Client::Login(const std::string& name, const std::string& password, const std::string& game, int num_turns, int num_players, bool is_observer) const{
-    nlohmann::json json;
+    nlohmann::ordered_json json;
     json["name"] = name;
     json["password"] = password;
     if(!game.empty())
@@ -131,14 +131,14 @@ Response Client::Turn() const {
 }
 
 Response Client::Chat(const std::string& msg) const {
-    nlohmann::json json;
+    nlohmann::ordered_json json;
     json["message"] = msg;
     this->SendRequest(Action::CHAT, json.dump());
     return this->GetAnswer();
 }
 
 Response Client::Move(int vehicle_id, int x, int y, int z) const {
-    nlohmann::json msg;
+    nlohmann::ordered_json msg;
     msg["vehicle_id"] = vehicle_id;
     msg["target"]["x"] = x;
     msg["target"]["y"] = y;
@@ -149,7 +149,7 @@ Response Client::Move(int vehicle_id, int x, int y, int z) const {
 }
 
 Response Client::Shoot(int vehicle_id, int x, int y, int z) const {
-    nlohmann::json msg;
+    nlohmann::ordered_json msg;
     msg["vehicle_id"] = vehicle_id;
     msg["target"]["x"] = x;
     msg["target"]["y"] = y;

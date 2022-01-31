@@ -28,11 +28,12 @@ private:
     vector<int> kills;
 
     const int numRounds = 15;
+
     int numTurns;
     int currentTurn;
 
     int numPlayers;
-    int currentPlayer;
+    int currentPlayerId;
 
     bool isFinished = false;
 

@@ -14,7 +14,7 @@
 
 struct Response{
     Result result;
-    nlohmann::json answer;
+    nlohmann::ordered_json answer;
 
     friend std::ostream& operator<< (std::ostream &out, const Response &response);
 };
