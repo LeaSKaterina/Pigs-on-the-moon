@@ -7,7 +7,7 @@
 
 class GameClient {
 public:
-    GameClient(bool debug = true);
+    GameClient(bool debug = false);
 
     // must be called once and first.
     bool initGame(const std::string& name, const std::string& password = "",
@@ -29,7 +29,7 @@ public:
 
     Client *getClient() const;
 
-    bool isOurTurn();
+    [[nodiscard]] bool isPlayTime() const;
 
 private:
 

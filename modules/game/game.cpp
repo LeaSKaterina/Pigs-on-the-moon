@@ -21,11 +21,10 @@ void Game::InitMap(int size) {
     map = new Map(size);
 }
 
-
 void Game::InitPlayer(int id, string name, string password) {
-    player = new Player(id, name, password);
+    player = new Player(id, move(name), move(password));
 }
-// There
+
 void Game::InitVariables(int playersNum) {
     numPlayers = playersNum;
     numTurns = numRounds * numPlayers;
@@ -58,6 +57,13 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
 
 void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
     Vehicle *t = new Vehicle(type, playerId);
+    t->InitSpawn(map->Get(spawn));
+    vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
+}
+
+void Game::AddVehicle(int playerId, string& type, tuple<int, int, int> spawn) {
+    // parse string and create new instance on this base
+    Vehicle *t = new Vehicle(Vehicle::Type::MediumTank, playerId);
     t->InitSpawn(map->Get(spawn));
     vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
 }
@@ -124,6 +130,10 @@ int Game::GetNumPlayers() const {
 
 bool Game::IsFinished() const {
     return isFinished;
+}
+
+bool Game::isPlayerTurn() const {
+    return currentPlayerId == player->GetId();
 }
 
 // get action

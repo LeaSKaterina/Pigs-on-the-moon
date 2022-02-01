@@ -11,21 +11,19 @@
 #include "../map/map.h"
 #include "../enums/action.h"
 
-using namespace std;
-
 class Game {
 private:
-    vector<int> state;
-    vector<vector<Vehicle *>> vehicles;
+    std::vector<int> state;
+    std::vector<std::vector<Vehicle *>> vehicles;
 
     // new: custom id start from 0 to numPlayers - 1
-    map<int, int> playersIdAdapter; // [real id 1, ..]->[0, 1, 2]
-    vector<int> tanksIdAdapter; // save real id for server
+    std::map<int, int> playersIdAdapter; // [real id 1, ..]->[0, 1, 2]
+    std::vector<int> tanksIdAdapter; // save real id for server
 
     // order??
 
-    vector<int> captures;
-    vector<int> kills;
+    std::vector<int> captures;
+    std::vector<int> kills;
 
     const int numRounds = 15;
 
@@ -37,12 +35,12 @@ private:
 
     bool isFinished = false;
 
-    vector<vector<int>> attackMatrix; // {"id" : "whom attack"}
+    std::vector<std::vector<int>> attackMatrix; // {"id" : "whom attack"}
     Map *map;
 
     Player *player;
 
-    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const;
+    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const std::tuple<int, int, int> &spawn) const;
 
 public:
     Game() = default;
@@ -53,31 +51,32 @@ public:
     // all inits must be called firstly!
     void InitMap(int size);
 
-    void InitPlayer(int id, string name, string password = "");
+    void InitPlayer(int id, std::string name, std::string password = "");
 
     void InitVariables(int playersNum = 3);
 
-    void InitPlayersId(const vector<int>& realId);
+    void InitPlayersId(const std::vector<int>& realId);
 
-    void InitVehiclesIds(int playerId, const vector<int>& realId);
+    void InitVehiclesIds(int playerId, const std::vector<int>& realId);
 
     // add methods
-    void AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn);
+    void AddVehicle(int playerId, Vehicle::Type type, std::tuple<int, int, int> spawn);
+    void AddVehicle(int playerId, std::string& type, std::tuple<int, int, int> spawn);
 
-    void AddBase(vector<tuple<int, int, int>> &points);
+    void AddBase(std::vector<std::tuple<int, int, int>> &points);
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
 
-    void UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
+    void UpdateVehicleState(int parentId, std::tuple<int, int, int> spawn, std::tuple<int, int, int> pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, vector<int> attacked);
+    void UpdateAttackMatrix(int playerId, std::vector<int> attacked);
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
 
-    [[nodiscard]] vector<tuple<Action, int, Hex*>> Play() const;
+    [[nodiscard]] std::vector<std::tuple<Action, int, Hex*>> Play() const;
 
     // get action
     // ...
@@ -87,6 +86,8 @@ public:
     [[nodiscard]] int GetNumPlayers() const;
 
     [[nodiscard]] bool IsFinished() const;
+
+    [[nodiscard]] bool isPlayerTurn() const;
 };
 
 

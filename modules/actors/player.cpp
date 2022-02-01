@@ -6,8 +6,8 @@ int Player::GetId() const {
 
 Player::Player(int id, std::string name, std::string pass) {
     this->id = id;
-    this->name = name;
-    this->password = pass;
+    this->name = move(name);
+    this->password = move(pass);
     this->capture = 0;
     this->kill = 0;
 }

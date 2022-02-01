@@ -18,18 +18,26 @@ bool GameClient::initGame(const string &name, const string &password, const stri
     int size = map_info.value("size", -1);
     game->InitMap(size);
 
+    #ifdef _DEBUG
+    cout << "Map request:\n" << map_info << "\n:Map request" << endl;
+    #endif
+
     auto spawn_info = map_info.value("spawn_points", nlohmann::ordered_json(""));
     int index = 0;
+
     for (auto& player : spawn_info.items()) {
-        auto points = player.value().value("medium_tank", nlohmann::ordered_json(""));
-        for (auto& i : points){
-            game->AddVehicle(index,
-                             Vehicle::Type::MediumTank,
-                             make_tuple(
+        for (auto& spawn : player.value().items()){
+            auto& points = spawn.value();
+            string type = spawn.key();
+            for(auto& i : points) {
+                game->AddVehicle(index,
+                                 type,
+                                 make_tuple(
                                      i.value("x", -1),
                                      i.value("y", -1),
                                      i.value("z", -1)
-                             ));
+                                ));
+            }
         }
         index++;
     }
@@ -89,7 +97,7 @@ void GameClient::CheckGameState() {
         for(int i : pm.value()) {
             v_attacked.push_back(i);
         }
-        game->UpdateAttackMatrix(stoi(pm.key()), v_attacked);
+        game->UpdateAttackMatrix(stoi(pm.key()), move(v_attacked));
     }
 
     // current turn | player | finished
@@ -203,8 +211,8 @@ Client *GameClient::getClient() const {
     return client;
 }
 
-bool GameClient::isOurTurn() {
-    return true;
+bool GameClient::isPlayTime() const {
+    return game->isPlayerTurn();
 }
 
 
