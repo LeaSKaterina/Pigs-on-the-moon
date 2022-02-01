@@ -36,8 +36,13 @@ private:
     // entities
     Game* game;
     Client* client;
-
-    tuple<int, int, int> MakePosTuple(nlohmann::ordered_json coordinate);
+    tuple<int, int, int> MakePosTuple(const nlohmann::ordered_json& coordinate) {
+        return make_tuple(
+                coordinate.value("x", -1),
+                coordinate.value("y", -1),
+                coordinate.value("z", -1)
+        );
+    }
 
 };
 

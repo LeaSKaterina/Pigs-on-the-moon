@@ -50,14 +50,6 @@ bool GameClient::initGame(const string &name, const string &password, const stri
     return true;
 }
 
-tuple<int, int, int> GameClient::MakePosTuple(nlohmann::ordered_json coordinate) {
-    return make_tuple(
-            coordinate.value("x", -1),
-            coordinate.value("y", -1),
-            coordinate.value("z", -1)
-    );
-}
-
 GameClient::~GameClient() {
     client->Logout();
     delete game;
