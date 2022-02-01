@@ -22,7 +22,7 @@ public:
 
     void AddBase(vector<tuple<int, int, int>> &points);
 
-    Hex *Get(const tuple<int, int, int> &p) const { return grid.at(p); }
+    [[nodiscard]] Hex *Get(const tuple<int, int, int> &p) const { return grid.at(p); }
 };
 
 

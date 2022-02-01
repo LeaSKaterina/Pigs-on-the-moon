@@ -6,7 +6,6 @@
 
 class Construction {
 private:
-    // std::vector<Hex*> basis;
     static int counter;
     int id;
 

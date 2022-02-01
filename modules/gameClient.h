@@ -30,8 +30,7 @@ public:
 
     Client *GetClient() const { return client; }
 
-    bool IsOurTurn() { return true; }
-
+    [[nodiscard]] bool IsPlayTime() const { return game->IsPlayerTurn(); }
 private:
 
     // entities

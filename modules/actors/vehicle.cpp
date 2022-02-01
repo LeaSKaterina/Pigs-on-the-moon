@@ -14,6 +14,7 @@ Vehicle::Vehicle(Type type, int playerId) {
     }
     destructionPoints = health;
     this->playerId = playerId;
+    this->type = type;
 }
 
 bool Vehicle::Move(Hex *newPos) {
@@ -32,7 +33,8 @@ int Vehicle::Shoot(Vehicle *v) { // вернет сколько очков за�
 }
 
 void Vehicle::Update(int health, Hex *newPos, int capture) {
-    currentPosition->Free();
+    if (currentPosition)
+        currentPosition->Free();
     currentPosition = newPos;
     currentPosition->Occupy();
     this->health = health;
