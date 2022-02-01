@@ -120,7 +120,7 @@ int main() {
 
 ///////////////////////////////////////////////////////////////////////////////variables for debugging
     std::string game = "test3";// the name of the game we are connecting to
-    int numbersCount = 2; // number of players. Values from [1, 2, 3]
+    int numbersCount = 1; // number of players. Values from [1, 2, 3]
     int numbersTurn = 100; // numbers of turns. Values from [0 ... 100]
     int ourOrder = 1; // our connection number. Values from [1, 2, 3] // may be mare than numberCount
 ///////////////////////////////////////////////////////////////////////////////

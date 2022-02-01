@@ -9,7 +9,7 @@
 #include "../enums/action.h"
 #include "../enums/result.h"
 
-#include "../../libs/json-3.10.5/include/nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 
 struct Response{

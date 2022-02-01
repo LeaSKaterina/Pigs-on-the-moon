@@ -1,7 +1,7 @@
 #ifndef PIGS_ON_THE_MOON_GAMECLIENT_H
 #define PIGS_ON_THE_MOON_GAMECLIENT_H
 
-#include "../libs/json-3.10.5/include/nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 #include "client/client.h"
 #include "game/game.h"
 

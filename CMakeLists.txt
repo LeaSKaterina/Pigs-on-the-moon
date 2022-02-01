@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 link_libraries(ws2_32)
 
-include_directories(libs/json-3.10.5/include)
+include(./conanBuild/conanbuildinfo.cmake)
+conan_basic_setup()
 
 file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.h) #collect all .h files
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.cpp) #collect all .cpp files
@@ -14,3 +15,4 @@ set(SOURCES ${HEADER_FILES} ${SOURCE_FILES})
 
 add_executable(Pigs_on_the_moon main.cpp ${SOURCES})
 
+target_link_libraries(Pigs_on_the_moon ${CONAN_LIBS})
