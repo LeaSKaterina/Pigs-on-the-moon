@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_MAP_HEX_H
-#define PIGS_ON_THE_MOON_MAP_HEX_H
+#pragma once
 
 #include <cstdlib>
 #include <tuple>
@@ -35,5 +34,3 @@ public:
     bool operator==(const Hex &rhs) const;
 };
 
-
-#endif //PIGS_ON_THE_MOON_MAP_HEX_H

@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_GAMECLIENT_H
-#define PIGS_ON_THE_MOON_GAMECLIENT_H
+#pragma once
 
 #include "nlohmann/json.hpp"
 #include "client/client.h"
@@ -47,6 +46,3 @@ private:
 };
 
 
-
-
-#endif //PIGS_ON_THE_MOON_GAMECLIENT_H

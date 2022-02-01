@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_CONSTRUCTIONS_CONSTRUCTION_H
-#define PIGS_ON_THE_MOON_CONSTRUCTIONS_CONSTRUCTION_H
+#pragma once
 
 #include <vector>
 #include "../actors/vehicle.h"
@@ -19,6 +18,3 @@ public:
     explicit Construction(std::vector<Hex *> &basis);
 };
 
-
-
-#endif // PIGS_ON_THE_MOON_CONSTRUCTIONS_CONSTRUCTION_H

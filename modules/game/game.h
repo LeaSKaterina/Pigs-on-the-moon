@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_GAME_GAME_H
-#define PIGS_ON_THE_MOON_GAME_GAME_H
+#pragma once
 
 #include <tuple>
 #include <map>
@@ -89,6 +88,3 @@ public:
     [[nodiscard]] bool IsFinished() const;
 };
 
-
-
-#endif //PIGS_ON_THE_MOON_GAME_GAME_H

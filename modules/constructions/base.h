@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_CONSTRUCTIONS_BASE_H
-#define PIGS_ON_THE_MOON_CONSTRUCTIONS_BASE_H
+#pragma once
 
 #include "construction.h"
 
@@ -11,5 +10,3 @@ public:
 };
 
 
-
-#endif  //PIGS_ON_THE_MOON_CONSTRUCTIONS_BASE_H

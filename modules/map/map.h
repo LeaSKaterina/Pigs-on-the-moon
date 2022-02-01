@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_MAP_MAP_H
-#define PIGS_ON_THE_MOON_MAP_MAP_H
+#pragma once
 
 #include <vector>
 #include <tuple>
@@ -27,5 +26,3 @@ public:
 };
 
 
-
-#endif //PIGS_ON_THE_MOON_MAP_MAP_H

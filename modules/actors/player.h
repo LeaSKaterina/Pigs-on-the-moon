@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_ACTORS_PLAYER_H
-#define PIGS_ON_THE_MOON_ACTORS_PLAYER_H
+#pragma once
 
 #include <string>
 //#include <vector>
@@ -20,5 +19,3 @@ public:
     int GetId() const;
 };
 
-
-#endif //PIGS_ON_THE_MOON_ACTORS_PLAYER_H

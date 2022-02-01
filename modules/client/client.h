@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_CLIENT_CLIENT_H
-#define PIGS_ON_THE_MOON_CLIENT_CLIENT_H
+#pragma once
 
 #include <winsock2.h>
 #include <winerror.h>
@@ -51,5 +50,3 @@ public:
     static void PrintLogInfo(const std::string& info);
 };
 
-
-#endif //PIGS_ON_THE_MOON_CLIENT_CLIENT_H

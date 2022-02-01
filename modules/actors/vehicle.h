@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_ACTORS_VEHICLE_H
-#define PIGS_ON_THE_MOON_ACTORS_VEHICLE_H
+#pragma once
 
 #include "../map/hex.h"
 
@@ -50,5 +49,3 @@ private:
 };
 
 
-
-#endif //PIGS_ON_THE_MOON_ACTORS_VEHICLE_H

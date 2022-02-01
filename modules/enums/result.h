@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_ENUMS_RESULT_H
-#define PIGS_ON_THE_MOON_ENUMS_RESULT_H
+#pragma once
 
 enum class Result {
     OKEY = 0,
@@ -9,5 +8,3 @@ enum class Result {
     TIMEOUT = 4,
     INTERNAL_SERVER_ERROR = 500
 };
-
-#endif //PIGS_ON_THE_MOON_ENUMS_RESULT_H

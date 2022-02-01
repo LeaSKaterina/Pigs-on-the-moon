@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_GAME_ACTIONCONTROLLER_H
-#define PIGS_ON_THE_MOON_GAME_ACTIONCONTROLLER_H
+#pragma once
 
 //#include <tuple>
 #include <cstdlib>
@@ -31,5 +30,3 @@ public:
 
 };
 
-
-#endif //PIGS_ON_THE_MOON_GAME_ACTIONCONTROLLER_H
