@@ -35,19 +35,27 @@ private:
     bool debug;
 public:
     Client(bool debug = true);
-    ~Client();
+    ~Client() { shutdown(server, 1);}
 
     Response Login(const std::string& name, const std::string& password = "",
                    const std::string& game="", int num_turns = 0, int num_players = 1, bool is_observer = false) const;
-    Response Logout() const;
-    Response Map() const;
-    Response GameState() const;
-    Response GameActions() const;
-    Response Turn() const;
+
+    Response Logout() const { this->SendRequest(Action::LOGOUT, ""); return this->GetAnswer();}
+
+    Response Map() const { this->SendRequest(Action::MAP, ""); return this->GetAnswer();}
+
+    Response GameState() const { this->SendRequest(Action::GAME_STATE, ""); return this->GetAnswer();}
+
+    Response GameActions() const { this->SendRequest(Action::GAME_ACTIONS, ""); return this->GetAnswer();}
+
+    Response Turn() const { this->SendRequest(Action::TURN, ""); return this->GetAnswer();}
+
     Response Chat(const std::string& msg) const;
+
     Response Move(int vehicle_id, int x, int y, int z) const;
+
     Response Shoot(int vehicle_id, int x, int y, int z) const;
 
-    static void PrintLogInfo(const std::string& info);
+    static void PrintLogInfo(const std::string& info) { std::cout << info << '\n';}
 };
 

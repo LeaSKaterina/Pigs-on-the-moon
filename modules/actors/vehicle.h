@@ -15,17 +15,17 @@ public:
 
     int Shoot(Vehicle *v);
 
-    void IncCapture();
+    void IncCapture() { capturePoints++;}
 
-    void DropCapture();
+    void DropCapture() { capturePoints = 0;}
 
     void Update(int health, Hex *newPos, int capture);
 
-    int GetPlayerId() const;
+    int GetPlayerId() const { return playerId;}
 
-    [[nodiscard]] const std::tuple<int, int, int> &GetSpawn() const;
+    [[nodiscard]] const std::tuple<int, int, int> &GetSpawn() const { return spawnPosition->GetCoordinates();}
 
-    [[nodiscard]] const std::tuple<int, int, int> &GetCurrentPosition() const;
+    [[nodiscard]] const std::tuple<int, int, int> &GetCurrentPosition() const { return currentPosition->GetCoordinates();}
 
     void InitSpawn(Hex *p);
 
@@ -45,7 +45,7 @@ private:
 
     int GetHit(int damage = 1);
 
-    bool IsEnemy(Vehicle *v) const;
+    bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId;}
 };
 
 

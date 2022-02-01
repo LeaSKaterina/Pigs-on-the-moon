@@ -18,14 +18,6 @@ Client::Client(bool debug) : debug(debug){
     }
 }
 
-Client::~Client() {
-    shutdown(server, 1);
-}
-
-void Client::PrintLogInfo(const std::string& info) {
-    std::cout << info << '\n';
-}
-
 void Client::SendRequest(Action action, const std::string& msg) const {
     std::vector<char> buffer(4 * 2 + msg.size() + 1);// action(int) + size(int) + msg + '\0'
     buffer.back() = '\0';
@@ -92,31 +84,6 @@ Response Client::Login(const std::string& name, const std::string& password, con
 
     this->SendRequest(Action::LOGIN, json.dump());
 
-    return this->GetAnswer();
-}
-
-Response Client::Logout() const {
-    this->SendRequest(Action::LOGOUT, "");
-    return this->GetAnswer();
-}
-
-Response Client::Map() const{
-    this->SendRequest(Action::MAP, "");
-    return this->GetAnswer();
-}
-
-Response Client::GameState() const {
-    this->SendRequest(Action::GAME_STATE, "");
-    return this->GetAnswer();
-}
-
-Response Client::GameActions() const {
-    this->SendRequest(Action::GAME_ACTIONS, "");
-    return this->GetAnswer();
-}
-
-Response Client::Turn() const {
-    this->SendRequest(Action::TURN, "");
     return this->GetAnswer();
 }
 

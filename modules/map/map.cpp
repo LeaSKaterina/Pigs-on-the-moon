@@ -1,10 +1,5 @@
 #include "map.h"
 
-Map::Map(int size) {
-    this->size = size;
-    InitGrid();
-}
-
 void Map::AddBase(vector <tuple<int, int, int>> &points) {
     vector < Hex * > basis;
     for (auto &p: points) {
@@ -12,11 +7,6 @@ void Map::AddBase(vector <tuple<int, int, int>> &points) {
     }
     content.push_back(new Base(basis));
 }
-
-Hex *Map::Get(const tuple<int, int, int> &p) const {
-    return grid.at(p);
-}
-
 
 void Map::InitGrid() {
     for (int x = -size + 1; x < size; x++) {

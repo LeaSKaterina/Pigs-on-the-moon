@@ -26,7 +26,5 @@ public:
     static std::tuple<int, int, int>
     getTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
                       vector<vector<Vehicle *>> vehicles, int playerId);
-
-
 };
 

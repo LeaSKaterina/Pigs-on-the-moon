@@ -56,16 +56,7 @@ GameClient::~GameClient() {
     delete client;
 }
 
-GameClient::GameClient(bool debug) {
-    game = new Game();
-    client = new Client(debug);
-}
-
-bool GameClient::GameIsFinished() const {
-    return game->IsFinished();
-}
-
-void GameClient::CheckGameState() {
+void GameClient::UpdateGameState() {
     auto answer = client->GameState();
 
     // attack matrix
@@ -191,12 +182,13 @@ void GameClient::InitPlayersId() {
         game->InitVehiclesIds(current_player_id, vehicles_ids);
 }
 
-Client *GameClient::getClient() const {
-    return client;
+tuple<int, int, int> GameClient::MakePosTuple(const nlohmann::ordered_json &coordinate) {
+    return make_tuple(
+            coordinate.value("x", -1),
+            coordinate.value("y", -1),
+            coordinate.value("z", -1)
+    );
 }
 
-bool GameClient::isOurTurn() {
-    return true;
-}
 
 

@@ -15,16 +15,8 @@ Game::~Game() {
     delete map;
     // vehicles?
 }
-// Init
-
-void Game::InitMap(int size) {
-    map = new Map(size);
-}
 
 
-void Game::InitPlayer(int id, string name, string password) {
-    player = new Player(id, name, password);
-}
 // There
 void Game::InitVariables(int playersNum) {
     numPlayers = playersNum;
@@ -62,12 +54,6 @@ void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spa
     vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
 }
 
-void Game::AddBase(vector <tuple<int, int, int>> &points) {
-    map->AddBase(points);
-}
-
-// Update
-
 // get state
 void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     currentTurn = currTurn;
@@ -79,10 +65,6 @@ void Game::UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<in
                               int capturePoints) {
     Vehicle *v = Find(playersIdAdapter.at(parentId), spawn);
     v->Update(health, map->Get(pos), capturePoints);
-}
-
-void Game::UpdateAttackMatrix(int playerId, vector<int> attacked) {
-    attackMatrix[playersIdAdapter.at(playerId)] = move(attacked);
 }
 
 void Game::UpdateWinPoints(int playerId, int capture, int kill) {
@@ -116,14 +98,6 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
 
     return res;
 //    return vector<tuple<Action, int, Hex *>>();
-}
-
-int Game::GetNumPlayers() const {
-    return numPlayers;
-}
-
-bool Game::IsFinished() const {
-    return isFinished;
 }
 
 // get action

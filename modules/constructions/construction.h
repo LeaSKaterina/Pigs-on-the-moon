@@ -13,7 +13,7 @@ private:
 public:
     virtual void Play(Vehicle *) = 0;
 
-    virtual ~Construction();
+    virtual ~Construction() = default;
 
     explicit Construction(std::vector<Hex *> &basis);
 };

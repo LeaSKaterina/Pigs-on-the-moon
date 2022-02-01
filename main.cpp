@@ -119,9 +119,9 @@ int main() {
     bool debug = true;
 
 ///////////////////////////////////////////////////////////////////////////////variables for debugging
-    std::string game = "test3";// the name of the game we are connecting to
-    int numbersCount = 1; // number of players. Values from [1, 2, 3]
-    int numbersTurn = 100; // numbers of turns. Values from [0 ... 100]
+    const std::string game = "test3";// the name of the game we are connecting to
+    const int numbersCount = 1; // number of players. Values from [1, 2, 3]
+    const int numbersTurn = 100; // numbers of turns. Values from [0 ... 100]
     int ourOrder = 1; // our connection number. Values from [1, 2, 3] // may be mare than numberCount
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +145,7 @@ int main() {
     while(gc.SendTurn() != true);
     gc.InitPlayersId();
     while(gc.GameIsFinished() != true){
-        gc.CheckGameState();
+        gc.UpdateGameState();
         if(gc.isOurTurn())
             gc.SendAction();
 //        std::cout << gc.getClient()->GameState();

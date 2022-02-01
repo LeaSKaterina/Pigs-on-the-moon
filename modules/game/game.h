@@ -50,9 +50,9 @@ public:
 
     // init methods
     // all inits must be called firstly!
-    void InitMap(int size);
+    void InitMap(int size) { map = new Map(size);}
 
-    void InitPlayer(int id, string name, string password = "");
+    void InitPlayer(int id, string name, string password = "") { player = new Player(id, name, password);}
 
     void InitVariables(int playersNum = 3);
 
@@ -63,7 +63,7 @@ public:
     // add methods
     void AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn);
 
-    void AddBase(vector<tuple<int, int, int>> &points);
+    void AddBase(vector<tuple<int, int, int>> &points) { map->AddBase(points);}
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
@@ -71,7 +71,7 @@ public:
     void UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, vector<int> attacked);
+    void UpdateAttackMatrix(int playerId, vector<int> attacked) { attackMatrix[playersIdAdapter.at(playerId)] = move(attacked);}
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
@@ -83,8 +83,9 @@ public:
 
     // Getters
 
-    [[nodiscard]] int GetNumPlayers() const;
+    [[nodiscard]] int GetNumPlayers() const { return numPlayers;}
 
-    [[nodiscard]] bool IsFinished() const;
+    [[nodiscard]] bool IsFinished() const { return isFinished;}
+
 };
 

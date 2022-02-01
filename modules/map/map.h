@@ -18,11 +18,10 @@ private:
     void InitGrid();
 
 public:
-    explicit Map(int size);
+    explicit Map(int size) : size(size) { InitGrid();}
 
     void AddBase(vector <tuple<int, int, int>> &points);
-
-    Hex *Get(const tuple<int, int, int> &p) const;
+    Hex *Get(const tuple<int, int, int> &p) const { return grid.at(p);}
 };
 
 

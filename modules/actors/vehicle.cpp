@@ -31,32 +31,12 @@ int Vehicle::Shoot(Vehicle *v) { // вернет сколько очков за�
     return 0;
 }
 
-void Vehicle::IncCapture() {
-    capturePoints++;
-}
-
-void Vehicle::DropCapture() {
-    capturePoints = 0;
-}
-
 void Vehicle::Update(int health, Hex *newPos, int capture) {
     currentPosition->Free();
     currentPosition = newPos;
     currentPosition->Occupy();
     this->health = health;
     capturePoints = capture;
-}
-
-int Vehicle::GetPlayerId() const {
-    return playerId;
-}
-
-const std::tuple<int, int, int> &Vehicle::GetSpawn() const {
-    return spawnPosition->GetCoordinates();
-}
-
-const std::tuple<int, int, int> &Vehicle::GetCurrentPosition() const {
-    return currentPosition->GetCoordinates();
 }
 
 void Vehicle::InitSpawn(Hex *p) {
@@ -75,9 +55,5 @@ int Vehicle::GetHit(int damage) {
     if (health <= 0)
         return destructionPoints;
     return 0;
-}
-
-bool Vehicle::IsEnemy(Vehicle *v) const {
-    return this->playerId != v->playerId;
 }
 

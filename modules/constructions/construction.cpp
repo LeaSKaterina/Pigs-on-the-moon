@@ -9,7 +9,3 @@ Construction::Construction(std::vector<Hex *> &basis) {
 }
 
 int Construction::counter = 0;
-
-Construction::~Construction() {
-
-}
