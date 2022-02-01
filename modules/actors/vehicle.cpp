@@ -14,6 +14,7 @@ Vehicle::Vehicle(Type type, int playerId) {
     }
     destructionPoints = health;
     this->playerId = playerId;
+    this->type = type;
 }
 
 bool Vehicle::Move(Hex *newPos) {
@@ -40,7 +41,8 @@ void Vehicle::DropCapture() {
 }
 
 void Vehicle::Update(int health, Hex *newPos, int capture) {
-    currentPosition->Free();
+    if (currentPosition)
+        currentPosition->Free();
     currentPosition = newPos;
     currentPosition->Occupy();
     this->health = health;

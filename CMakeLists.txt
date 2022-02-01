@@ -3,8 +3,11 @@ project(Pigs_on_the_moon)
 
 set(CMAKE_CXX_STANDARD 17)
 
-link_libraries(ws2_32)
+#Debug
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
+#!Debug
 
+link_libraries(ws2_32)
 set(ACTORS modules/actors/player.cpp modules/actors/vehicle.cpp)
 set(CLIENT modules/client/client.cpp)
 set(CONSTRUCTIONS modules/constructions/construction.cpp modules/constructions/base.cpp)

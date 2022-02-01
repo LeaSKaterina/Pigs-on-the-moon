@@ -1,6 +1,4 @@
 #include <iostream>
-//#include "modules/client/Client.h"
-//#include "modules/game.h"
 #include "modules/gameClient.h"
 
 #include <nlohmann/json.hpp>
@@ -16,7 +14,7 @@ int main() {
     std::string game = "test3";// the name of the game we are connecting to
     int numbersCount = 2; // number of players. Values from [1, 2, 3]
     int numbersTurn = 100; // numbers of turns. Values from [0 ... 100]
-    int ourOrder = 1; // our connection number. Values from [1, 2, 3] // may be mare than numberCount
+    int ourOrder = 1; // our connection number. Values from [1, 2, 3] // may be more than numberCount
 ///////////////////////////////////////////////////////////////////////////////
 
     if(ourOrder > numbersCount) // simple check max value
@@ -36,9 +34,9 @@ int main() {
     }
 
 
-    while(gc.SendTurn() != true);
+    while(!gc.SendTurn());
     gc.InitPlayersId();
-    while(gc.GameIsFinished() != true){
+    while(!gc.GameIsFinished()){
         gc.CheckGameState();
         if(gc.isPlayTime())
             gc.SendAction();

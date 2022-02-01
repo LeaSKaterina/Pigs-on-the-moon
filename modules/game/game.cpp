@@ -61,6 +61,13 @@ void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spa
     vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
 }
 
+void Game::AddVehicle(int playerId, string& type, tuple<int, int, int> spawn) {
+    // parse string and create new instance on this base
+    Vehicle *t = new Vehicle(Vehicle::Type::MediumTank, playerId);
+    t->InitSpawn(map->Get(spawn));
+    vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
+}
+
 void Game::AddBase(vector <tuple<int, int, int>> &points) {
     map->AddBase(points);
 }

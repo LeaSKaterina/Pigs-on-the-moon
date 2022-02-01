@@ -39,9 +39,9 @@ private:
     int destructionPoints;    // Очки за уничтожение
     int speedPoints;
     int damage = 1;
-    int capturePoints;
-    Hex *spawnPosition;
-    Hex *currentPosition;
+    int capturePoints = 0;
+    Hex *spawnPosition = nullptr;
+    Hex *currentPosition = nullptr;
     Type type;
 
     int GetHit(int damage = 1);
