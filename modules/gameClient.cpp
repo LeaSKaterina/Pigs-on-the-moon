@@ -1,9 +1,9 @@
 #include "gameClient.h"
 
-bool GameClient::initGame(const string &name, const string &password, const string &game_name, int num_turns,
-                          int num_players, bool is_observer)  {
+bool GameClient::InitGame(const string &name, const string &password, const string &gameName, int numTurns,
+                          int numPlayers, bool isObserver) {
     // Login
-    auto answer = client->Login(name, password, game_name, num_turns, num_players, is_observer);
+    auto answer = client->Login(name, password, gameName, numTurns, numPlayers, isObserver);
     if (answer.result != Result::OKEY)
         return false;
 
@@ -14,17 +14,17 @@ bool GameClient::initGame(const string &name, const string &password, const stri
     game->InitVariables();
 
     // Map
-    nlohmann::ordered_json map_info = client->Map().answer;
-    int size = map_info.value("size", -1);
+    nlohmann::ordered_json mapInfo = client->Map().answer;
+    int size = mapInfo.value("size", -1);
     game->InitMap(size);
 
-    auto spawn_info = map_info.value("spawn_points", nlohmann::ordered_json(""));
+    auto spawnInfo = mapInfo.value("spawn_points", nlohmann::ordered_json(""));
     int index = 0;
-    for (auto& player : spawn_info.items()) {
+    for (auto &player: spawnInfo.items()) {
         auto points = player.value().value("medium_tank", nlohmann::ordered_json(""));
-        for (auto& i : points){
+        for (auto &i: points) {
             game->AddVehicle(index,
-                             Vehicle::Type::MediumTank,
+                             Vehicle::Type::MEDIUM_TANK,
                              make_tuple(
                                      i.value("x", -1),
                                      i.value("y", -1),
@@ -34,19 +34,19 @@ bool GameClient::initGame(const string &name, const string &password, const stri
         index++;
     }
 
-    auto content_info = map_info.value("content", nlohmann::ordered_json(""));
-    auto base_info = content_info.value("base", nlohmann::ordered_json(""));
-    vector<tuple<int, int, int>> base_points;
-    for (auto& point : base_info) {
-        base_points.emplace_back(
+    auto contentInfo = mapInfo.value("content", nlohmann::ordered_json(""));
+    auto baseInfo = contentInfo.value("base", nlohmann::ordered_json(""));
+    vector<tuple<int, int, int>> basePoints;
+    for (auto &point: baseInfo) {
+        basePoints.emplace_back(
                 make_tuple(
                         point.value("x", -1),
                         point.value("y", -1),
-                        point.value("z",-1)
-                        )
-                );
+                        point.value("z", -1)
+                )
+        );
     }
-    game->AddBase(base_points);
+    game->AddBase(basePoints);
     return true;
 }
 
@@ -63,16 +63,16 @@ void GameClient::UpdateGameState() {
 
     auto am = answer.answer.value("attack_matrix", nlohmann::ordered_json(""));
 //    const int vector_size = game->GetNumPlayers();
-    for(auto& pm : am.items()) {
+    for (auto &pm: am.items()) {
         // player id = pm.key, vector of attacks = pm.value
         // to upd : is there a way to do vector without a loop ?
 
-        vector<int> v_attacked;
+        vector<int> vAttacked;
 //        auto& arr_attacked = pm.value();
-        for(int i : pm.value()) {
-            v_attacked.push_back(i);
+        for (int i: pm.value()) {
+            vAttacked.push_back(i);
         }
-        game->UpdateAttackMatrix(stoi(pm.key()), v_attacked);
+        game->UpdateAttackMatrix(stoi(pm.key()), vAttacked);
     }
 
     // current turn | player | finished
@@ -81,43 +81,43 @@ void GameClient::UpdateGameState() {
             answer.answer.value("current_turn", -1),
             answer.answer.value("current_player_idx", -1),
             answer.answer.value("finished", 0)
-            );
+    );
 
     // vehicles
 
     auto vehicles = answer.answer.value("vehicles", nlohmann::ordered_json(""));
-    for(auto& v : vehicles.items()) {
-        auto& vehicle_info = v.value();
+    for (auto &v: vehicles.items()) {
+        auto &vehicleInfo = v.value();
 
-        auto position = vehicle_info.value("position", nlohmann::ordered_json(""));
-        auto spawn_position = vehicle_info.value("spawn_position", nlohmann::ordered_json(""));
+        auto position = vehicleInfo.value("position", nlohmann::ordered_json(""));
+        auto spawnPosition = vehicleInfo.value("spawn_position", nlohmann::ordered_json(""));
 
         auto pos = MakePosTuple(
-                vehicle_info.value("position", nlohmann::ordered_json(""))
-                );
-        auto spawn_pos = MakePosTuple(
-                vehicle_info.value("spawn_position", nlohmann::ordered_json(""))
+                vehicleInfo.value("position", nlohmann::ordered_json(""))
+        );
+        auto spawnPos = MakePosTuple(
+                vehicleInfo.value("spawn_position", nlohmann::ordered_json(""))
         );
         game->UpdateVehicleState(
-                vehicle_info.value("player_id", -1),
-                spawn_pos,
+                vehicleInfo.value("player_id", -1),
+                spawnPos,
                 pos,
-                vehicle_info.value("health", -1),
-                vehicle_info.value("capture_points", -1));
+                vehicleInfo.value("health", -1),
+                vehicleInfo.value("capture_points", -1));
         // TODO? mb ref in uvs;
     }
 
     // win_points
 
-    auto win_points = answer.answer.value("win_points", nlohmann::ordered_json(""));
-    cerr <<"DEBUG: " << win_points << endl;
-    for(auto& player : win_points.items()) {
-        auto& win_points_info = player.value();
+    auto winPoints = answer.answer.value("win_points", nlohmann::ordered_json(""));
+    cerr << "DEBUG: " << winPoints << endl;
+    for (auto &player: winPoints.items()) {
+        auto &winPointsInfo = player.value();
         game->UpdateWinPoints(
                 stoi(player.key()),
-                win_points_info.value("capture", 0),
-                win_points_info.value("kill", 0)
-                );
+                winPointsInfo.value("capture", 0),
+                winPointsInfo.value("kill", 0)
+        );
     }
 }
 
@@ -128,17 +128,17 @@ bool GameClient::SendTurn() const {
 
 void GameClient::SendAction() const {
     auto actions = game->Play();
-    for(auto& act : actions) {
-        auto& [action_type, vehicle_id, coordinate] = act;
-        auto& [x, y, z] = coordinate->GetCoordinates();
+    for (auto &act: actions) {
+        auto&[actionType, vehicleId, coordinate] = act;
+        auto&[x, y, z] = coordinate->GetCoordinates();
         // TODO? Is there any check needed? as Hex* == nullptr
-        switch (action_type) {
+        switch (actionType) {
             case Action::MOVE:
-                client->Move(vehicle_id, x, y, z);
+                client->Move(vehicleId, x, y, z);
                 // TODO make other move/shoot in Client private
                 break;
             case Action::SHOOT:
-                client->Shoot(vehicle_id, x, y, z);
+                client->Shoot(vehicleId, x, y, z);
                 break;
             default:
 //                cerr << "DEFAULT ACTIVE" << endl;
@@ -150,36 +150,36 @@ void GameClient::SendAction() const {
 // must be called only when all players are connected
 void GameClient::InitPlayersId() {
     auto answer = client->GameState();
-    vector<int> real_ids;
+    vector<int> realIds;
 
     // players id
 
     auto am = answer.answer.value("attack_matrix", nlohmann::ordered_json(""));
-    for(auto& pm : am.items()) {
-        real_ids.push_back(stoi(pm.key()));
+    for (auto &pm: am.items()) {
+        realIds.push_back(stoi(pm.key()));
     }
-    game->InitPlayersId(real_ids);
+    game->InitPlayersId(realIds);
 
     // vehicle id
     // TODO! recode
-    vector<int> vehicles_ids;
-    int current_player_id = -1;
+    vector<int> vehiclesIds;
+    int currentPlayerId = -1;
     auto vehicles = answer.answer.value("vehicles", nlohmann::ordered_json(""));
-    for(auto& v : vehicles.items()) {
-        auto& vehicle_info = v.value();
-        int player_id = vehicle_info.value("player_id", -1);
-        int vehicle_id = stoi(v.key());
-        if (current_player_id == -1)
-            current_player_id = player_id;
-        if(current_player_id != player_id) {
-            game->InitVehiclesIds(current_player_id, vehicles_ids);
-            vehicles_ids.clear();
-            current_player_id = player_id;
+    for (auto &v: vehicles.items()) {
+        auto &vehicleInfo = v.value();
+        int playerId = vehicleInfo.value("player_id", -1);
+        int vehicleId = stoi(v.key());
+        if (currentPlayerId == -1)
+            currentPlayerId = playerId;
+        if (currentPlayerId != playerId) {
+            game->InitVehiclesIds(currentPlayerId, vehiclesIds);
+            vehiclesIds.clear();
+            currentPlayerId = playerId;
         }
-        vehicles_ids.push_back(vehicle_id);
+        vehiclesIds.push_back(vehicleId);
     }
-    if(!vehicles_ids.empty())
-        game->InitVehiclesIds(current_player_id, vehicles_ids);
+    if (!vehiclesIds.empty())
+        game->InitVehiclesIds(currentPlayerId, vehiclesIds);
 }
 
 tuple<int, int, int> GameClient::MakePosTuple(const nlohmann::ordered_json &coordinate) {

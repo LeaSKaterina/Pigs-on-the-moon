@@ -6,7 +6,7 @@ class Vehicle {
 public:
 
     enum Type {
-        MediumTank, LightTank, HeavyTank, AtSpg, Spg
+        MEDIUM_TANK, LIGHT_TANK, HEAVY_TANK, AT_SPG, SPG
     };
 
     Vehicle(Type type, int playerId);
@@ -15,17 +15,18 @@ public:
 
     int Shoot(Vehicle *v);
 
-    void IncCapture() { capturePoints++;}
+    void IncCapture() { capturePoints++; }
 
-    void DropCapture() { capturePoints = 0;}
+    void DropCapture() { capturePoints = 0; }
 
     void Update(int health, Hex *newPos, int capture);
 
-    int GetPlayerId() const { return playerId;}
+    int GetPlayerId() const { return playerId; }
 
-    [[nodiscard]] const std::tuple<int, int, int> &GetSpawn() const { return spawnPosition->GetCoordinates();}
+    [[nodiscard]] const std::tuple<int, int, int> &GetSpawn() const { return spawnPosition->GetCoordinates(); }
 
-    [[nodiscard]] const std::tuple<int, int, int> &GetCurrentPosition() const { return currentPosition->GetCoordinates();}
+    [[nodiscard]] const std::tuple<int, int, int> &
+    GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
     void InitSpawn(Hex *p);
 
@@ -45,7 +46,7 @@ private:
 
     int GetHit(int damage = 1);
 
-    bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId;}
+    bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
 };
 
 

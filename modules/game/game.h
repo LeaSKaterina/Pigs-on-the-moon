@@ -50,20 +50,20 @@ public:
 
     // init methods
     // all inits must be called firstly!
-    void InitMap(int size) { map = new Map(size);}
+    void InitMap(int size) { map = new Map(size); }
 
-    void InitPlayer(int id, string name, string password = "") { player = new Player(id, name, password);}
+    void InitPlayer(int id, string name, string password = "") { player = new Player(id, name, password); }
 
     void InitVariables(int playersNum = 3);
 
-    void InitPlayersId(const vector<int>& realId);
+    void InitPlayersId(const vector<int> &realId);
 
-    void InitVehiclesIds(int playerId, const vector<int>& realId);
+    void InitVehiclesIds(int playerId, const vector<int> &realId);
 
     // add methods
     void AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn);
 
-    void AddBase(vector<tuple<int, int, int>> &points) { map->AddBase(points);}
+    void AddBase(vector<tuple<int, int, int>> &points) { map->AddBase(points); }
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
@@ -71,21 +71,23 @@ public:
     void UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, vector<int> attacked) { attackMatrix[playersIdAdapter.at(playerId)] = move(attacked);}
+    void UpdateAttackMatrix(int playerId, vector<int> attacked) {
+        attackMatrix[playersIdAdapter.at(playerId)] = move(attacked);
+    }
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
 
-    [[nodiscard]] vector<tuple<Action, int, Hex*>> Play() const;
+    [[nodiscard]] vector<tuple<Action, int, Hex *>> Play() const;
 
     // get action
     // ...
 
     // Getters
 
-    [[nodiscard]] int GetNumPlayers() const { return numPlayers;}
+    [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
 
-    [[nodiscard]] bool IsFinished() const { return isFinished;}
+    [[nodiscard]] bool IsFinished() const { return isFinished; }
 
 };
 

@@ -12,11 +12,11 @@
 #include "nlohmann/json.hpp"
 
 
-struct Response{
+struct Response {
     Result result;
     nlohmann::ordered_json answer;
 
-    friend std::ostream& operator<< (std::ostream &out, const Response &response);
+    friend std::ostream &operator<<(std::ostream &out, const Response &response);
 };
 
 class Client {
@@ -28,34 +28,53 @@ private:
     const int SOCKET_TYPE = SOCK_STREAM; // socket config
     WSAData WSAData; //info about connect
 
-    void SendRequest(Action action, const std::string& msg) const;
+    void SendRequest(Action action, const std::string &msg) const;
+
     int GetIntFromServer() const;
+
     Response GetAnswer() const;
 
     bool debug;
 public:
     Client(bool debug = true);
-    ~Client() { shutdown(server, 1);}
 
-    Response Login(const std::string& name, const std::string& password = "",
-                   const std::string& game="", int num_turns = 0, int num_players = 1, bool is_observer = false) const;
+    ~Client() { shutdown(server, 1); }
 
-    Response Logout() const { this->SendRequest(Action::LOGOUT, ""); return this->GetAnswer();}
+    Response Login(const std::string &name, const std::string &password = "",
+                   const std::string &game = "", int numTurns = 0, int numPlayers = 1,
+                   bool isObserver = false) const;
 
-    Response Map() const { this->SendRequest(Action::MAP, ""); return this->GetAnswer();}
+    Response Logout() const {
+        this->SendRequest(Action::LOGOUT, "");
+        return this->GetAnswer();
+    }
 
-    Response GameState() const { this->SendRequest(Action::GAME_STATE, ""); return this->GetAnswer();}
+    Response Map() const {
+        this->SendRequest(Action::MAP, "");
+        return this->GetAnswer();
+    }
 
-    Response GameActions() const { this->SendRequest(Action::GAME_ACTIONS, ""); return this->GetAnswer();}
+    Response GameState() const {
+        this->SendRequest(Action::GAME_STATE, "");
+        return this->GetAnswer();
+    }
 
-    Response Turn() const { this->SendRequest(Action::TURN, ""); return this->GetAnswer();}
+    Response GameActions() const {
+        this->SendRequest(Action::GAME_ACTIONS, "");
+        return this->GetAnswer();
+    }
 
-    Response Chat(const std::string& msg) const;
+    Response Turn() const {
+        this->SendRequest(Action::TURN, "");
+        return this->GetAnswer();
+    }
 
-    Response Move(int vehicle_id, int x, int y, int z) const;
+    Response Chat(const std::string &msg) const;
 
-    Response Shoot(int vehicle_id, int x, int y, int z) const;
+    Response Move(int vehicleId, int x, int y, int z) const;
 
-    static void PrintLogInfo(const std::string& info) { std::cout << info << '\n';}
+    Response Shoot(int vehicleId, int x, int y, int z) const;
+
+    static void PrintLogInfo(const std::string &info) { std::cout << info << '\n'; }
 };
 

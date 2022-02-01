@@ -1,7 +1,7 @@
 #include "client.h"
 
-Client::Client(bool debug) : debug(debug){
-    if(FAILED (WSAStartup(MAKEWORD(2, 1), &this->WSAData))){// first - version, second create info
+Client::Client(bool debug) : debug(debug) {
+    if (FAILED (WSAStartup(MAKEWORD(2, 1), &this->WSAData))) {// first - version, second create info
         PrintLogInfo("WSAStartup creation failed with error: " + std::to_string(WSAGetLastError()));
     }
     if ((this->server = socket(this->PROTOCOL, this->SOCKET_TYPE, 0)) == INVALID_SOCKET) {
@@ -13,12 +13,12 @@ Client::Client(bool debug) : debug(debug){
     myaddr.sin_family = this->PROTOCOL;
     myaddr.sin_port = htons(this->PORT);
 
-    if (connect(this->server, (SOCKADDR* ) &myaddr, sizeof(myaddr)) == SOCKET_ERROR) {
+    if (connect(this->server, (SOCKADDR *) &myaddr, sizeof(myaddr)) == SOCKET_ERROR) {
         PrintLogInfo("Server connection failed with error: " + std::to_string(WSAGetLastError()));
     }
 }
 
-void Client::SendRequest(Action action, const std::string& msg) const {
+void Client::SendRequest(Action action, const std::string &msg) const {
     std::vector<char> buffer(4 * 2 + msg.size() + 1);// action(int) + size(int) + msg + '\0'
     buffer.back() = '\0';
 
@@ -35,12 +35,12 @@ void Client::SendRequest(Action action, const std::string& msg) const {
 
     std::strncpy(&buffer[8], &msg[0], msg.size());
 
-    if(debug){
+    if (debug) {
         for (int i = 0; i < 4; ++i) {
-            std::cerr << (int)buffer[i] << ' ';
+            std::cerr << (int) buffer[i] << ' ';
         }
         for (int i = 0; i < 4; ++i) {
-            std::cerr << (int)buffer[i + 4] << ' ';
+            std::cerr << (int) buffer[i + 4] << ' ';
         }
         std::cerr << &buffer[8] << '\n';
     }
@@ -66,37 +66,38 @@ int Client::GetIntFromServer() const {
 
     int result = 0;
     for (int i = 0; i < 4; ++i) {
-        result += (unsigned char)buffer[i] * (int)std::pow(2, i * 8);
+        result += (unsigned char) buffer[i] * (int) std::pow(2, i * 8);
     }
     return result;
 }
 
-Response Client::Login(const std::string& name, const std::string& password, const std::string& game, int num_turns, int num_players, bool is_observer) const{
+Response Client::Login(const std::string &name, const std::string &password, const std::string &game, int numTurns,
+                       int numPlayers, bool isObserver) const {
     nlohmann::ordered_json json;
     json["name"] = name;
     json["password"] = password;
-    if(!game.empty())
+    if (!game.empty())
         json["game"] = game;
-    if(num_turns != 0)
-        json["num_turns"] = num_turns;
-    json["num_players"] = num_players;
-    json["is_observer"] = is_observer;
+    if (numTurns != 0)
+        json["num_turns"] = numTurns;
+    json["num_players"] = numPlayers;
+    json["is_observer"] = isObserver;
 
     this->SendRequest(Action::LOGIN, json.dump());
 
     return this->GetAnswer();
 }
 
-Response Client::Chat(const std::string& msg) const {
+Response Client::Chat(const std::string &msg) const {
     nlohmann::ordered_json json;
     json["message"] = msg;
     this->SendRequest(Action::CHAT, json.dump());
     return this->GetAnswer();
 }
 
-Response Client::Move(int vehicle_id, int x, int y, int z) const {
+Response Client::Move(int vehicleId, int x, int y, int z) const {
     nlohmann::ordered_json msg;
-    msg["vehicle_id"] = vehicle_id;
+    msg["vehicle_id"] = vehicleId;
     msg["target"]["x"] = x;
     msg["target"]["y"] = y;
     msg["target"]["z"] = z;
@@ -105,9 +106,9 @@ Response Client::Move(int vehicle_id, int x, int y, int z) const {
     return this->GetAnswer();
 }
 
-Response Client::Shoot(int vehicle_id, int x, int y, int z) const {
+Response Client::Shoot(int vehicleId, int x, int y, int z) const {
     nlohmann::ordered_json msg;
-    msg["vehicle_id"] = vehicle_id;
+    msg["vehicle_id"] = vehicleId;
     msg["target"]["x"] = x;
     msg["target"]["y"] = y;
     msg["target"]["z"] = z;
@@ -116,6 +117,6 @@ Response Client::Shoot(int vehicle_id, int x, int y, int z) const {
 }
 
 std::ostream &operator<<(std::ostream &out, const Response &response) {
-    out << "Response {result : " << (int)response.result << ", answer :\n" << response.answer.dump(2) << " }\n";
+    out << "Response {result : " << (int) response.result << ", answer :\n" << response.answer.dump(2) << " }\n";
     return out;
 }

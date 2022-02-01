@@ -9,12 +9,12 @@ public:
     GameClient(bool debug = true) : game(new Game()), client(new Client(debug)) {}
 
     // must be called once and first.
-    bool initGame(const std::string& name, const std::string& password = "",
-                  const std::string& game_name="", int num_turns = 0, int num_players = 1,
-                  bool is_observer = false);
+    bool InitGame(const std::string &name, const std::string &password = "",
+                  const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
+                  bool isObserver = false);
 
 
-    [[nodiscard]] bool GameIsFinished() const { return game->IsFinished();}
+    [[nodiscard]] bool GameIsFinished() const { return game->IsFinished(); }
 
     void UpdateGameState();
 
@@ -25,18 +25,20 @@ public:
     bool SendTurn() const;
 
     void SendAction() const;
+
     void InitPlayersId();
 
-    Client *getClient() const { return client;}
+    Client *GetClient() const { return client; }
 
-    bool isOurTurn(){ return true;}
+    bool IsOurTurn() { return true; }
 
 private:
 
     // entities
-    Game* game;
-    Client* client;
-    tuple<int, int, int> MakePosTuple(const nlohmann::ordered_json& coordinate);
+    Game *game;
+    Client *client;
+
+    tuple<int, int, int> MakePosTuple(const nlohmann::ordered_json &coordinate);
 
 };
 

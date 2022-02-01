@@ -19,12 +19,12 @@ private:
 
 
 public:
-    static std::tuple<int, int, int> getTargetForMove(std::tuple<int, int, int> coordinates, Map *map);
+    static std::tuple<int, int, int> GetTargetForMove(std::tuple<int, int, int> coordinates, Map *map);
 
-    static std::tuple<int, int, int> getNextOnAxis(std::tuple<int, int, int> coordinates, Map *map);
+    static std::tuple<int, int, int> GetNextOnAxis(std::tuple<int, int, int> coordinates, Map *map);
 
     static std::tuple<int, int, int>
-    getTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
+    GetTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
                       vector<vector<Vehicle *>> vehicles, int playerId);
 };
 

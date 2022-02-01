@@ -14,8 +14,9 @@ private:
     int kill;
 
 public:
-    Player(int id, const std::string& name, const std::string& pass) : id(id), name(name), password(pass), capture(0), kill(0) {}
+    Player(int id, const std::string &name, const std::string &pass) : id(id), name(name), password(pass), capture(0),
+                                                                       kill(0) {}
 
-    int GetId() const { return id;}
+    int GetId() const { return id; }
 };
 

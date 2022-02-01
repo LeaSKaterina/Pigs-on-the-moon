@@ -1,7 +1,7 @@
 #include "map.h"
 
-void Map::AddBase(vector <tuple<int, int, int>> &points) {
-    vector < Hex * > basis;
+void Map::AddBase(vector<tuple<int, int, int>> &points) {
+    vector<Hex *> basis;
     for (auto &p: points) {
         basis.push_back(grid[p]);
     }
