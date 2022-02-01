@@ -7,14 +7,13 @@
 
 class Construction {
 private:
-    // std::vector<Hex*> basis;
     static int counter;
     int id;
 
 public:
     virtual void Play(Vehicle *) = 0;
 
-    virtual ~Construction();
+    virtual ~Construction() = default;
 
     explicit Construction(std::vector<Hex *> &basis);
 };

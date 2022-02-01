@@ -21,11 +21,10 @@ void Game::InitMap(int size) {
     map = new Map(size);
 }
 
-
 void Game::InitPlayer(int id, string name, string password) {
-    player = new Player(id, name, password);
+    player = new Player(id, move(name), move(password));
 }
-// There
+
 void Game::InitVariables(int playersNum) {
     numPlayers = playersNum;
     numTurns = numRounds * numPlayers;
@@ -124,6 +123,10 @@ int Game::GetNumPlayers() const {
 
 bool Game::IsFinished() const {
     return isFinished;
+}
+
+bool Game::isPlayerTurn() const {
+    return currentPlayerId == player->GetId();
 }
 
 // get action

@@ -23,7 +23,7 @@ public:
 
     void AddBase(vector <tuple<int, int, int>> &points);
 
-    Hex *Get(const tuple<int, int, int> &p) const;
+    [[nodiscard]] Hex *Get(const tuple<int, int, int> &p) const;
 };
 
 

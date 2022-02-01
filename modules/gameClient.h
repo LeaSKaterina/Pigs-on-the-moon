@@ -29,7 +29,7 @@ public:
 
     Client *getClient() const;
 
-    bool isOurTurn();
+    [[nodiscard]] bool isPlayTime() const;
 
 private:
 

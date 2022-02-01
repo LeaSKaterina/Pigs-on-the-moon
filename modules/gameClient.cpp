@@ -89,7 +89,7 @@ void GameClient::CheckGameState() {
         for(int i : pm.value()) {
             v_attacked.push_back(i);
         }
-        game->UpdateAttackMatrix(stoi(pm.key()), v_attacked);
+        game->UpdateAttackMatrix(stoi(pm.key()), move(v_attacked));
     }
 
     // current turn | player | finished
@@ -203,8 +203,8 @@ Client *GameClient::getClient() const {
     return client;
 }
 
-bool GameClient::isOurTurn() {
-    return true;
+bool GameClient::isPlayTime() const {
+    return game->isPlayerTurn();
 }
 
 
