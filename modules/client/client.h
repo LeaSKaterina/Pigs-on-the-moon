@@ -4,6 +4,7 @@
 #include <winerror.h>
 #include <iostream>
 #include <memory>
+#include <cstring>
 #include <valarray>
 #include "../enums/action.h"
 #include "../enums/result.h"

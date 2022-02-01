@@ -27,7 +27,8 @@ void Client::PrintLogInfo(const std::string& info) {
 }
 
 void Client::SendRequest(Action action, const std::string& msg) const {
-    std::unique_ptr<char[]> buffer(new char[4 * 2 + msg.size()]);
+    std::vector<char> buffer(4 * 2 + msg.size() + 1);// action(int) + size(int) + msg + '\0'
+    buffer.back() = '\0';
 
     {
         auto actionInt = (unsigned int) action;
@@ -40,11 +41,7 @@ void Client::SendRequest(Action action, const std::string& msg) const {
         }
     }
 
-    unsigned int sizeMsg = msg.size();
-
-    for (int i = 0; i < sizeMsg; i++) {
-        buffer[i + 8] = msg[i];
-    }
+    std::strncpy(&buffer[8], &msg[0], msg.size());
 
     if(debug){
         for (int i = 0; i < 4; ++i) {
@@ -53,28 +50,21 @@ void Client::SendRequest(Action action, const std::string& msg) const {
         for (int i = 0; i < 4; ++i) {
             std::cerr << (int)buffer[i + 4] << ' ';
         }
-        for (int i = 8; i < 8 + sizeMsg; ++i) {
-            std::cerr << buffer[i];
-        }std::cerr << '\n';
+        std::cerr << &buffer[8] << '\n';
     }
 
-    send(server, buffer.get(), 8 + sizeMsg, 0);
+    send(server, &buffer.front(), 8 + msg.size(), 0);
 }
 
 Response Client::GetAnswer() const {
     auto result = Result(GetIntFromServer());
     int size = GetIntFromServer();
 
-
-    std::unique_ptr<char[]> cMsg(new char[size + 1]);
-    cMsg[size] = '\0';
-    if (size) recv(server, cMsg.get(), size, MSG_WAITALL);
+    std::vector<char> msg(size);
+    if (size) recv(server, &msg.front(), size, MSG_WAITALL);
     nlohmann::ordered_json ans = size ?
-                                 nlohmann::ordered_json::parse(cMsg.get())
+                                 nlohmann::ordered_json::parse(msg)
                                       : nlohmann::ordered_json();
-//    nlohmann::json ans(cMsg.get());
-//    std::cerr << "start: " << cMsg.get() << " :end" << std::endl;
-
     return {result, ans};
 }
 
