@@ -2,15 +2,16 @@
 #define PIGS_ON_THE_MOON_ACTORS_VEHICLE_H
 
 #include "../map/hex.h"
+#include "../enums/vehicle_types.h"
 
 class Vehicle {
 public:
 
-    enum Type {
-        MediumTank, LightTank, HeavyTank, AtSpg, Spg
-    };
+//    enum Type {
+//        MediumTank, LightTank, HeavyTank, AtSpg, Spg
+//    };
 
-    Vehicle(Type type, int playerId);
+    Vehicle(VehiclesTypes::Type type, int playerId);
 
     bool Move(Hex *newPos);
 
@@ -42,7 +43,7 @@ private:
     int capturePoints = 0;
     Hex *spawnPosition = nullptr;
     Hex *currentPosition = nullptr;
-    Type type;
+    VehiclesTypes::Type type;
 
     int GetHit(int damage = 1);
 

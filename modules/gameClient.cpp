@@ -26,19 +26,44 @@ bool GameClient::initGame(const string &name, const string &password, const stri
     int index = 0;
 
     for (auto& player : spawn_info.items()) {
-        for (auto& spawn : player.value().items()){
-            auto& points = spawn.value();
-            string type = spawn.key();
-            for(auto& i : points) {
+        /// test
+        for(int i = 0; i < VehiclesTypes::TypesNum; i++) {
+            auto& type = VehiclesTypes::s_types[i];
+            auto spawns = player.value().value(type, nlohmann::json(""));
+            for (auto& spawn : spawns.items()) {
+                auto &point = spawn.value();
+
+                #ifdef _DEBUG
+                    cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
+                    cout << "POINT:\n" << point << "\n:POINTS" << endl;
+                #endif
+
                 game->AddVehicle(index,
-                                 type,
+                                 VehiclesTypes::Type(i),
                                  make_tuple(
-                                     i.value("x", -1),
-                                     i.value("y", -1),
-                                     i.value("z", -1)
-                                ));
+                                         point.value("x", -1),
+                                         point.value("y", -1),
+                                         point.value("z", -1)
+                                 ));
+
             }
         }
+        ////!test
+
+//        working version
+//        for (auto& spawn : player.value().items()){
+//            auto& points = spawn.value();
+//            string type = spawn.key();
+//            for(auto& i : points) {
+//                game->AddVehicle(index,
+//                                 type,
+//                                 make_tuple(
+//                                     i.value("x", -1),
+//                                     i.value("y", -1),
+//                                     i.value("z", -1)
+//                                ));
+//            }
+//        }
         index++;
     }
 
