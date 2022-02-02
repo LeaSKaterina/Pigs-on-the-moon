@@ -1,17 +1,21 @@
+//
+// Created by HP on 02.02.2022.
+//
+
 #include "vehicle.h"
 
 using namespace  VehiclesTypes;
 
-Vehicle::Vehicle(Type type, int playerId) {
+Vehicle::Vehicle(VehiclesTypes::Type type, int playerId) {
     switch (type) {
-        case MEDIUM_TANK:
+        case MediumTank:
             health = 2;
             speedPoints = 2;
             break;
-        case LIGHT_TANK:
-        case HEAVY_TANK:
-        case AT_SPG:
-        case SPG:
+        case LightTank:
+        case HeavyTank:
+        case AtSpg:
+        case Spg:
             break;
     }
     destructionPoints = health;

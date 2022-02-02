@@ -14,7 +14,7 @@ int main() {
     const int numbersCount = 2;      // number of players. Values from [1, 2, 3]
     const int numbersTurn = 100;     // numbers of turns. Values from [0 ... 100]
     int ourOrder = 1;                // our connection number. Values from [1, 2, 3] // may be mare than numberCount
-                                     ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
 
     if (ourOrder > numbersCount)// simple check max value
         ourOrder = numbersCount;
@@ -36,10 +36,10 @@ int main() {
     while (!gc.SendTurn()) {}
     gc.InitPlayersId();
     while (!gc.GameIsFinished()) {
-        gc.UpdateGameState();
+        gc.CheckGameState();
         if (gc.IsPlayTime())
             gc.SendAction();
-        //        std::cout << gc.getClient()->GameState();
+        //        std::cout << gc.GetClient()->GameState();
         if (debug)
             std::cerr << "\n---------------------------------------\n";
         gc.SendTurn();

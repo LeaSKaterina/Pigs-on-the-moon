@@ -1,7 +1,17 @@
+//
+// Created by HP on 02.02.2022.
+//
+
+#ifndef PIGS_ON_THE_MOON_VEHICLE_H
+#define PIGS_ON_THE_MOON_VEHICLE_H
+
 #pragma once
 
-#include "../map/hex.h"
-#include "../enums/vehicle_types.h"
+#include "../../map/hex.h"
+#include "../../enums/vehicle_types.h"
+#include <vector>
+
+typedef std::tuple<int,int,int> Point;
 
 class Vehicle {
 public:
@@ -9,6 +19,10 @@ public:
     Vehicle(VehiclesTypes::Type type, int playerId);
 
     bool Move(Hex *newPos);
+
+    virtual std::vector<Point> GetAvailableMovePoints();
+
+    virtual std::vector<Point> GetAvailableShootPoints();
 
     int Shoot(Vehicle *v);
 
@@ -32,7 +46,8 @@ public:
 private:
     int playerId;
     int health;
-    int destructionPoints;// Очки за уничтожение
+    int destructionPoints;
+    int rangeOfShooting;
     int speedPoints;
     int damage = 1;
     int capturePoints = 0;
@@ -44,3 +59,7 @@ private:
 
     bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
 };
+
+
+
+#endif //PIGS_ON_THE_MOON_VEHICLE_H

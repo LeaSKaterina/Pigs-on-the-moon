@@ -85,10 +85,10 @@ public:
 
     // Getters
 
-    [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
+    [[nodiscard]] int GetNumPlayers() const;
 
+    [[nodiscard]] bool IsFinished() const;
 
-    [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
+    [[nodiscard]] bool isPlayerTurn() const;
 
-    [[nodiscard]] bool IsFinished() const { return isFinished; }
 };

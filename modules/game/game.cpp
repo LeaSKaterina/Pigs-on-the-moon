@@ -109,3 +109,15 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
     return res;
     //    return vector<tuple<Action, int, Hex *>>();
 }
+
+int Game::GetNumPlayers() const {
+    return numPlayers;
+}
+
+bool Game::IsFinished() const {
+    return isFinished;
+}
+
+bool Game::isPlayerTurn() const {
+    return currentPlayerId == player->GetId();
+}
