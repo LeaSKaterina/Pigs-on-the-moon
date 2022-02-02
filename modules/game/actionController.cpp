@@ -15,13 +15,15 @@ void ActionController::IncreaseModule(int &n, const int amount) {
 void ActionController::ModuleDecrement(int &n) {
     if (n == 0) return;
     if (n > 0) n--;
-    else n++;
+    else
+        n++;
 }
 
 void ActionController::ModuleIncrement(int &n) {
-//    if (n == 0) return;
+    //    if (n == 0) return;
     if (n >= 0) n++;
-    else n--;
+    else
+        n--;
 }
 
 void Restore(int &x, int &y, int &z, const std::tuple<int, int, int> coordinates) {
@@ -31,7 +33,7 @@ void Restore(int &x, int &y, int &z, const std::tuple<int, int, int> coordinates
 }
 
 std::tuple<int, int, int> ActionController::GetNextOnAxis(std::tuple<int, int, int> coordinates, Map *map) {
-    auto[x, y, z] = coordinates;
+    auto [x, y, z] = coordinates;
     if (x == 0) {
         ReduceModule(y, 2);
         ReduceModule(z, 2);
@@ -86,12 +88,11 @@ std::tuple<int, int, int> ActionController::GetNextOnAxis(std::tuple<int, int, i
     if (map->Get(res)->IsEmpty()) return res;
 
 
-    return std::make_tuple(-1, -1, -1); // нам не нужно перемещаться
-
+    return std::make_tuple(-1, -1, -1);// нам не нужно перемещаться
 }
 
 std::tuple<int, int, int> ActionController::GetTargetForMove(std::tuple<int, int, int> coordinates, Map *map) {
-    auto[x, y, z] = coordinates;
+    auto [x, y, z] = coordinates;
 
     if (x == 0 || y == 0 || z == 0)
         return GetNextOnAxis(coordinates, map);
@@ -101,7 +102,7 @@ std::tuple<int, int, int> ActionController::GetTargetForMove(std::tuple<int, int
     if (abs(*maxAbs) < abs(z)) maxAbs = &z;
 
     if (*maxAbs == 0 || abs(*maxAbs) == 1)
-        return std::make_tuple(-1, -1, -1); // нам не нужно перемещаться, мы на базе
+        return std::make_tuple(-1, -1, -1);// нам не нужно перемещаться, мы на базе
 
     ModuleDecrement(x);
     ModuleDecrement(y);
@@ -151,12 +152,12 @@ std::tuple<int, int, int> ActionController::GetTargetForMove(std::tuple<int, int
     res = make_tuple(x, y, z);
     if (map->Get(res)->IsEmpty()) return res;
 
-//    return res;
-    return std::make_tuple(-1, -1, -1); // нам не нужно перемещаться
+    //    return res;
+    return std::make_tuple(-1, -1, -1);// нам не нужно перемещаться
 }
 
 std::tuple<int, int, int>
 ActionController::GetTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
                                     vector<vector<Vehicle *>> vehicles, int playerId) {
     return std::tuple<int, int, int>(-1, -1, -1);
-} // какая-то логика выстрела. если не стрелять - возвращает (-1,-1,-1)
+}// какая-то логика выстрела. если не стрелять - возвращает (-1,-1,-1)

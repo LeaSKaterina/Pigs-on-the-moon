@@ -1,7 +1,7 @@
 #include "client.h"
 
 Client::Client(bool debug) : debug(debug) {
-    if (FAILED (WSAStartup(MAKEWORD(2, 1), &this->WSAData))) {// first - version, second create info
+    if (FAILED(WSAStartup(MAKEWORD(2, 1), &this->WSAData))) {// first - version, second create info
         PrintLogInfo("WSAStartup creation failed with error: " + std::to_string(WSAGetLastError()));
     }
     if ((this->server = socket(this->PROTOCOL, this->SOCKET_TYPE, 0)) == INVALID_SOCKET) {
@@ -54,8 +54,7 @@ Response Client::GetAnswer() const {
 
     std::vector<char> msg(size);
     if (size) recv(server, &msg.front(), size, MSG_WAITALL);
-    nlohmann::ordered_json ans = size ?
-                                 nlohmann::ordered_json::parse(msg)
+    nlohmann::ordered_json ans = size ? nlohmann::ordered_json::parse(msg)
                                       : nlohmann::ordered_json();
     return {result, ans};
 }
@@ -117,6 +116,7 @@ Response Client::Shoot(int vehicleId, int x, int y, int z) const {
 }
 
 std::ostream &operator<<(std::ostream &out, const Response &response) {
-    out << "Response {result : " << (int) response.result << ", answer :\n" << response.answer.dump(2) << " }\n";
+    out << "Response {result : " << (int) response.result << ", answer :\n"
+        << response.answer.dump(2) << " }\n";
     return out;
 }

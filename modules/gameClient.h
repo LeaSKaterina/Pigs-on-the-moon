@@ -1,8 +1,8 @@
 #pragma once
 
-#include "nlohmann/json.hpp"
 #include "client/client.h"
 #include "game/game.h"
+#include "nlohmann/json.hpp"
 
 class GameClient {
 public:
@@ -18,7 +18,7 @@ public:
 
     void UpdateGameState();
 
-//    void CheckGameAction();  Do we really need this?
+    //    void CheckGameAction();  Do we really need this?
 
     ~GameClient();
 
@@ -31,14 +31,11 @@ public:
     Client *GetClient() const { return client; }
 
     [[nodiscard]] bool IsPlayTime() const { return game->IsPlayerTurn(); }
-private:
 
+private:
     // entities
     Game *game;
     Client *client;
 
     tuple<int, int, int> MakePosTuple(const nlohmann::ordered_json &coordinate);
-
 };
-
-

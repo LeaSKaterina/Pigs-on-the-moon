@@ -6,13 +6,11 @@
 struct Hex {
 
 private:
-
     std::tuple<int, int, int> coordinates;
     bool isEmpty = true;
     int ownerId = -1;
 
 public:
-
     Hex(int x, int y, int z) { coordinates = std::make_tuple(x, y, z); }
 
     bool IsEmpty() const { return isEmpty; }
@@ -33,4 +31,3 @@ public:
 
     bool operator==(const Hex &rhs) const { return coordinates == rhs.coordinates; }
 };
-

@@ -19,4 +19,3 @@ public:
 
     int GetId() const { return id; }
 };
-

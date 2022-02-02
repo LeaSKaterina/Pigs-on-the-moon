@@ -1,13 +1,13 @@
 #pragma once
 
-#include <winsock2.h>
-#include <winerror.h>
-#include <iostream>
-#include <memory>
-#include <cstring>
-#include <valarray>
 #include "../enums/action.h"
 #include "../enums/result.h"
+#include <cstring>
+#include <iostream>
+#include <memory>
+#include <valarray>
+#include <winerror.h>
+#include <winsock2.h>
 
 #include "nlohmann/json.hpp"
 
@@ -23,10 +23,10 @@ class Client {
 private:
     const char ADDRESS[14] = {"92.223.34.102"};
     const int PORT = 443;
-    SOCKET server; // server descriptor
-    const int PROTOCOL = AF_INET; //socket config
-    const int SOCKET_TYPE = SOCK_STREAM; // socket config
-    WSAData WSAData; //info about connect
+    SOCKET server;                      // server descriptor
+    const int PROTOCOL = AF_INET;       //socket config
+    const int SOCKET_TYPE = SOCK_STREAM;// socket config
+    WSAData WSAData;                    //info about connect
 
     void SendRequest(Action action, const std::string &msg) const;
 
@@ -35,6 +35,7 @@ private:
     Response GetAnswer() const;
 
     bool debug;
+
 public:
     Client(bool debug = true);
 
@@ -77,4 +78,3 @@ public:
 
     static void PrintLogInfo(const std::string &info) { std::cout << info << '\n'; }
 };
-

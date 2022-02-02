@@ -1,10 +1,10 @@
 #pragma once
 
 //#include <tuple>
-#include <cstdlib>
-#include <iostream>
 #include "../map/hex.h"
 #include "../map/map.h"
+#include <cstdlib>
+#include <iostream>
 
 
 class ActionController {
@@ -27,4 +27,3 @@ public:
     GetTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
                       vector<vector<Vehicle *>> vehicles, int playerId);
 };
-

@@ -3,7 +3,7 @@
 using namespace std;
 
 Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
-    for (auto *p: vehicles[adaptedPlayerId]) {
+    for (auto *p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
     }
@@ -50,14 +50,14 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
 void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
     Vehicle *t = new Vehicle(type, playerId);
     t->InitSpawn(map->Get(spawn));
-    vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
+    vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
 }
 
-void Game::AddVehicle(int playerId, string& type, tuple<int, int, int> spawn) {
+void Game::AddVehicle(int playerId, string &type, tuple<int, int, int> spawn) {
     // parse string and create new instance on this base
     Vehicle *t = new Vehicle(Vehicle::Type::MEDIUM_TANK, playerId);
     t->InitSpawn(map->Get(spawn));
-    vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
+    vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
 }
 
 // get state
@@ -80,7 +80,7 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
 }
 
 bool TargetIsAvailable(const tuple<int, int, int> *target) {
-    auto[x, y, z] = *target;
+    auto [x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 
@@ -103,5 +103,5 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
     }
 
     return res;
-//    return vector<tuple<Action, int, Hex *>>();
+    //    return vector<tuple<Action, int, Hex *>>();
 }

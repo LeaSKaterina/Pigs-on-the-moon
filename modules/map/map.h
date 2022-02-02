@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <tuple>
-#include "hex.h"
-#include "../constructions/construction.h"
 #include "../constructions/base.h"
+#include "../constructions/construction.h"
+#include "hex.h"
 #include <map>
+#include <tuple>
+#include <vector>
 
 using namespace std;
 
@@ -24,5 +24,3 @@ public:
 
     [[nodiscard]] Hex *Get(const tuple<int, int, int> &p) const { return grid.at(p); }
 };
-
-

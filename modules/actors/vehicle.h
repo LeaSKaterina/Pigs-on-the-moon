@@ -4,9 +4,12 @@
 
 class Vehicle {
 public:
-
     enum Type {
-        MEDIUM_TANK, LIGHT_TANK, HEAVY_TANK, AT_SPG, SPG
+        MEDIUM_TANK,
+        LIGHT_TANK,
+        HEAVY_TANK,
+        AT_SPG,
+        SPG
     };
 
     Vehicle(Type type, int playerId);
@@ -33,10 +36,9 @@ public:
     void Respawn();
 
 private:
-
     int playerId;
     int health;
-    int destructionPoints;    // Очки за уничтожение
+    int destructionPoints;// Очки за уничтожение
     int speedPoints;
     int damage = 1;
     int capturePoints = 0;
@@ -48,5 +50,3 @@ private:
 
     bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
 };
-
-

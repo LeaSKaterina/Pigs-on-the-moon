@@ -26,7 +26,7 @@ bool Vehicle::Move(Hex *newPos) {
     return true;
 }
 
-int Vehicle::Shoot(Vehicle *v) { // вернет сколько очков заработал
+int Vehicle::Shoot(Vehicle *v) {// вернет сколько очков заработал
     if (IsEnemy(v))
         return v->GetHit(this->damage);
     return 0;
@@ -58,4 +58,3 @@ int Vehicle::GetHit(int damage) {
         return destructionPoints;
     return 0;
 }
-

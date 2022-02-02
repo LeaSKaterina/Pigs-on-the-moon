@@ -1,0 +1,25 @@
+<code_scheme name="Pigs_on_the_moon" version="173">
+    <Objective-C>
+        <option name="KEEP_STRUCTURES_IN_ONE_LINE" value="true"/>
+        <option name="KEEP_NESTED_NAMESPACES_IN_ONE_LINE" value="true"/>
+    </Objective-C>
+    <Objective-C-extensions>
+        <rules>
+            <rule entity="NAMESPACE,TYPEDEF" visibility="ANY" specifier="ANY" prefix="" style="CAMEL_CASE" suffix=""/>
+            <rule entity="MACRO" visibility="ANY" specifier="ANY" prefix="" style="SCREAMING_SNAKE_CASE" suffix=""/>
+            <rule entity="CLASS,STRUCT,ENUM" visibility="ANY" specifier="ANY" prefix="" style="PASCAL_CASE" suffix=""/>
+            <rule entity="ENUMERATOR" visibility="ANY" specifier="ANY" prefix="" style="SCREAMING_SNAKE_CASE"
+                  suffix=""/>
+            <rule entity="UNION" visibility="ANY" specifier="ANY" prefix="" style="CAMEL_CASE" suffix=""/>
+            <rule entity="GLOBAL_FUNCTION,CLASS_MEMBER_FUNCTION,STRUCT_MEMBER_FUNCTION" visibility="ANY" specifier="ANY"
+                  prefix="" style="PASCAL_CASE" suffix=""/>
+            <rule entity="GLOBAL_VARIABLE" visibility="ANY" specifier="ANY" prefix="" style="CAMEL_CASE" suffix=""/>
+            <rule entity="GLOBAL_VARIABLE,PARAMETER,LOCAL_VARIABLE" visibility="ANY" specifier="ANY" prefix=""
+                  style="CAMEL_CASE" suffix=""/>
+            <rule entity="CLASS_MEMBER_FIELD,STRUCT_MEMBER_FIELD" visibility="ANY" specifier="ANY" prefix=""
+                  style="CAMEL_CASE" suffix=""/>
+            <rule entity="CLASS_MEMBER_FIELD,STRUCT_MEMBER_FIELD" visibility="ANY" specifier="CONST" prefix=""
+                  style="SCREAMING_SNAKE_CASE" suffix=""/>
+        </rules>
+    </Objective-C-extensions>
+</code_scheme>

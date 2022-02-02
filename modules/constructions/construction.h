@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
 #include "../actors/vehicle.h"
 #include "../map/hex.h"
+#include <vector>
 
 class Construction {
 private:
@@ -16,4 +16,3 @@ public:
 
     explicit Construction(std::vector<Hex *> &basis);
 };
-

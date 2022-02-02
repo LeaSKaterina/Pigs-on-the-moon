@@ -2,7 +2,7 @@
 
 void Map::AddBase(vector<tuple<int, int, int>> &points) {
     vector<Hex *> basis;
-    for (auto &p: points) {
+    for (auto &p : points) {
         basis.push_back(grid[p]);
     }
     content.push_back(new Base(basis));
@@ -18,4 +18,3 @@ void Map::InitGrid() {
         }
     }
 }
-

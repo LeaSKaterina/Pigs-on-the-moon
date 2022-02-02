@@ -1,14 +1,14 @@
 #pragma once
 
-#include <tuple>
-#include <map>
-#include <vector>
-#include <string>
-#include "actionController.h"
-#include "../actors/vehicle.h"
 #include "../actors/player.h"
-#include "../map/map.h"
+#include "../actors/vehicle.h"
 #include "../enums/action.h"
+#include "../map/map.h"
+#include "actionController.h"
+#include <map>
+#include <string>
+#include <tuple>
+#include <vector>
 
 class Game {
 private:
@@ -16,8 +16,8 @@ private:
     std::vector<std::vector<Vehicle *>> vehicles;
 
     // new: custom id start from 0 to numPlayers - 1
-    std::map<int, int> playersIdAdapter; // [real id 1, ..]->[0, 1, 2]
-    std::vector<int> tanksIdAdapter; // save real id for server
+    std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]
+    std::vector<int> tanksIdAdapter;    // save real id for server
 
     // order??
 
@@ -34,7 +34,7 @@ private:
 
     bool isFinished = false;
 
-    std::vector<std::vector<int>> attackMatrix; // {"id" : "whom attack"}
+    std::vector<std::vector<int>> attackMatrix;// {"id" : "whom attack"}
     Map *map;
 
     Player *player;
@@ -60,7 +60,8 @@ public:
 
     // add methods
     void AddVehicle(int playerId, Vehicle::Type type, std::tuple<int, int, int> spawn);
-    void AddVehicle(int playerId, std::string& type, std::tuple<int, int, int> spawn);
+
+    void AddVehicle(int playerId, std::string &type, std::tuple<int, int, int> spawn);
 
     void AddBase(vector<tuple<int, int, int>> &points) { map->AddBase(points); }
 
@@ -86,9 +87,7 @@ public:
     [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
 
 
-    [[nodiscard]] bool IsPlayerTurn() const{ return currentPlayerId == player->GetId(); }
+    [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
 
     [[nodiscard]] bool IsFinished() const { return isFinished; }
-
 };
-

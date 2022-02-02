@@ -8,5 +8,3 @@ public:
 
     void Play(Vehicle *v) override { v->IncCapture(); }
 };
-
-
