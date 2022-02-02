@@ -1,15 +1,17 @@
 #include "vehicle.h"
 
-Vehicle::Vehicle(VehiclesTypes::Type type, int playerId) {
+using namespace  VehiclesTypes;
+
+Vehicle::Vehicle(Type type, int playerId) {
     switch (type) {
-        case VehiclesTypes::Type::MediumTank:
+        case MediumTank:
             health = 2;
             speedPoints = 2;
             break;
-        case VehiclesTypes::Type::LightTank:
-        case VehiclesTypes::Type::HeavyTank:
-        case VehiclesTypes::Type::AtSpg:
-        case VehiclesTypes::Type::Spg:
+        case LightTank:
+        case HeavyTank:
+        case AtSpg:
+        case Spg:
             break;
     }
     destructionPoints = health;

@@ -7,10 +7,6 @@
 class Vehicle {
 public:
 
-//    enum Type {
-//        MediumTank, LightTank, HeavyTank, AtSpg, Spg
-//    };
-
     Vehicle(VehiclesTypes::Type type, int playerId);
 
     bool Move(Hex *newPos);

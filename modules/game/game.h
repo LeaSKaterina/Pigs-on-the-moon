@@ -62,7 +62,6 @@ public:
 
     // add methods
     void AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn);
-    void AddVehicle(int playerId, std::string& type, std::tuple<int, int, int> spawn);
 
     void AddBase(std::vector<std::tuple<int, int, int>> &points);
 
