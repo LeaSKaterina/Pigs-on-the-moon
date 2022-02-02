@@ -1,21 +1,16 @@
-//
-// Created by HP on 02.02.2022.
-//
-
 #ifndef PIGS_ON_THE_MOON_VEHICLE_H
 #define PIGS_ON_THE_MOON_VEHICLE_H
 
 #pragma once
 
-#include "../../map/hex.h"
 #include "../../enums/vehicle_types.h"
+#include "../../map/hex.h"
 #include <vector>
 
-typedef std::tuple<int,int,int> Point;
+typedef std::tuple<int, int, int> Point;
 
 class Vehicle {
 public:
-
     Vehicle(VehiclesTypes::Type type, int playerId);
 
     bool Move(Hex *newPos);
@@ -34,10 +29,9 @@ public:
 
     int GetPlayerId() const { return playerId; }
 
-    [[nodiscard]] const std::tuple<int, int, int> &GetSpawn() const { return spawnPosition->GetCoordinates(); }
+    [[nodiscard]] const Point &GetSpawn() const { return spawnPosition->GetCoordinates(); }
 
-    [[nodiscard]] const std::tuple<int, int, int> &
-    GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
+    [[nodiscard]] const Point &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
     void InitSpawn(Hex *p);
 
@@ -61,5 +55,4 @@ private:
 };
 
 
-
-#endif //PIGS_ON_THE_MOON_VEHICLE_H
+#endif//PIGS_ON_THE_MOON_VEHICLE_H

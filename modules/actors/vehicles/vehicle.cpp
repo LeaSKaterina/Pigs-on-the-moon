@@ -1,10 +1,6 @@
-//
-// Created by HP on 02.02.2022.
-//
-
 #include "vehicle.h"
 
-using namespace  VehiclesTypes;
+using namespace VehiclesTypes;
 
 Vehicle::Vehicle(VehiclesTypes::Type type, int playerId) {
     switch (type) {
