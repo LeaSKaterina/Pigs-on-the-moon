@@ -2,11 +2,12 @@
 
 #include "client/client.h"
 #include "game/game.h"
-#include "nlohmann/json.hpp"
+#include "enums/vehicle_types.h"
+
 
 class GameClient {
 public:
-    GameClient(bool debug = true) : game(new Game()), client(new Client(debug)) {}
+    explicit GameClient(bool debug = false);
 
     // must be called once and first.
     bool InitGame(const std::string &name, const std::string &password = "",
@@ -34,8 +35,10 @@ public:
 
 private:
     // entities
-    Game *game;
-    Client *client;
+    Game* game;
+    Client* client;
+
+    static tuple<int, int, int> MakePosTuple(nlohmann::ordered_json coordinate);
 
     tuple<int, int, int> MakePosTuple(const nlohmann::ordered_json &coordinate);
 };

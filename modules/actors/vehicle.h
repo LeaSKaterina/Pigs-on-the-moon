@@ -1,18 +1,12 @@
 #pragma once
 
 #include "../map/hex.h"
+#include "../enums/vehicle_types.h"
 
 class Vehicle {
 public:
-    enum Type {
-        MEDIUM_TANK,
-        LIGHT_TANK,
-        HEAVY_TANK,
-        AT_SPG,
-        SPG
-    };
 
-    Vehicle(Type type, int playerId);
+    Vehicle(VehiclesTypes::Type type, int playerId);
 
     bool Move(Hex *newPos);
 
@@ -44,7 +38,7 @@ private:
     int capturePoints = 0;
     Hex *spawnPosition = nullptr;
     Hex *currentPosition = nullptr;
-    Type type;
+    VehiclesTypes::Type type;
 
     int GetHit(int damage = 1);
 

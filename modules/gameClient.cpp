@@ -26,17 +26,26 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
     auto spawnInfo = mapInfo.value("spawn_points", nlohmann::ordered_json(""));
     int index = 0;
 
-    for (auto &player : spawnInfo.items()) {
-        for (auto &spawn : player.value().items()) {
-            auto &points = spawn.value();
-            string type = spawn.key();
-            for (auto &i : points) {
+    for (auto& player : spawn_info.items()) {
+        for(int i = 0; i < VehiclesTypes::TypesNum; i++) {
+            const auto& type = VehiclesTypes::s_types[i];
+            auto spawns = player.value().value(type, nlohmann::json(""));
+            for (auto& spawn : spawns.items()) {
+                auto &point = spawn.value();
+
+                #ifdef _DEBUG
+                    cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
+                    cout << "POINT:\n" << point << "\n:POINTS" << endl;
+                #endif
+
                 game->AddVehicle(index,
-                                 type,
+                                 VehiclesTypes::Type(i),
                                  make_tuple(
-                                         i.value("x", -1),
-                                         i.value("y", -1),
-                                         i.value("z", -1)));
+                                         point.value("x", -1),
+                                         point.value("y", -1),
+                                         point.value("z", -1)
+                                 ));
+
             }
         }
         index++;
