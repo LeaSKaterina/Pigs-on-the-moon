@@ -1,8 +1,8 @@
 #include "vehicle_types.h"
 
-int VehiclesTypes::TypesNum = 5;
+const int VehiclesTypes::TypesNum = 5;
 
-std::string VehiclesTypes::s_types[] = {
+const std::string VehiclesTypes::s_types[] = {
         "at_spg",
         "light_tank",
         "heavy_tank",
