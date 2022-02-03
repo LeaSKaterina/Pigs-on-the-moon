@@ -13,11 +13,11 @@ private:
 public:
     Hex(int x, int y, int z) { coordinates = std::make_tuple(x, y, z); }
 
-    bool IsEmpty() const { return isEmpty; }
+    [[nodiscard]] bool IsEmpty() const { return isEmpty; }
 
-    bool IsSpecial() const { return ownerId == -1; }
+    [[nodiscard]] bool IsSpecial() const { return ownerId == -1; }
 
-    const std::tuple<int, int, int> &GetCoordinates() const { return coordinates; }
+    [[nodiscard]] const std::tuple<int, int, int> &GetCoordinates() const { return coordinates; }
 
     bool Occupy();
 
