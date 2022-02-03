@@ -1,5 +1,7 @@
 #include "vehicle.h"
 
+using namespace  VehiclesTypes;
+
 Vehicle::Vehicle(Type type, int playerId) {
     switch (type) {
         case MEDIUM_TANK:

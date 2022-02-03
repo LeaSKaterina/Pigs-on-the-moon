@@ -1,6 +1,7 @@
 #include "game.h"
 
 using namespace std;
+using namespace  VehiclesTypes;
 
 Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
     for (auto *p : vehicles[adaptedPlayerId]) {
@@ -47,18 +48,21 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
 
 // Add
 
-void Game::AddVehicle(int playerId, Vehicle::Type type, tuple<int, int, int> spawn) {
-    Vehicle *t = new Vehicle(type, playerId);
-    t->InitSpawn(map->Get(spawn));
-    vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
+void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
+    // there choose type of tanks
+    switch(type){
+        case AtSpg:
+        case LightTank:
+        case HeavyTank:
+        case MediumTank:
+        case Spg:
+            Vehicle *t = new Vehicle(type, playerId);
+            t->InitSpawn(map->Get(spawn));
+            vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
+            break;
+    }
 }
 
-void Game::AddVehicle(int playerId, string &type, tuple<int, int, int> spawn) {
-    // parse string and create new instance on this base
-    Vehicle *t = new Vehicle(Vehicle::Type::MEDIUM_TANK, playerId);
-    t->InitSpawn(map->Get(spawn));
-    vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
-}
 
 // get state
 void Game::UpdateState(int currTurn, int currPlayer, bool finished) {

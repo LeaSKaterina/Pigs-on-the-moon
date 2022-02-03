@@ -3,12 +3,15 @@
 #include "../actors/player.h"
 #include "../actors/vehicle.h"
 #include "../enums/action.h"
+#include "../enums/vehicle_types.h"
+
 #include "../map/map.h"
 #include "actionController.h"
 #include <map>
 #include <string>
 #include <tuple>
 #include <vector>
+
 
 class Game {
 private:
@@ -59,7 +62,8 @@ public:
     void InitVehiclesIds(int playerId, const vector<int> &realId);
 
     // add methods
-    void AddVehicle(int playerId, Vehicle::Type type, std::tuple<int, int, int> spawn);
+
+    void AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn);
 
     void AddVehicle(int playerId, std::string &type, std::tuple<int, int, int> spawn);
 
