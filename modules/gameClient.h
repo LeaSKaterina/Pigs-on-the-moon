@@ -9,7 +9,7 @@
 
 class GameClient {
 public:
-    explicit GameClient(bool debug = false) : game(new Game()), client(new Client(debug)) {}
+    explicit GameClient() : game(new Game()), client(new Client()) {}
 
     // must be called once and first.
     bool InitGame(const std::string &name, const std::string &password = "",
@@ -40,6 +40,10 @@ private:
     Game* game;
     Client* client;
 
-    static tuple<int, int, int> MakePosTuple(nlohmann::ordered_json coordinate);
+    static tuple<int, int, int> MakePosTuple(const nlohmann::json&& coordinate);
 
+    // init methods
+    bool Login(const string &name, const string &password, const string &gameName, int numTurns,
+                               int numPlayers, bool isObserver);
+    void InitMap();
 };

@@ -7,7 +7,7 @@ using json = nlohmann::ordered_json;
 using namespace std;
 
 int main() {
-    bool debug = true;
+//    bool debug = true;
 
     ///////////////////////////////////////////////////////////////////////////////variables for debugging
     const std::string game = "test4";// the name of the game we are connecting to
@@ -20,7 +20,7 @@ int main() {
         ourOrder = numbersCount;
 
     Client *clients = new Client[numbersCount - 1];// bots for extras
-    GameClient gc(debug);                          // our overmind
+    GameClient gc;                          // our overmind
 
     int clientIndex = 0;
     for (int i = 0; i < numbersCount; ++i) {// Login
@@ -39,9 +39,12 @@ int main() {
         gc.UpdateGameState();
         if (gc.IsPlayTime())
             gc.SendAction();
-        //        std::cout << gc.getClient()->GameState();
-        if (debug)
+
+        #ifdef _DEBUG
+//            std::cout << gc.getClient()->GameState();
             std::cerr << "\n---------------------------------------\n";
+        #endif
+
         gc.SendTurn();
     }
     std::cout << "Game is finished : " << std::boolalpha << gc.GameIsFinished() << '\n';

@@ -1,7 +1,7 @@
 #include "gameClient.h"
 
-bool GameClient::InitGame(const string &name, const string &password, const string &gameName, int numTurns,
-                          int numPlayers, bool isObserver) {
+bool GameClient::Login(const string &name, const string &password, const string &gameName, int numTurns,
+                 int numPlayers, bool isObserver) {
     // Login
     auto answer = client->Login(name, password, gameName, numTurns, numPlayers, isObserver);
     if (answer.result != Result::OKEY)
@@ -12,55 +12,14 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
 
     // Always init game for _3_ players
     game->InitVariables();
+    return true;
+}
 
-    // Map
-    nlohmann::ordered_json mapInfo = client->Map().answer;
-    int size = mapInfo.value("size", -1);
-    game->InitMap(size);
-
-#ifdef _DEBUG
-    cout << "Map request:\n"
-         << mapInfo << "\n:Map request" << endl;
-#endif
-
-    auto spawnInfo = mapInfo.value("spawn_points", nlohmann::ordered_json(""));
-    int index = 0;
-
-    for (auto& player : spawnInfo.items()) {
-        for(int i = 0; i < VehiclesTypes::TypesNum; i++) {
-            const auto& type = VehiclesTypes::s_types[i];
-            auto spawns = player.value().value(type, nlohmann::json(""));
-            for (auto& spawn : spawns.items()) {
-                auto &point = spawn.value();
-
-                #ifdef _DEBUG
-                    cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
-                    cout << "POINT:\n" << point << "\n:POINTS" << endl;
-                #endif
-
-                game->AddVehicle(index,
-                                 VehiclesTypes::Type(i),
-                                 make_tuple(
-                                         point.value("x", -1),
-                                         point.value("y", -1),
-                                         point.value("z", -1)
-                                 ));
-            }
-        }
-        index++;
-    }
-
-    auto contentInfo = mapInfo.value("content", nlohmann::ordered_json(""));
-    auto baseInfo = contentInfo.value("base", nlohmann::ordered_json(""));
-    vector<tuple<int, int, int>> basePoints;
-    for (auto &point : baseInfo) {
-        basePoints.emplace_back(
-                make_tuple(
-                        point.value("x", -1),
-                        point.value("y", -1),
-                        point.value("z", -1)));
-    }
-    game->AddBase(basePoints);
+bool GameClient::InitGame(const string &name, const string &password, const string &gameName, int numTurns,
+                          int numPlayers, bool isObserver) {
+    if (!Login(name, password, gameName, numTurns, numPlayers, isObserver))
+        return false;
+    InitMap();
     return true;
 }
 
@@ -192,9 +151,51 @@ void GameClient::InitPlayersId() {
         game->InitVehiclesIds(currentPlayerId, vehiclesIds);
 }
 
-tuple<int, int, int> GameClient::MakePosTuple(nlohmann::ordered_json coordinate) {
+tuple<int, int, int> GameClient::MakePosTuple(const nlohmann::json&& coordinate) {
     return make_tuple(
             coordinate.value("x", -1),
             coordinate.value("y", -1),
             coordinate.value("z", -1));
+}
+void GameClient::InitMap() {
+    // Map
+    nlohmann::ordered_json mapInfo = client->Map().answer;
+    int size = mapInfo.value("size", -1);
+    game->InitMap(size);
+
+    #ifdef _DEBUG
+        cout << "Map request:\n"
+             << mapInfo << "\n:Map request" << endl;
+    #endif
+
+    auto spawnInfo = mapInfo.value("spawn_points", nlohmann::ordered_json(""));
+    int index = 0;
+
+    for (auto& player : spawnInfo.items()) {
+        for(int i = 0; i < VehiclesTypes::TypesNum; i++) {
+            const auto& type = VehiclesTypes::s_types[i];
+            auto spawns = player.value().value(type, nlohmann::ordered_json(""));
+            for (auto& spawn : spawns.items()) {
+                auto &point = spawn.value();
+                #ifdef _DEBUG
+                    cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
+                    cout << "POINT:\n" << point << "\n:POINTS" << endl;
+                #endif
+                game->AddVehicle(index,
+                                 VehiclesTypes::Type(i),
+                                 MakePosTuple(point));
+                //                std::cerr << "POINT1: " << typeid(point).name() << std::endl;
+            }
+        }
+        index++;
+    }
+
+    auto contentInfo = mapInfo.value("content", nlohmann::ordered_json(""));
+    auto baseInfo = contentInfo.value("base", nlohmann::ordered_json(""));
+    vector<tuple<int, int, int>> basePoints;
+    for (auto &point : baseInfo) {
+        basePoints.emplace_back(MakePosTuple(point));
+        //        std::cerr << "POINT2: " << typeid(point).name() << std::endl;
+    }
+    game->AddBase(basePoints);
 }

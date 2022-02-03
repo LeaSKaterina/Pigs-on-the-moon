@@ -37,7 +37,7 @@ private:
     bool debug;
 
 public:
-    Client(bool debug = true);
+    Client();
 
     ~Client() { shutdown(server, 1); }
 
