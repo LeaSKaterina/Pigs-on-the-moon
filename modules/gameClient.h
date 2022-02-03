@@ -46,4 +46,8 @@ private:
     bool Login(const string &name, const string &password, const string &gameName, int numTurns,
                                int numPlayers, bool isObserver);
     void InitMap();
+
+    void UpdateVehicles(const nlohmann::json&& vehicles);
+    void UpdateAttackMatrix(nlohmann::json&& am);
+    void UpdateWinPoints(nlohmann::json&& winPoints);
 };

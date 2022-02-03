@@ -33,61 +33,19 @@ void GameClient::UpdateGameState() {
     auto answer = client->GameState();
 
     // attack matrix
-
-    auto am = answer.answer.value("attack_matrix", nlohmann::ordered_json(""));
-    //    const int vector_size = game->GetNumPlayers();
-    for (auto &pm : am.items()) {
-        // player id = pm.key, vector of attacks = pm.value
-        // to upd : is there a way to do vector without a loop ?
-
-        vector<int> vAttacked;
-        //        auto& arr_attacked = pm.value();
-        for (int i : pm.value()) {
-            vAttacked.push_back(i);
-        }
-        game->UpdateAttackMatrix(stoi(pm.key()), vAttacked);
-    }
+    UpdateAttackMatrix(answer.answer.value("attack_matrix", nlohmann::ordered_json("")));
 
     // current turn | player | finished
-
     game->UpdateState(
             answer.answer.value("current_turn", -1),
             answer.answer.value("current_player_idx", -1),
             answer.answer.value("finished", 0));
 
     // vehicles
-
-    auto vehicles = answer.answer.value("vehicles", nlohmann::ordered_json(""));
-    for (auto &v : vehicles.items()) {
-        auto &vehicleInfo = v.value();
-
-        auto position = vehicleInfo.value("position", nlohmann::ordered_json(""));
-        auto spawnPosition = vehicleInfo.value("spawn_position", nlohmann::ordered_json(""));
-
-        auto pos = MakePosTuple(
-                vehicleInfo.value("position", nlohmann::ordered_json("")));
-        auto spawnPos = MakePosTuple(
-                vehicleInfo.value("spawn_position", nlohmann::ordered_json("")));
-        game->UpdateVehicleState(
-                vehicleInfo.value("player_id", -1),
-                spawnPos,
-                pos,
-                vehicleInfo.value("health", -1),
-                vehicleInfo.value("capture_points", -1));
-        // TODO? mb ref in uvs;
-    }
+    UpdateVehicles(answer.answer.value("vehicles", nlohmann::ordered_json("")));
 
     // win_points
-
-    auto winPoints = answer.answer.value("win_points", nlohmann::ordered_json(""));
-    cerr << "DEBUG: " << winPoints << endl;
-    for (auto &player : winPoints.items()) {
-        auto &winPointsInfo = player.value();
-        game->UpdateWinPoints(
-                stoi(player.key()),
-                winPointsInfo.value("capture", 0),
-                winPointsInfo.value("kill", 0));
-    }
+    UpdateWinPoints(answer.answer.value("win_points", nlohmann::ordered_json("")));
 }
 
 bool GameClient::SendTurn() const {
@@ -157,6 +115,8 @@ tuple<int, int, int> GameClient::MakePosTuple(const nlohmann::json&& coordinate)
             coordinate.value("y", -1),
             coordinate.value("z", -1));
 }
+
+
 void GameClient::InitMap() {
     // Map
     nlohmann::ordered_json mapInfo = client->Map().answer;
@@ -198,4 +158,51 @@ void GameClient::InitMap() {
         //        std::cerr << "POINT2: " << typeid(point).name() << std::endl;
     }
     game->AddBase(basePoints);
+}
+
+
+void GameClient::UpdateVehicles(const nlohmann::json &&vehicles) {
+    for (auto &v : vehicles.items()) {
+        auto &vehicleInfo = v.value();
+
+        auto pos = MakePosTuple(
+                vehicleInfo.value("position", nlohmann::ordered_json("")));
+        auto spawnPos = MakePosTuple(
+                vehicleInfo.value("spawn_position", nlohmann::ordered_json("")));
+        game->UpdateVehicleState(
+                vehicleInfo.value("player_id", -1),
+                spawnPos,
+                pos,
+                vehicleInfo.value("health", -1),
+                vehicleInfo.value("capture_points", -1));
+        // TODO? mb ref in uvs;
+    }
+}
+
+
+void GameClient::UpdateAttackMatrix(nlohmann::json &&am) {
+    //    const int vector_size = game->GetNumPlayers();
+    for (auto &pm : am.items()) {
+        // player id = pm.key, vector of attacks = pm.value
+        // to upd : is there a way to do vector without a loop ?
+
+        vector<int> vAttacked;
+        //        auto& arr_attacked = pm.value();
+        for (int i : pm.value()) {
+            vAttacked.push_back(i);
+        }
+        game->UpdateAttackMatrix(stoi(pm.key()), vAttacked);
+    }
+}
+
+
+void GameClient::UpdateWinPoints(nlohmann::json &&winPoints) {
+    cerr << "DEBUG: " << winPoints << endl;
+    for (auto &player : winPoints.items()) {
+        auto &winPointsInfo = player.value();
+        game->UpdateWinPoints(
+                stoi(player.key()),
+                winPointsInfo.value("capture", 0),
+                winPointsInfo.value("kill", 0));
+    }
 }
