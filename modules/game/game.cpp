@@ -51,11 +51,11 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
 void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
     // there choose type of tanks
     switch(type){
-        case AtSpg:
-        case LightTank:
-        case HeavyTank:
-        case MediumTank:
-        case Spg:
+        case MEDIUM_TANK:
+        case LIGHT_TANK:
+        case HEAVY_TANK:
+        case AT_SPG:
+        case SPG:
             Vehicle *t = new Vehicle(type, playerId);
             t->InitSpawn(map->Get(spawn));
             vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)

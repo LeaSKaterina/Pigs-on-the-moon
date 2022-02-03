@@ -26,7 +26,7 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
     auto spawnInfo = mapInfo.value("spawn_points", nlohmann::ordered_json(""));
     int index = 0;
 
-    for (auto& player : spawn_info.items()) {
+    for (auto& player : spawnInfo.items()) {
         for(int i = 0; i < VehiclesTypes::TypesNum; i++) {
             const auto& type = VehiclesTypes::s_types[i];
             auto spawns = player.value().value(type, nlohmann::json(""));
