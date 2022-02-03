@@ -10,30 +10,28 @@
 class GameClient {
 public:
     explicit GameClient() : game(new Game()), client(new Client()) {}
+    ~GameClient();
+
+    // Inits
 
     // must be called once and first.
     bool InitGame(const std::string &name, const std::string &password = "",
                   const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
                   bool isObserver = false);
 
-    // must be called only when all players are connected
+    // must be called once and only when all players are connected
     void InitIds();
 
+    // Game process
+
+    [[nodiscard]] bool IsPlayTime() const { return game->IsPlayerTurn(); }
     [[nodiscard]] bool GameIsFinished() const { return game->IsFinished(); }
 
     void UpdateGameState();
-
-    //    void CheckGameAction();  Do we really need this?
-
-    ~GameClient();
+    //    void UpdateGameAction();  Do we really need it?
 
     bool SendTurn() const;
-
     void SendAction() const;
-
-    Client *GetClient() const { return client; }
-
-    [[nodiscard]] bool IsPlayTime() const { return game->IsPlayerTurn(); }
 
 private:
     // entities
@@ -46,6 +44,7 @@ private:
     bool Login(const string &name, const string &password, const string &gameName, int numTurns,
                                int numPlayers, bool isObserver);
     void InitMap();
+    void InitSpawns(const nlohmann::json&& spawnInfo);
     void InitPlayersIds(const nlohmann::json&& am);
     void InitVehiclesIds(const nlohmann::json&& vehicles);
 
