@@ -18,3 +18,8 @@ void Map::InitGrid() {
         }
     }
 }
+Map::~Map() {
+    for(auto& [k, h] : grid) {
+        delete h;
+    }
+}
