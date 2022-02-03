@@ -1,12 +1,11 @@
-#ifndef PIGS_ON_THE_MOON_MAP_MAP_H
-#define PIGS_ON_THE_MOON_MAP_MAP_H
+#pragma once
 
-#include <vector>
-#include <tuple>
-#include "hex.h"
-#include "../constructions/construction.h"
 #include "../constructions/base.h"
+#include "../constructions/construction.h"
+#include "hex.h"
 #include <map>
+#include <tuple>
+#include <vector>
 
 using namespace std;
 
@@ -14,18 +13,14 @@ class Map {
 private:
     int size;
     vector<Construction *> content;
-    map<tuple < int, int, int>, Hex*> grid;
+    map<tuple<int, int, int>, Hex *> grid;
 
     void InitGrid();
 
 public:
-    explicit Map(int size);
+    explicit Map(int size) : size(size) { InitGrid(); }
 
-    void AddBase(vector <tuple<int, int, int>> &points);
+    void AddBase(vector<tuple<int, int, int>> &points);
 
-    [[nodiscard]] Hex *Get(const tuple<int, int, int> &p) const;
+    [[nodiscard]] Hex *Get(const tuple<int, int, int> &p) const { return grid.at(p); }
 };
-
-
-
-#endif //PIGS_ON_THE_MOON_MAP_MAP_H

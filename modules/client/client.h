@@ -1,55 +1,80 @@
-#ifndef PIGS_ON_THE_MOON_CLIENT_CLIENT_H
-#define PIGS_ON_THE_MOON_CLIENT_CLIENT_H
+#pragma once
 
-#include <winsock2.h>
-#include <winerror.h>
+#include "../enums/action.h"
+#include "../enums/result.h"
+#include <cstring>
 #include <iostream>
 #include <memory>
 #include <valarray>
-#include "../enums/action.h"
-#include "../enums/result.h"
+#include <winerror.h>
+#include <winsock2.h>
 
-#include "../../libs/json-3.10.5/include/nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 
-struct Response{
+struct Response {
     Result result;
     nlohmann::ordered_json answer;
 
-    friend std::ostream& operator<< (std::ostream &out, const Response &response);
+    friend std::ostream &operator<<(std::ostream &out, const Response &response);
 };
 
 class Client {
 private:
     const char ADDRESS[14] = {"92.223.34.102"};
     const int PORT = 443;
-    SOCKET server; // server descriptor
-    const int PROTOCOL = AF_INET; //socket config
-    const int SOCKET_TYPE = SOCK_STREAM; // socket config
-    WSAData WSAData; //info about connect
+    SOCKET server;                      // server descriptor
+    const int PROTOCOL = AF_INET;       //socket config
+    const int SOCKET_TYPE = SOCK_STREAM;// socket config
+    WSAData WSAData;                    //info about connect
 
-    void SendRequest(Action action, const std::string& msg) const;
+    void SendRequest(Action action, const std::string &msg) const;
+
     int GetIntFromServer() const;
+
     Response GetAnswer() const;
 
     bool debug;
+
 public:
     Client(bool debug = true);
-    ~Client();
 
-    Response Login(const std::string& name, const std::string& password = "",
-                   const std::string& game="", int num_turns = 0, int num_players = 1, bool is_observer = false) const;
-    Response Logout() const;
-    Response Map() const;
-    Response GameState() const;
-    Response GameActions() const;
-    Response Turn() const;
-    Response Chat(const std::string& msg) const;
-    Response Move(int vehicle_id, int x, int y, int z) const;
-    Response Shoot(int vehicle_id, int x, int y, int z) const;
+    ~Client() { shutdown(server, 1); }
 
-    static void PrintLogInfo(const std::string& info);
+    Response Login(const std::string &name, const std::string &password = "",
+                   const std::string &game = "", int numTurns = 0, int numPlayers = 1,
+                   bool isObserver = false) const;
+
+    Response Logout() const {
+        this->SendRequest(Action::LOGOUT, "");
+        return this->GetAnswer();
+    }
+
+    Response Map() const {
+        this->SendRequest(Action::MAP, "");
+        return this->GetAnswer();
+    }
+
+    Response GameState() const {
+        this->SendRequest(Action::GAME_STATE, "");
+        return this->GetAnswer();
+    }
+
+    Response GameActions() const {
+        this->SendRequest(Action::GAME_ACTIONS, "");
+        return this->GetAnswer();
+    }
+
+    Response Turn() const {
+        this->SendRequest(Action::TURN, "");
+        return this->GetAnswer();
+    }
+
+    Response Chat(const std::string &msg) const;
+
+    Response Move(int vehicleId, int x, int y, int z) const;
+
+    Response Shoot(int vehicleId, int x, int y, int z) const;
+
+    static void PrintLogInfo(const std::string &info) { std::cout << info << '\n'; }
 };
-
-
-#endif //PIGS_ON_THE_MOON_CLIENT_CLIENT_H

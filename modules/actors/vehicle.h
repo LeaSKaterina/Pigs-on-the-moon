@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_ACTORS_VEHICLE_H
-#define PIGS_ON_THE_MOON_ACTORS_VEHICLE_H
+#pragma once
 
 #include "../map/hex.h"
 #include "../enums/vehicle_types.h"
@@ -13,27 +12,27 @@ public:
 
     int Shoot(Vehicle *v);
 
-    void IncCapture();
+    void IncCapture() { capturePoints++; }
 
-    void DropCapture();
+    void DropCapture() { capturePoints = 0; }
 
     void Update(int health, Hex *newPos, int capture);
 
-    int GetPlayerId() const;
+    int GetPlayerId() const { return playerId; }
 
-    [[nodiscard]] const std::tuple<int, int, int> &GetSpawn() const;
+    [[nodiscard]] const std::tuple<int, int, int> &GetSpawn() const { return spawnPosition->GetCoordinates(); }
 
-    [[nodiscard]] const std::tuple<int, int, int> &GetCurrentPosition() const;
+    [[nodiscard]] const std::tuple<int, int, int> &
+    GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
     void InitSpawn(Hex *p);
 
     void Respawn();
 
 private:
-
     int playerId;
     int health;
-    int destructionPoints;    // Очки за уничтожение
+    int destructionPoints;// Очки за уничтожение
     int speedPoints;
     int damage = 1;
     int capturePoints = 0;
@@ -43,9 +42,5 @@ private:
 
     int GetHit(int damage = 1);
 
-    bool IsEnemy(Vehicle *v) const;
+    bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
 };
-
-
-
-#endif //PIGS_ON_THE_MOON_ACTORS_VEHICLE_H

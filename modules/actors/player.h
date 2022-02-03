@@ -1,24 +1,21 @@
-#ifndef PIGS_ON_THE_MOON_ACTORS_PLAYER_H
-#define PIGS_ON_THE_MOON_ACTORS_PLAYER_H
+#pragma once
 
 #include <string>
 //#include <vector>
 //#include "vehicle.h"
 
-class Player {
+struct Player {
 private:
-    std::string name;
-    std::string password;
+    const std::string name;
+    const std::string password;
     int id;
     // std::vector<Vehicle*>& tanks;
     int capture;
     int kill;
 
 public:
-    Player(int id, std::string name, std::string pass);
+    Player(int id, const std::string &name, const std::string &pass) : id(id), name(name), password(pass), capture(0),
+                                                                       kill(0) {}
 
-    int GetId() const;
+    int GetId() const { return id; }
 };
-
-
-#endif //PIGS_ON_THE_MOON_ACTORS_PLAYER_H

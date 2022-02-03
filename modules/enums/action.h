@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_ENUMS_ACTION_H
-#define PIGS_ON_THE_MOON_ENUMS_ACTION_H
+#pragma once
 
 enum class Action {
     LOGIN = 1,
@@ -13,5 +12,3 @@ enum class Action {
     MOVE = 101,
     SHOOT = 102
 };
-
-#endif //PIGS_ON_THE_MOON_ENUMS_ACTION_H
