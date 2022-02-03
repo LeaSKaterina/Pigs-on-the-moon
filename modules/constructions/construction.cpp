@@ -1,8 +1,7 @@
 #include "construction.h"
 
 Construction::Construction(std::vector<Hex *> &basis) {
-    id = Construction::counter;
-    counter++;
+    id = Construction::counter++;
     for (auto &h : basis) {
         h->SetOwnerId(id);
     }

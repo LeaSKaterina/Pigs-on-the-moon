@@ -22,4 +22,7 @@ Map::~Map() {
     for(auto& [k, h] : grid) {
         delete h;
     }
+
+    for(auto c : content)
+        delete c;
 }

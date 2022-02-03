@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 
@@ -53,7 +54,7 @@ public:
     // all inits must be called firstly!
     void InitMap(int size) { map = new Map(size); }
 
-    void InitPlayer(int id, string name, string password = "") { player = new Player(id, name, password); }
+    void InitPlayer(int id, string name, string password = "") { player = new Player(id, std::move(name), std::move(password)); }
 
     void InitVariables(int playersNum = 3);
 
@@ -64,8 +65,6 @@ public:
     // add methods
 
     void AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn);
-
-    void AddVehicle(int playerId, std::string &type, std::tuple<int, int, int> spawn);
 
     void AddBase(vector<tuple<int, int, int>> &points) { map->AddBase(points); }
 
