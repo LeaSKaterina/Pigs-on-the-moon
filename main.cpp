@@ -34,7 +34,7 @@ int main() {
 
 
     while (!gc.SendTurn()) {}
-    gc.InitPlayersId();
+    gc.InitIds();
     while (!gc.GameIsFinished()) {
         gc.UpdateGameState();
         if (gc.IsPlayTime())

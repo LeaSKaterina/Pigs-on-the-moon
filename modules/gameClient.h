@@ -16,6 +16,8 @@ public:
                   const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
                   bool isObserver = false);
 
+    // must be called only when all players are connected
+    void InitIds();
 
     [[nodiscard]] bool GameIsFinished() const { return game->IsFinished(); }
 
@@ -28,8 +30,6 @@ public:
     bool SendTurn() const;
 
     void SendAction() const;
-
-    void InitPlayersId();
 
     Client *GetClient() const { return client; }
 
@@ -46,8 +46,10 @@ private:
     bool Login(const string &name, const string &password, const string &gameName, int numTurns,
                                int numPlayers, bool isObserver);
     void InitMap();
+    void InitPlayersIds(const nlohmann::json&& am);
+    void InitVehiclesIds(const nlohmann::json&& vehicles);
 
     void UpdateVehicles(const nlohmann::json&& vehicles);
-    void UpdateAttackMatrix(nlohmann::json&& am);
-    void UpdateWinPoints(nlohmann::json&& winPoints);
+    void UpdateAttackMatrix(const nlohmann::json&& am);
+    void UpdateWinPoints(const nlohmann::json&& winPoints);
 };

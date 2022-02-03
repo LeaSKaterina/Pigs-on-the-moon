@@ -74,39 +74,15 @@ void GameClient::SendAction() const {
     }
 }
 
-// must be called only when all players are connected
-void GameClient::InitPlayersId() {
+
+void GameClient::InitIds() {
     auto answer = client->GameState();
-    vector<int> realIds;
 
     // players id
-
-    auto am = answer.answer.value("attack_matrix", nlohmann::ordered_json(""));
-    for (auto &pm : am.items()) {
-        realIds.push_back(stoi(pm.key()));
-    }
-    game->InitPlayersId(realIds);
+    InitPlayersIds(answer.answer.value("attack_matrix", nlohmann::ordered_json("")));
 
     // vehicle id
-    // TODO! recode
-    vector<int> vehiclesIds;
-    int currentPlayerId = -1;
-    auto vehicles = answer.answer.value("vehicles", nlohmann::ordered_json(""));
-    for (auto &v : vehicles.items()) {
-        auto &vehicleInfo = v.value();
-        int playerId = vehicleInfo.value("player_id", -1);
-        int vehicleId = stoi(v.key());
-        if (currentPlayerId == -1)
-            currentPlayerId = playerId;
-        if (currentPlayerId != playerId) {
-            game->InitVehiclesIds(currentPlayerId, vehiclesIds);
-            vehiclesIds.clear();
-            currentPlayerId = playerId;
-        }
-        vehiclesIds.push_back(vehicleId);
-    }
-    if (!vehiclesIds.empty())
-        game->InitVehiclesIds(currentPlayerId, vehiclesIds);
+    InitVehiclesIds(answer.answer.value("vehicles", nlohmann::ordered_json("")));
 }
 
 tuple<int, int, int> GameClient::MakePosTuple(const nlohmann::json&& coordinate) {
@@ -180,7 +156,7 @@ void GameClient::UpdateVehicles(const nlohmann::json &&vehicles) {
 }
 
 
-void GameClient::UpdateAttackMatrix(nlohmann::json &&am) {
+void GameClient::UpdateAttackMatrix(const nlohmann::json &&am) {
     //    const int vector_size = game->GetNumPlayers();
     for (auto &pm : am.items()) {
         // player id = pm.key, vector of attacks = pm.value
@@ -196,7 +172,7 @@ void GameClient::UpdateAttackMatrix(nlohmann::json &&am) {
 }
 
 
-void GameClient::UpdateWinPoints(nlohmann::json &&winPoints) {
+void GameClient::UpdateWinPoints(const nlohmann::json &&winPoints) {
     cerr << "DEBUG: " << winPoints << endl;
     for (auto &player : winPoints.items()) {
         auto &winPointsInfo = player.value();
@@ -205,4 +181,35 @@ void GameClient::UpdateWinPoints(nlohmann::json &&winPoints) {
                 winPointsInfo.value("capture", 0),
                 winPointsInfo.value("kill", 0));
     }
+}
+
+
+void GameClient::InitPlayersIds(const nlohmann::json &&am) {
+    vector<int> realIds;
+    for (auto &pm : am.items()) {
+        realIds.push_back(stoi(pm.key()));
+    }
+    game->InitPlayersId(realIds);
+}
+
+
+void GameClient::InitVehiclesIds(const nlohmann::json &&vehicles) {
+    // TODO! recode
+    vector<int> vehiclesIds;
+    int currentPlayerId = -1;
+    for (auto &v : vehicles.items()) {
+        auto &vehicleInfo = v.value();
+        int playerId = vehicleInfo.value("player_id", -1);
+        int vehicleId = stoi(v.key());
+        if (currentPlayerId == -1)
+            currentPlayerId = playerId;
+        if (currentPlayerId != playerId) {
+            game->InitVehiclesIds(currentPlayerId, vehiclesIds);
+            vehiclesIds.clear();
+            currentPlayerId = playerId;
+        }
+        vehiclesIds.push_back(vehicleId);
+    }
+    if (!vehiclesIds.empty())
+        game->InitVehiclesIds(currentPlayerId, vehiclesIds);
 }
