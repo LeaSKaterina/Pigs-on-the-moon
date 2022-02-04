@@ -4,7 +4,7 @@ project(Pigs_on_the_moon)
 set(CMAKE_CXX_STANDARD 17)
 
 #Debug
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
 #!Debug
 
 include(./conanBuild/conanbuildinfo.cmake)

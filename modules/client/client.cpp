@@ -1,6 +1,6 @@
 #include "client.h"
 
-Client::Client(bool debug) : debug(debug) {
+Client::Client() {
     if (FAILED(WSAStartup(MAKEWORD(2, 1), &this->WSAData))) {// first - version, second create info
         PrintLogInfo("WSAStartup creation failed with error: " + std::to_string(WSAGetLastError()));
     }
@@ -34,16 +34,15 @@ void Client::SendRequest(Action action, const std::string &msg) const {
     }
 
     std::strncpy(&buffer[8], &msg[0], msg.size());
-
-    if (debug) {
-        for (int i = 0; i < 4; ++i) {
-            std::cerr << (int) buffer[i] << ' ';
-        }
-        for (int i = 0; i < 4; ++i) {
-            std::cerr << (int) buffer[i + 4] << ' ';
-        }
-        std::cerr << &buffer[8] << '\n';
+#ifdef _DEBUG
+    for (int i = 0; i < 4; ++i) {
+        std::cerr << (int) buffer[i] << ' ';
     }
+    for (int i = 0; i < 4; ++i) {
+        std::cerr << (int) buffer[i + 4] << ' ';
+    }
+    std::cerr << &buffer[8] << '\n';
+#endif
 
     send(server, &buffer.front(), 8 + msg.size(), 0);
 }
@@ -56,6 +55,9 @@ Response Client::GetAnswer() const {
     if (size) recv(server, &msg.front(), size, MSG_WAITALL);
     nlohmann::ordered_json ans = size ? nlohmann::ordered_json::parse(msg)
                                       : nlohmann::ordered_json();
+    #ifdef _DEBUG
+        std::cerr << (int)result << " " << ans << std::endl;
+    #endif
     return {result, ans};
 }
 

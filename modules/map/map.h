@@ -23,4 +23,6 @@ public:
     void AddBase(vector<tuple<int, int, int>> &points);
 
     [[nodiscard]] Hex *Get(const tuple<int, int, int> &p) const { return grid.at(p); }
+
+    ~Map();
 };
