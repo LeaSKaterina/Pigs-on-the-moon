@@ -40,6 +40,6 @@ private:
     Game* game;
     Client* client;
 
-    static tuple<int, int, int> MakePosTuple(nlohmann::ordered_json coordinate);
 
+    std::tuple<int, int, int> MakePosTuple(const nlohmann::ordered_json &coordinate);
 };

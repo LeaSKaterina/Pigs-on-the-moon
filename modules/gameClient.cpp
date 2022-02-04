@@ -1,5 +1,7 @@
 #include "gameClient.h"
 
+using namespace std;
+
 bool GameClient::InitGame(const string &name, const string &password, const string &gameName, int numTurns,
                           int numPlayers, bool isObserver) {
     // Login
@@ -18,9 +20,9 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
     int size = mapInfo.value("size", -1);
     game->InitMap(size);
 
-#ifdef _DEBUG
-    cout << "Map request:\n"
-         << mapInfo << "\n:Map request" << endl;
+#ifdef DEBUG
+//    cout << "Map request:\n"
+//         << mapInfo << "\n:Map request" << endl;
 #endif
 
     auto spawnInfo = mapInfo.value("spawn_points", nlohmann::ordered_json(""));
@@ -33,7 +35,7 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
             for (auto& spawn : spawns.items()) {
                 auto &point = spawn.value();
 
-                #ifdef _DEBUG
+                #ifdef DEBUG
                     cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
                     cout << "POINT:\n" << point << "\n:POINTS" << endl;
                 #endif
@@ -192,7 +194,7 @@ void GameClient::InitPlayersId() {
         game->InitVehiclesIds(currentPlayerId, vehiclesIds);
 }
 
-tuple<int, int, int> GameClient::MakePosTuple(nlohmann::ordered_json coordinate) {
+tuple<int, int, int> GameClient::MakePosTuple(const nlohmann::ordered_json &coordinate) {
     return make_tuple(
             coordinate.value("x", -1),
             coordinate.value("y", -1),
