@@ -12,6 +12,7 @@
 #include <tuple>
 #include <utility>
 #include <vector>
+#include <unordered_map>
 
 
 class Game {
@@ -61,6 +62,8 @@ public:
     void InitPlayersId(const vector<int> &realId);
 
     void InitVehiclesIds(int playerId, const vector<int> &realId);
+
+    void InitVehiclesIds(int playerId, const unordered_map<std::string, vector<int>>& realId);
 
     // add methods
 

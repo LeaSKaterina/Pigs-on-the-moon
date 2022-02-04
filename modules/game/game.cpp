@@ -50,6 +50,19 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
     }
 }
 
+void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector<int>> &realId) {
+    if (playerId != player->GetId())
+        return;
+    int next = 0;
+    for (int i = 0; i < VehiclesTypes::TypesNum; i++) {
+        auto& tanks = realId.at(VehiclesTypes::s_types[i]);
+        // q: is there more than one access?
+        for(const auto& id : tanks) {
+            tanksIdAdapter[next++] = id;
+        }
+    }
+}
+
 // Add
 
 void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {

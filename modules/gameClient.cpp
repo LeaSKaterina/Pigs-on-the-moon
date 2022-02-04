@@ -161,12 +161,14 @@ void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
 
 
 void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
-    // TODO! recode
-    vector<int> vehiclesIds;
+    // TODO! do we need all players?
+    // strings ...
+    unordered_map<string, vector<int>> vehiclesIds;
     int currentPlayerId = -1;
     for (auto &v : vehicles.items()) {
         auto &vehicleInfo = v.value();
         int playerId = vehicleInfo.value("player_id", -1);
+        string vehicle_type = vehicleInfo.value("vehicle_type", "unknown");
         int vehicleId = stoi(v.key());
         if (currentPlayerId == -1)
             currentPlayerId = playerId;
@@ -175,7 +177,7 @@ void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
             vehiclesIds.clear();
             currentPlayerId = playerId;
         }
-        vehiclesIds.push_back(vehicleId);
+        vehiclesIds[vehicle_type].push_back(vehicleId);
     }
     if (!vehiclesIds.empty())
         game->InitVehiclesIds(currentPlayerId, vehiclesIds);
