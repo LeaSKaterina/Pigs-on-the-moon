@@ -5,7 +5,7 @@
 
 #include "enums/vehicle_types.h"
 
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 class GameClient {
 public:
@@ -44,11 +44,11 @@ private:
     bool Login(const string &name, const string &password, const string &gameName, int numTurns,
                                int numPlayers, bool isObserver);
     void InitMap();
-    void InitSpawns(const nlohmann::json&& spawnInfo);
-    void InitPlayersIds(const nlohmann::json&& am);
-    void InitVehiclesIds(const nlohmann::json&& vehicles);
+    void InitSpawns(const nlohmann::ordered_json&& spawnInfo);
+    void InitPlayersIds(const nlohmann::ordered_json&& am);
+    void InitVehiclesIds(const nlohmann::ordered_json&& vehicles);
 
-    void UpdateVehicles(const nlohmann::json&& vehicles);
-    void UpdateAttackMatrix(const nlohmann::json&& am);
-    void UpdateWinPoints(const nlohmann::json&& winPoints);
+    void UpdateVehicles(const nlohmann::ordered_json&& vehicles);
+    void UpdateAttackMatrix(const nlohmann::ordered_json&& am);
+    void UpdateWinPoints(const nlohmann::ordered_json&& winPoints);
 };

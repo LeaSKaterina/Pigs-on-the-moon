@@ -31,7 +31,6 @@ GameClient::~GameClient() {
 
 void GameClient::UpdateGameState() {
     auto answer = client->GameState();
-
     // attack matrix
     UpdateAttackMatrix(answer.answer.value("attack_matrix", nlohmann::ordered_json("")));
 
@@ -74,16 +73,23 @@ void GameClient::SendAction() const {
     }
 }
 
-
 void GameClient::InitIds() {
     auto answer = client->GameState();
-
+    #ifdef _DEBUG
+        cerr << "Attack Matrix: "
+         << answer.answer.value("attack_matrix", nlohmann::ordered_json(""))
+         << " :Attack Matrix" << endl;
+        cerr << "Vehicles: "
+             << answer.answer.value("vehicles", nlohmann::ordered_json(""))
+             << " :Vehicles" << endl;
+    #endif
     // players id
     InitPlayersIds(answer.answer.value("attack_matrix", nlohmann::ordered_json("")));
 
     // vehicle id
     InitVehiclesIds(answer.answer.value("vehicles", nlohmann::ordered_json("")));
 }
+
 
 tuple<int, int, int> GameClient::MakePosTuple(const nlohmann::json&& coordinate) {
     return make_tuple(
@@ -117,7 +123,12 @@ void GameClient::InitMap() {
 }
 
 
-void GameClient::InitSpawns(const nlohmann::json &&spawnInfo) {
+void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {
+    #ifdef _DEBUG
+        cerr << "Spawn Info: "
+             << spawnInfo
+             << " :Spawn Info" << endl;
+    #endif
     int index = 0;
     for (auto& player : spawnInfo.items()) {
         for(int i = 0; i < VehiclesTypes::TypesNum; i++) {
@@ -126,8 +137,8 @@ void GameClient::InitSpawns(const nlohmann::json &&spawnInfo) {
             for (auto& spawn : spawns.items()) {
                 auto &point = spawn.value();
                 #ifdef _DEBUG
-                    cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
-                    cout << "POINT:\n" << point << "\n:POINTS" << endl;
+//                    cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
+//                    cout << "POINT:\n" << point << "\n:POINTS" << endl;
                 #endif
                 game->AddVehicle(index,
                                  VehiclesTypes::Type(i),
@@ -140,7 +151,7 @@ void GameClient::InitSpawns(const nlohmann::json &&spawnInfo) {
 }
 
 
-void GameClient::InitPlayersIds(const nlohmann::json &&am) {
+void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
     vector<int> realIds;
     for (auto &pm : am.items()) {
         realIds.push_back(stoi(pm.key()));
@@ -149,7 +160,7 @@ void GameClient::InitPlayersIds(const nlohmann::json &&am) {
 }
 
 
-void GameClient::InitVehiclesIds(const nlohmann::json &&vehicles) {
+void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
     // TODO! recode
     vector<int> vehiclesIds;
     int currentPlayerId = -1;
@@ -171,7 +182,7 @@ void GameClient::InitVehiclesIds(const nlohmann::json &&vehicles) {
 }
 
 
-void GameClient::UpdateVehicles(const nlohmann::json &&vehicles) {
+void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
     for (auto &v : vehicles.items()) {
         auto &vehicleInfo = v.value();
 
@@ -190,7 +201,7 @@ void GameClient::UpdateVehicles(const nlohmann::json &&vehicles) {
 }
 
 
-void GameClient::UpdateAttackMatrix(const nlohmann::json &&am) {
+void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
     //    const int vector_size = game->GetNumPlayers();
     for (auto &pm : am.items()) {
         // player id = pm.key, vector of attacks = pm.value
@@ -206,7 +217,7 @@ void GameClient::UpdateAttackMatrix(const nlohmann::json &&am) {
 }
 
 
-void GameClient::UpdateWinPoints(const nlohmann::json &&winPoints) {
+void GameClient::UpdateWinPoints(const nlohmann::ordered_json &&winPoints) {
     cerr << "DEBUG: " << winPoints << endl;
     for (auto &player : winPoints.items()) {
         auto &winPointsInfo = player.value();
