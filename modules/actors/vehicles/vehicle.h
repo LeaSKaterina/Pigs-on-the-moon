@@ -17,9 +17,9 @@ public:
 
     bool Move(Hex *newPos);
 
-    virtual std::multimap<int, Point> GetAvailableMovePoints(Point target, int r = 0) const  = 0;
+    std::multimap<int, Point> GetAvailableMovePoints(Point target);
 
-    virtual std::vector<bool> IsAvailableForShoot(const std::vector<Point> &points) = 0;
+    virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 
     virtual Action PriorityAction() const = 0;
 

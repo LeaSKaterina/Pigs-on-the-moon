@@ -158,55 +158,52 @@ Point ActionController::GetTargetForMove(Point coordinates, Map *map) {
     return make_tuple(-1, -1, -1);// нам не нужно перемещаться
 }
 
-Point ActionController::GetTargetForShoot(Point coordinates, vector<vector<int>> attackMatrix,
-                                          vector<vector<Vehicle *>> vehicles, int playerId) {
-    return Point(-1, -1, -1);
-}// какая-то логика выстрела. если не стрелять - возвращает (-1,-1,-1)
+vector<bool> ActionController::NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int playersNum) {
+    vector<bool> canAttack(playersNum);
+    for (int enemyId = 0; enemyId < playersNum; enemyId++) {
+        if (enemyId == playerId){
+            continue;
+        }
 
-
-vector<int> ActionController::GetPotentialDamage(const vector<Vehicle*>& vehicles, const vector<Point>& enemyPoints){
-    vector<int> potentialDamage(10);
-    vector<bool> buffer;
-    for (auto v : vehicles) {
-        buffer = v->IsAvailableForShoot(enemyPoints);
-        for (int i = 0; i < 10; i++) {
-            potentialDamage[i] += buffer[i];
+        canAttack[enemyId] = true;
+        for (int i = 0; i < attackMatrix.size(); i++) {
+            if (i == enemyId){
+                continue;
+            }
+            for (int j = 0; j < attackMatrix[i].size(); j++) {
+                if (attackMatrix[i][j] == enemyId) {// he was attacked
+                    for (auto id : attackMatrix[enemyId]) {
+                        if (id == playerId) {// but he attack us
+                            break;
+                        }
+                    }
+                    canAttack[enemyId] = false;
+                    break;
+                }
+            }
         }
     }
-    return potentialDamage;
+    return canAttack;
 }
 
-vector<Point> ActionController::GetPointsForShoot(const vector<vector<int>>& attackMatrix, vector<vector<Vehicle *>> vehicles, int playerId) {
-    vector<Point> enemyPoints;
-    const vector<Vehicle *>& playerVehicles = vehicles[playerId];
+std::unordered_map<Vehicle *, vector<Vehicle *>> ActionController::GetPointsForShoot(const vector<vector<int>> &attackMatrix,
+                                                                                     const vector<vector<Vehicle *>> &vehicles,
+                                                                                     int playerId, int playersNum) {
 
-    vector<vector<bool>> toAttack(5);
-    std::unordered_map<Vehicle*, std::vector<int>> r;
-    for (auto& our : playerVehicles){
-        for (auto vect : vehicles) {
-                    if (vect[0]->GetPlayerId() != playerId)
-                        continue;
-                    for (auto v : vect) {
-                        enemyPoints.push_back(v->GetCurrentPosition());
-//                        if(our->mayAttack(v))
-//                            res[v].push_back(our->id);
-                    }
-                }
+    const vector<Vehicle *> &playerVehicles = vehicles[playerId];
+    vector<bool> canAttack(playersNum);
+    canAttack = move(NeutralityRuleCheck(attackMatrix, playerId, playersNum));
+    std::unordered_map<Vehicle *, vector<Vehicle *>> res;
+    for (auto &our : playerVehicles) {
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (vehicles[i][0]->GetPlayerId() == playerId || !canAttack[i])
+                continue;
+            for (auto enemy : vehicles[i]) {
+                if (our->IsAvailableForShoot(enemy))
+                    res[enemy].push_back(our);
+            }
+        }
     }
 
-//    vector<pair<int, const Point&>>
-    vector<int> potentialDamage = GetPotentialDamage(playerVehicles, enemyPoints);
-
-    // TODO
-    // check the rule of neutrality using attackMatrix
-    // if we can destroy the enemy - shoot
-    // if vehicle doesn't shoot res[id] = (-1,-1,-1)
-    // else res[id] = current position of target vehicle
-
-    vector<Point> res(5);
     return res;
-}
-
-std::unordered_map<Vehicle *, vector<Vehicle*>> ActionController::GetPointsForShoot(const vector<std::vector<int>> &attackMatrix, const vector<std::vector<Vehicle *>> &vehicles, int playerId, int playersNum, int playerVehiclesNum) {
-    return {};
 }

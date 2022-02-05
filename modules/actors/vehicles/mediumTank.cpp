@@ -1,10 +1,7 @@
 #include "mediumTank.h"
 
 
-std::vector<bool> MediumTank::IsAvailableForShoot(const std::vector<Point>& points) {
-    std::vector<bool> res;
-    return res;
+bool MediumTank::IsAvailableForShoot(Vehicle *enemy) {
+    return Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition()) == 2;
 }
-std::multimap<int, Point> MediumTank::GetAvailableMovePoints(Point target, int r) const {
-    return {  };
-}
+

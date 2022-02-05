@@ -1,9 +1,7 @@
 #include "lightTank.h"
 
-std::vector<bool> LightTank::IsAvailableForShoot(const std::vector<Point>& points) {
-    std::vector<bool> res;
-    return res;
+
+bool LightTank::IsAvailableForShoot(Vehicle *enemy) {
+    return Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition()) == 2;
 }
-std::multimap<int, Point> LightTank::GetAvailableMovePoints(Point target, int r) const {
-    return {};
-}
+

@@ -23,16 +23,9 @@ public:
 
     static Point GetNextOnAxis(Point coordinates, Map *map);
 
-    static Point GetTargetForShoot(Point coordinates, std::vector<std::vector<int>> attackMatrix,
-                                   std::vector<std::vector<Vehicle *>> vehicles, int playerId);
+    static std::vector<bool> NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int playersNum);
 
-    static std::vector<int> GetPotentialDamage(const std::vector<Vehicle*>& vehicles, const std::vector<Point>& enemyPoints);
-
-    static std::vector<Point> GetPointsForShoot(const std::vector<std::vector<int>>& attackMatrix,
-                                                std::vector<std::vector<Vehicle *>> vehicles, int playerId);
-
-    static std::unordered_map<Vehicle*, std::vector<Vehicle*>> GetPointsForShoot
-            (const std::vector<std::vector<int>>& attackMatrix,
-             const std::vector<std::vector<Vehicle *>>& vehicles,
-             int playerId, int playersNum = 3, int playerVehiclesNum = 5);
+    static std::unordered_map<Vehicle *, std::vector<Vehicle *>> GetPointsForShoot(const std::vector<std::vector<int>> &attackMatrix,
+                                                                                   const std::vector<std::vector<Vehicle *>> &vehicles,
+                                                                                   int playerId, int playersNum = 3);
 };

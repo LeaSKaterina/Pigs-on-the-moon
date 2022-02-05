@@ -168,7 +168,6 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
             round = true;
         }
     }
-
     return res;
 }
 

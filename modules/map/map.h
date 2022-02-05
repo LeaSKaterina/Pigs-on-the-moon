@@ -5,7 +5,6 @@
 #include "hex.h"
 #include <map>
 #include <tuple>
-#include <vector>
 
 class Map {
 private:
