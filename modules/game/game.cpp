@@ -1,9 +1,10 @@
 #include "game.h"
+#include "../actors/vehicles/spg.h"
 
 using namespace std;
-using namespace  VehiclesTypes;
+using namespace VehiclesTypes;
 
-Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
+Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
     for (auto *p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
@@ -15,8 +16,8 @@ Game::~Game() {
     // TODO!
     delete player;
     delete map;
-    for (auto & vehicle : vehicles) {
-        for(auto v : vehicle) {
+    for (auto &vehicle : vehicles) {
+        for (auto v : vehicle) {
             delete v;
         }
     }
@@ -55,9 +56,9 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
         return;
     int next = 0;
     for (int i = 0; i < VehiclesTypes::TypesNum; i++) {
-        auto& tanks = realId.at(VehiclesTypes::s_types[i]);
+        auto &tanks = realId.at(VehiclesTypes::s_types[i]);
         // q: is there more than one access?
-        for(const auto& id : tanks) {
+        for (const auto &id : tanks) {
             tanksIdAdapter[next++] = id;
         }
     }
@@ -67,15 +68,15 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
 
 void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
     // there choose type of tanks
-    switch(type){
+    switch (type) {
         case MEDIUM_TANK:
         case LIGHT_TANK:
         case HEAVY_TANK:
         case AT_SPG:
         case SPG:
-            auto *t = new Vehicle(type, playerId);
+            auto *t = new Spg(type, playerId);
             t->InitSpawn(map->Get(spawn));
-            vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
+            vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
             break;
     }
 }
@@ -87,7 +88,7 @@ void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     isFinished = finished;
 }
 
-void Game::UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
+void Game::UpdateVehicleState(int parentId, Point spawn, Point pos, int health,
                               int capturePoints) {
     Vehicle *v = Find(playersIdAdapter.at(parentId), spawn);
     v->Update(health, map->Get(pos), capturePoints);
@@ -99,14 +100,14 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
-bool TargetIsAvailable(const tuple<int, int, int> *target) {
+bool TargetIsAvailable(const Point *target) {
     auto [x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 
 vector<tuple<Action, int, Hex *>> Game::Play() const {
     vector<tuple<Action, int, Hex *>> res;
-    tuple<int, int, int> target;
+    Point target;
     auto v = vehicles[playersIdAdapter.at(player->GetId())];
 
     for (int i = 0; i < 5; i++) {

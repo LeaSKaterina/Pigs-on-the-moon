@@ -70,5 +70,6 @@ int main() {
     }
 
     std::cout << "Game is finished : " << std::boolalpha << gc.GameIsFinished() << '\n';
+
     return 0;
 }

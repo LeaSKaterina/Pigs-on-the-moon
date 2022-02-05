@@ -1,18 +1,17 @@
 #pragma once
 
 #include "../actors/player.h"
-#include "../actors/vehicle.h"
+#include "../actors/vehicles/vehicle.h"
 #include "../enums/action.h"
 #include "../enums/vehicle_types.h"
-
 #include "../map/map.h"
 #include "actionController.h"
 #include <map>
 #include <string>
 #include <tuple>
+#include <unordered_map>
 #include <utility>
 #include <vector>
-#include <unordered_map>
 
 
 class Game {
@@ -44,7 +43,7 @@ private:
 
     Player *player;
 
-    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const std::tuple<int, int, int> &spawn) const;
+    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point &spawn) const;
 
 public:
     Game() = default;
@@ -55,30 +54,30 @@ public:
     // all inits must be called firstly!
     void InitMap(int size) { map = new Map(size); }
 
-    void InitPlayer(int id, string name, string password = "") { player = new Player(id, std::move(name), std::move(password)); }
+    void InitPlayer(int id, std::string name, std::string password = "") { player = new Player(id, std::move(name), std::move(password)); }
 
     void InitVariables(int playersNum = 3);
 
-    void InitPlayersId(const vector<int> &realId);
+    void InitPlayersId(const std::vector<int> &realId);
 
-    void InitVehiclesIds(int playerId, const vector<int> &realId);
+    void InitVehiclesIds(int playerId, const std::vector<int> &realId);
 
-    void InitVehiclesIds(int playerId, const unordered_map<std::string, vector<int>>& realId);
+    void InitVehiclesIds(int playerId, const std::unordered_map<std::string, std::vector<int>> &realId);
 
     // add methods
 
-    void AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn);
+    void AddVehicle(int playerId, VehiclesTypes::Type type, Point spawn);
 
-    void AddBase(vector<tuple<int, int, int>> &points) { map->AddBase(points); }
+    void AddBase(std::vector<Point> &points) { map->AddBase(points); }
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
 
-    void UpdateVehicleState(int parentId, std::tuple<int, int, int> spawn, std::tuple<int, int, int> pos, int health,
+    void UpdateVehicleState(int parentId, Point spawn, Point pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, vector<int> attacked) {
-        attackMatrix[playersIdAdapter.at(playerId)] = move(attacked);
+    void UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
+        attackMatrix[playersIdAdapter.at(playerId)] = std::move(attacked);
     }
 
     void UpdateWinPoints(int playerId, int capture, int kill);
@@ -91,7 +90,6 @@ public:
     // Getters
 
     [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
-
 
     [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
 

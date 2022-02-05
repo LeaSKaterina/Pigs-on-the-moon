@@ -1,6 +1,8 @@
 #include "map.h"
 
-void Map::AddBase(vector<tuple<int, int, int>> &points) {
+using namespace std;
+
+void Map::AddBase(vector<Point> &points) {
     vector<Hex *> basis(points.size());
     for (int i = 0; i < points.size(); i++) {
         basis[i] = grid[points[i]];
@@ -14,15 +16,40 @@ void Map::InitGrid() {
             int z = -x - y;
             if (x + y + z == 0 && abs(z) < size)
                 grid[make_tuple(x, y, z)] = new Hex(x, y, z);
-
         }
     }
 }
+
+vector<Point> Map::GetRing(Point center, int r) {
+    vector<Point> res;
+    int pointArr[3]{0, 0, 0};
+    int centerArr[3]{0, 0, 0};
+    centerArr[0] = get<0>(center);
+    centerArr[1] = get<1>(center);
+    centerArr[2] = get<2>(center);
+
+    for (int dr = 0; dr < r; dr++) {
+        for (int i = 0; i < 3; i++) {
+            pointArr[i % 3] = centerArr[i % 3] + (r - dr);
+            pointArr[(i + 1) % 3] = centerArr[(i + 1) % 3] + dr;
+            pointArr[(i + 2) % 3] = centerArr[(i + 2) % 3] - r;
+            res.push_back(make_tuple(pointArr[0], pointArr[1], pointArr[2]));
+            pointArr[i % 3] = centerArr[i % 3] - (r - dr);
+            pointArr[(i + 1) % 3] = centerArr[(i + 1) % 3] - dr;
+            pointArr[(i + 2) % 3] = centerArr[(i + 2) % 3] + r;
+            res.push_back(make_tuple(pointArr[0], pointArr[1], pointArr[2]));
+        }
+    }
+
+    return res;
+}
+
+
 Map::~Map() {
-    for(auto& [k, h] : grid) {
+    for (auto &[k, h] : grid) {
         delete h;
     }
 
-    for(auto c : content)
+    for (auto c : content)
         delete c;
 }

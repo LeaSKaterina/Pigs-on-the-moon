@@ -38,11 +38,14 @@ private:
     Game* game;
     Client* client;
 
-    static tuple<int, int, int> MakePosTuple(const nlohmann::json&& coordinate);
+    static Point MakePosTuple(const nlohmann::json&& coordinate);
 
     // init methods
-    bool Login(const string &name, const string &password, const string &gameName, int numTurns,
-                               int numPlayers, bool isObserver);
+    bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
+               int numPlayers, bool isObserver);
+
+    // init methods
+
     void InitMap();
     void InitSpawns(const nlohmann::ordered_json&& spawnInfo);
     void InitPlayersIds(const nlohmann::ordered_json&& am);
@@ -51,4 +54,5 @@ private:
     void UpdateVehicles(const nlohmann::ordered_json&& vehicles);
     void UpdateAttackMatrix(const nlohmann::ordered_json&& am);
     void UpdateWinPoints(const nlohmann::ordered_json&& winPoints);
+
 };
