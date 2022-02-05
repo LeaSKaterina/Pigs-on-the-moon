@@ -16,12 +16,12 @@ bool GameClient::Login(const string &name, const string &password, const string 
     return true;
 }
 
-
 bool GameClient::InitGame(const string &name, const string &password, const string &gameName, int numTurns,
                           int numPlayers, bool isObserver) {
     if (!Login(name, password, gameName, numTurns, numPlayers, isObserver))
         return false;
     InitMap();
+    return true;
 }
 
 GameClient::~GameClient() {
@@ -115,7 +115,7 @@ void GameClient::InitMap() {
 
     auto contentInfo = mapInfo.value("content", nlohmann::ordered_json(""));
     auto baseInfo = contentInfo.value("base", nlohmann::ordered_json(""));
-    vector<Point> basePoints;
+    vector<tuple<int, int, int>> basePoints;
     for (auto &point : baseInfo) {
         basePoints.emplace_back(MakePosTuple(point));
         //        std::cerr << "POINT2: " << typeid(point).name() << std::endl;
@@ -201,7 +201,6 @@ void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
         // TODO? mb ref in uvs;
     }
 }
-
 
 void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
     //    const int vector_size = game->GetNumPlayers();

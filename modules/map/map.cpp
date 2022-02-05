@@ -3,9 +3,9 @@
 using namespace std;
 
 void Map::AddBase(vector<Point> &points) {
-    vector<Hex *> basis;
-    for (auto &p : points) {
-        basis.push_back(grid[p]);
+    vector<Hex *> basis(points.size());
+    for (int i = 0; i < points.size(); i++) {
+        basis[i] = grid[points[i]];
     }
     content.push_back(new Base(basis));
 }
@@ -16,7 +16,6 @@ void Map::InitGrid() {
             int z = -x - y;
             if (x + y + z == 0 && abs(z) < size)
                 grid[make_tuple(x, y, z)] = new Hex(x, y, z);
-
         }
     }
 }
@@ -45,12 +44,12 @@ vector<Point> Map::GetRing(Point center, int r) {
     return res;
 }
 
-Map::~Map() {
 
-    for(auto& [k, h] : grid) {
+Map::~Map() {
+    for (auto &[k, h] : grid) {
         delete h;
     }
 
-    for(auto c : content)
+    for (auto c : content)
         delete c;
 }

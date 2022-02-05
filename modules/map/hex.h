@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <tuple>
 
-typedef std::tuple<int,int,int> Point;
+typedef std::tuple<int, int, int> Point;
 
 struct Hex {
 

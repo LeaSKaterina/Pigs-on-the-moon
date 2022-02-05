@@ -81,7 +81,6 @@ void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
     }
 }
 
-
 // get state
 void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     currentTurn = currTurn;
