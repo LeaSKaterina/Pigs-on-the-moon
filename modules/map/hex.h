@@ -18,7 +18,7 @@ public:
 
     [[nodiscard]] bool IsEmpty() const { return isEmpty; }
 
-    [[nodiscard]] bool IsSpecial() const { return ownerId == -1; }
+    [[nodiscard]] bool IsSpecial() const { return ownerId != -1; }
 
     [[nodiscard]] const Point &GetCoordinates() const { return coordinates; }
 

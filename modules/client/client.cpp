@@ -103,6 +103,10 @@ Response Client::Move(int vehicleId, int x, int y, int z) const {
     msg["target"]["y"] = y;
     msg["target"]["z"] = z;
 
+#ifdef  _DEBUG
+    std::cout << "MOVE: " << msg.dump() << std::endl;
+#endif
+
     this->SendRequest(Action::MOVE, msg.dump());
     return this->GetAnswer();
 }
@@ -113,7 +117,10 @@ Response Client::Shoot(int vehicleId, int x, int y, int z) const {
     msg["target"]["x"] = x;
     msg["target"]["y"] = y;
     msg["target"]["z"] = z;
-    this->SendRequest(Action::SHOOT, msg);
+#ifdef  _DEBUG
+    std::cout << "SHOOT: " << msg.dump() << std::endl;
+#endif
+    this->SendRequest(Action::SHOOT, msg.dump());
     return this->GetAnswer();
 }
 

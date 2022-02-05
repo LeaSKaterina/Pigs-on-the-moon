@@ -127,7 +127,7 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
     unordered_map<Vehicle*, vector<Vehicle*>> priorityShootTargets =
             move(ActionController::GetPointsForShoot(attackMatrix, vehicles,
                                                      playersIdAdapter.at(player->GetId()),
-                                                     numPlayers, numPlayerVehicles));
+                                                     numPlayers));
 
     ProcessAttackPossibility(priorityShootTargets); // Check if it's ok
 
@@ -136,7 +136,7 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
     for(int i = 0; i < numPlayerVehicles;) {
         auto* current = playerVehicles[i];
         bool satisfied = false;
-        if (current->PriorityAction() == Action::MOVE) {
+        if (current->PriorityAction() == Action::MOVE || round) {
             for (auto& [_, p] : priorityMoveTargets[i]) {
                 auto* point = map->Get(p);
                 if (point->IsEmpty()) {
@@ -147,20 +147,23 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
                 }
             }
         }
-        if (!satisfied && current->PriorityAction() == Action::SHOOT) {
-            if (!priorityShootTargets.at(current).empty()) {
+        if (!satisfied && !priorityShootTargets.empty() && current->PriorityAction() == Action::SHOOT) {
+            if (!priorityShootTargets[current].empty()) {
                 // TODO: priority.
                 for (auto* vToAttack : priorityShootTargets.at(current)) {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
+                        res.emplace_back(Action::SHOOT, tanksIdAdapter[i],
+                                         vToAttack->GetHexOfCurrentPosition());
+
                         break;
                     }
                 }
             }
         }
 
-        if (satisfied) {
+        if (satisfied || round) {
             i++;
             round = false;
         }

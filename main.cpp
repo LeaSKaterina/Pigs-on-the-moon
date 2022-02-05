@@ -8,14 +8,27 @@
 using json = nlohmann::ordered_json;
 using namespace std;
 
-void ClientThreadFunction(GameClient *bot) {// mystical process. I do not advise you to understand this. Just change value as you need.
-    while (!bot->SendTurn()) {}             // I use GameClient * because in this case destructor for GameClient don't run. It's important. If destructor runs then runtime error come.
-    bot->InitIds();                         // All because GameClient haven't deep copy for * tupe(
+void ClientThreadFunction(GameClient *gc) {// mystical process. I do not advise you to understand this. Just change value as you need.
+//    while (!bot->SendTurn()) {}             // I use GameClient * because in this case destructor for GameClient don't run. It's important. If destructor runs then runtime error come.
+//    bot->InitIds();                         // All because GameClient haven't deep copy for * tupe(
+//
+//
+//    while (!bot->GameIsFinished()) {// just stay and wait finish game
+//        bot->UpdateGameState();
+//        bot->SendTurn();// we don't want to wait 10 seconds
+//    }
+    while (!gc->SendTurn()) {}// wait all players
+    gc->InitIds();
+    while (!gc->GameIsFinished()) {
+        gc->UpdateGameState();
+        if (gc->IsPlayTime())// play only our turn
+            gc->SendAction();
 
-
-    while (!bot->GameIsFinished()) {// just stay and wait finish game
-        bot->UpdateGameState();
-        bot->SendTurn();// we don't want to wait 10 seconds
+//        #ifdef _DEBUG
+//                //            std::cout << gc.getClient()->GameState();
+//                std::cerr << "\n---------------------------------------\n";
+//        #endif
+                gc->SendTurn();
     }
 }
 
@@ -24,9 +37,9 @@ int main() {
     //    bool debug = true;
 
     ///////////////////////////////////////////////////////////////////////////////variables for debugging
-    std::string gameName = "Pigs-on-the-moon";// the name of the game we are connecting to
-    const int playersCount = 2;               // number of players. Values from [1, 2, 3]
-    const int numbersTurn = 40;               // numbers of turns. Values from [0 ... 100]
+    std::string gameName = "Pigs-on-the-moon-13";// the name of the game we are connecting to
+    const int playersCount = 3;               // number of players. Values from [1, 2, 3]
+    const int numbersTurn = 100;               // numbers of turns. Values from [0 ... 100]
     int ourOrder = 1;                         // our connection number. Values from [1, 2, 3] // may be more than numberCount
     ///////////////////////////////////////////////////////////////////////////////
 
