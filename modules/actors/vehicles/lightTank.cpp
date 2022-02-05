@@ -6,5 +6,5 @@ std::vector<Point> LightTank::GetAvailableMovePoints(Point target, int r) {
 }
 
 bool LightTank::IsAvailableForShoot(Vehicle *enemy) {
-    return true;
+    return Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition()) == 2;
 }

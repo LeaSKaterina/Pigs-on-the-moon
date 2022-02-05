@@ -6,5 +6,5 @@ std::vector<Point> Spg::GetAvailableMovePoints(Point target, int r) {
 }
 
 bool Spg::IsAvailableForShoot(Vehicle *enemy) {
-    return true;
+    return Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition()) == 3;
 }

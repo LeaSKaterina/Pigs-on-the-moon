@@ -25,7 +25,7 @@ public:
 
     void Free() { isEmpty = true; }
 
-    static int GetDistance(Hex &f, Hex &s);
+    static int GetDistance(const Point &f, const Point &s);
 
     void SetOwnerId(int id) { ownerId = id; }
 
