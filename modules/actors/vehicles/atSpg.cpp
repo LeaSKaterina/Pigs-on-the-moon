@@ -1,10 +1,6 @@
 #include "atSpg.h"
 using namespace std;
 
-vector<Point> AtSpg::GetAvailableMovePoints(Point target, int r) {
-    vector<Point> res;
-    return res;
-}
 bool AtSpg::IsAvailableForShoot(Vehicle *enemy) {
     int d = Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition());
     if (d == 1)

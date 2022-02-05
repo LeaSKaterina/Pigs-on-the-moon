@@ -7,8 +7,6 @@ class MediumTank : public Vehicle {
 public:
     MediumTank(int playerId) : Vehicle(playerId, 2, 2) {};
 
-    std::vector<Point> GetAvailableMovePoints(Point target, int r = 0) override;
-
     bool IsAvailableForShoot(Vehicle *enemy) override;
 };
 

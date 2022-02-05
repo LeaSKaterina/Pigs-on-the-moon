@@ -7,8 +7,6 @@ class AtSpg : public Vehicle {
 public:
     AtSpg(int playerId) : Vehicle(playerId, 2, 1) {};
 
-    std::vector<Point> GetAvailableMovePoints(Point target, int r = 0) override;
-
     bool IsAvailableForShoot(Vehicle *enemy) override;
 };
 

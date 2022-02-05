@@ -50,3 +50,18 @@ int Vehicle::GetHit(int damage) {
         return destructionPoints;
     return 0;
 }
+
+std::multimap<int, Point> Vehicle::GetAvailableMovePoints(Point target) {
+    const Point& center = this->currentPosition->GetCoordinates();
+    std::multimap<int, Point> availablePoints;
+
+    for (int i = speedPoints; i > 0; --i) {
+        std::vector<Point> ring = Hex::GetRing(center, i);
+        for(const Point &point : ring){
+            if(Hex::GetDistance(point, Point(0, 0, 0)) < 12) // 12?
+                availablePoints.emplace(Hex::GetDistance(point, target), point);
+        }
+    }
+
+    return availablePoints;
+}

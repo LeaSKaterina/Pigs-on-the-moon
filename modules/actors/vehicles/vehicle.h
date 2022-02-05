@@ -2,6 +2,7 @@
 #define PIGS_ON_THE_MOON_VEHICLE_H
 
 #include "../../map/hex.h"
+#include <map>
 #include <vector>
 
 class Vehicle {
@@ -10,7 +11,7 @@ public:
 
     bool Move(Hex *newPos);
 
-    virtual std::vector<Point> GetAvailableMovePoints(Point target, int r = 0) = 0;
+    std::multimap<int, Point> GetAvailableMovePoints(Point target);
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 

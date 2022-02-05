@@ -30,7 +30,7 @@ int main() {
     int ourOrder = 1;                         // our connection number. Values from [1, 2, 3] // may be more than numberCount
     ///////////////////////////////////////////////////////////////////////////////
 
-    ourOrder = std::min(ourOrder, playersCount);// simple check for easy life
+    ourOrder = min(ourOrder, playersCount);// simple check for easy life
 
 
     gameName += "_" + std::to_string(playersCount) + "_" + std::to_string(ourOrder);
