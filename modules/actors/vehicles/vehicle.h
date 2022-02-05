@@ -1,23 +1,22 @@
-#ifndef PIGS_ON_THE_MOON_VEHICLE_H
-#define PIGS_ON_THE_MOON_VEHICLE_H
+#pragma once
 
-#include "../../map/hex.h"
-#include "../../enums/action.h"
+#include "map/hex.h"
+#include "enums/action.h"
 #include <map>
 #include <vector>
 
 class Vehicle {
 public:
-    Vehicle (int ownerId, int hp, int speed, int damage_ = 1)
-        : playerId(ownerId),
-          damage(damage_),
-          health(hp),
-          speedPoints(speed),
-          destructionPoints(hp) {}
+    Vehicle(int ownerId, int hp, int speed, int damage = 1)
+            : PLAYER_ID(ownerId),
+              DAMAGE(damage),
+              health(hp),
+              SPEED_POINTS(speed),
+              DESTRUCTION_POINTS(hp) {}
 
     bool Move(Hex *newPos);
 
-    std::multimap<int, Point> GetAvailableMovePoints(Point target);
+    std::multimap<int, Point> GetAvailableMovePoints(const Point &target);
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 
@@ -31,13 +30,13 @@ public:
 
     void Update(int health, Hex *newPos, int capture);
 
-    [[nodiscard]] int GetPlayerId() const { return playerId; }
+    [[nodiscard]] int GetPlayerId() const { return PLAYER_ID; }
 
     [[nodiscard]] const Point &GetSpawn() const { return spawnPosition->GetCoordinates(); }
 
     [[nodiscard]] const Point &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
-    Hex* GetHexOfCurrentPosition() const { return currentPosition; }
+    Hex *GetHexOfCurrentPosition() const { return currentPosition; }
 
     int GetHp() const { return health; }
 
@@ -50,17 +49,15 @@ public:
     int GetHit(int damage = 1);
 
 private:
-    const int playerId;
+    const int PLAYER_ID;
     int health;
-    const int destructionPoints;
-    const int speedPoints;
-    const int damage;
+    const int DESTRUCTION_POINTS;
+    const int SPEED_POINTS;
+    const int DAMAGE;
     int capturePoints = 0;
     Hex *spawnPosition = nullptr;
     Hex *currentPosition = nullptr;
 
-    bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
+    bool IsEnemy(Vehicle *v) const { return this->PLAYER_ID != v->PLAYER_ID; }
 };
 
-
-#endif//PIGS_ON_THE_MOON_VEHICLE_H

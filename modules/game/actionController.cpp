@@ -22,7 +22,6 @@ void ActionController::ModuleDecrement(int &n) {
 }
 
 void ActionController::ModuleIncrement(int &n) {
-    //    if (n == 0) return;
     if (n >= 0) n++;
     else
         n--;
@@ -35,7 +34,7 @@ void Restore(int &x, int &y, int &z, const Point coordinates) {
 }
 
 Point ActionController::GetNextOnAxis(Point coordinates, Map *map) {
-    auto [x, y, z] = coordinates;
+    auto[x, y, z] = coordinates;
     if (x == 0) {
         ReduceModule(y, 2);
         ReduceModule(z, 2);
@@ -94,7 +93,7 @@ Point ActionController::GetNextOnAxis(Point coordinates, Map *map) {
 }
 
 Point ActionController::GetTargetForMove(Point coordinates, Map *map) {
-    auto [x, y, z] = coordinates;
+    auto[x, y, z] = coordinates;
 
     if (x == 0 || y == 0 || z == 0)
         return GetNextOnAxis(coordinates, map);
@@ -158,21 +157,22 @@ Point ActionController::GetTargetForMove(Point coordinates, Map *map) {
     return make_tuple(-1, -1, -1);// нам не нужно перемещаться
 }
 
-vector<bool> ActionController::NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int playersNum) {
+vector<bool>
+ActionController::NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int playersNum) {
     vector<bool> canAttack(playersNum);
     for (int enemyId = 0; enemyId < playersNum; enemyId++) {
-        if (enemyId == playerId){
+        if (enemyId == playerId) {
             continue;
         }
 
         canAttack[enemyId] = true;
         for (int i = 0; i < attackMatrix.size(); i++) {
-            if (i == enemyId){
+            if (i == enemyId) {
                 continue;
             }
             for (int j = 0; j < attackMatrix[i].size(); j++) {
                 if (attackMatrix[i][j] == enemyId) {// he was attacked
-                    for (auto id : attackMatrix[enemyId]) {
+                    for (auto id: attackMatrix[enemyId]) {
                         if (id == playerId) {// but he attack us
                             break;
                         }
@@ -186,19 +186,20 @@ vector<bool> ActionController::NeutralityRuleCheck(const std::vector<std::vector
     return canAttack;
 }
 
-std::unordered_map<Vehicle *, vector<Vehicle *>> ActionController::GetPointsForShoot(const vector<vector<int>> &attackMatrix,
-                                                                                     const vector<vector<Vehicle *>> &vehicles,
-                                                                                     int playerId, int playersNum) {
+std::unordered_map<Vehicle *, vector<Vehicle *>>
+ActionController::GetPointsForShoot(const vector<vector<int>> &attackMatrix,
+                                    const vector<vector<Vehicle *>> &vehicles,
+                                    int playerId, int playersNum) {
 
     const vector<Vehicle *> &playerVehicles = vehicles[playerId];
     vector<bool> canAttack(playersNum);
     canAttack = move(NeutralityRuleCheck(attackMatrix, playerId, playersNum));
     std::unordered_map<Vehicle *, vector<Vehicle *>> res;
-    for (auto &our : playerVehicles) {
+    for (auto &our: playerVehicles) {
         for (int i = 0; i < vehicles.size(); i++) {
             if (vehicles[i][0]->GetPlayerId() == playerId || !canAttack[i])
                 continue;
-            for (auto enemy : vehicles[i]) {
+            for (auto enemy: vehicles[i]) {
                 if (our->IsAvailableForShoot(enemy))
                     res[enemy].push_back(our);
             }

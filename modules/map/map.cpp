@@ -21,16 +21,18 @@ void Map::InitGrid() {
 }
 
 Map::~Map() {
-    for (auto &[k, h] : grid) {
+    for (auto &[k, h]: grid) {
         delete h;
     }
 
-    for (auto c : content)
+    for (auto c: content)
         delete c;
 }
+
 bool Map::IsBasePoint(const Hex *point) const {
     return false;
 }
+
 bool Map::IsBasePoint(const Point &point) const {
     // TODO!
     return this->Get(point)->IsSpecial();

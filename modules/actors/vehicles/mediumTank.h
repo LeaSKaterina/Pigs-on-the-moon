@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_MEDIUMTANK_H
-#define PIGS_ON_THE_MOON_MEDIUMTANK_H
+#pragma once
 
 #include "vehicle.h"
 
@@ -9,9 +8,8 @@ public:
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
 
-    Action PriorityAction() const override {return Action::MOVE;}
+    Action PriorityAction() const override { return Action::MOVE; }
 
 };
 
 
-#endif//PIGS_ON_THE_MOON_MEDIUMTANK_H

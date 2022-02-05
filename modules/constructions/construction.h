@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../actors/vehicles/vehicle.h"
-#include "../map/hex.h"
+#include "actors/vehicles/vehicle.h"
+#include "map/hex.h"
 
 #include <vector>
 

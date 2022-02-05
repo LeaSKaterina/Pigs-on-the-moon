@@ -5,13 +5,14 @@
 
 struct Player {
 private:
-    const std::string name;
-    const std::string password;
+    const std::string NAME;
+    const std::string PASSWORD;
     int id;
 
 public:
     Player(int id, std::string name, std::string pass) : id(id),
-                                                         name(std::move(name)),
-                                                         password(std::move(pass)) {}
+                                                         NAME(std::move(name)),
+                                                         PASSWORD(std::move(pass)) {}
+
     [[nodiscard]] int GetId() const { return id; }
 };

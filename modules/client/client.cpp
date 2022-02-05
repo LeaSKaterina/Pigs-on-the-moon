@@ -55,9 +55,9 @@ Response Client::GetAnswer() const {
     if (size) recv(server, &msg.front(), size, MSG_WAITALL);
     nlohmann::ordered_json ans = size ? nlohmann::ordered_json::parse(msg)
                                       : nlohmann::ordered_json();
-    #ifdef _DEBUG
+#ifdef _DEBUG
 //        std::cerr << (int)result << " " << ans << std::endl;
-    #endif
+#endif
     return {result, ans};
 }
 
@@ -96,31 +96,13 @@ Response Client::Chat(const std::string &msg) const {
     return this->GetAnswer();
 }
 
-Response Client::Move(int vehicleId, int x, int y, int z) const {
+Response Client::SendTankAction(Action action, int vehicleId, int x, int y, int z) const {
     nlohmann::ordered_json msg;
     msg["vehicle_id"] = vehicleId;
     msg["target"]["x"] = x;
     msg["target"]["y"] = y;
     msg["target"]["z"] = z;
-
-#ifdef  _DEBUG
-    std::cout << "MOVE: " << msg.dump() << std::endl;
-#endif
-
-    this->SendRequest(Action::MOVE, msg.dump());
-    return this->GetAnswer();
-}
-
-Response Client::Shoot(int vehicleId, int x, int y, int z) const {
-    nlohmann::ordered_json msg;
-    msg["vehicle_id"] = vehicleId;
-    msg["target"]["x"] = x;
-    msg["target"]["y"] = y;
-    msg["target"]["z"] = z;
-#ifdef  _DEBUG
-    std::cout << "SHOOT: " << msg.dump() << std::endl;
-#endif
-    this->SendRequest(Action::SHOOT, msg.dump());
+    this->SendRequest(action, msg.dump());
     return this->GetAnswer();
 }
 

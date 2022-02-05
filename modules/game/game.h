@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../actors/player.h"
-#include "../actors/vehicles/vehicle.h"
-#include "../actors/vehicles/spg.h"
-#include "../actors/vehicles/atSpg.h"
-#include "../actors/vehicles/heavyTank.h"
-#include "../actors/vehicles/lightTank.h"
-#include "../actors/vehicles/mediumTank.h"
-#include "../enums/action.h"
-#include "../enums/vehicle_types.h"
-#include "../map/map.h"
+#include "actors/player.h"
+#include "actors/vehicles/vehicle.h"
+#include "actors/vehicles/spg.h"
+#include "actors/vehicles/atSpg.h"
+#include "actors/vehicles/heavyTank.h"
+#include "actors/vehicles/lightTank.h"
+#include "actors/vehicles/mediumTank.h"
+#include "enums/action.h"
+#include "enums/vehicleTypes.h"
+#include "map/map.h"
 #include "actionController.h"
 #include <map>
 #include <string>
@@ -52,7 +52,7 @@ private:
     [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point &spawn) const;
 
     // Strategy
-    static void ProcessAttackPossibility(std::unordered_map<Vehicle*, std::vector<Vehicle*>>& priorityShootTargets) ;
+    static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
 
 public:
     Game() = default;
@@ -63,7 +63,9 @@ public:
     // all inits must be called firstly!
     void InitMap(int size) { map = new Map(size); }
 
-    void InitPlayer(int id, std::string name, std::string password = "") { player = new Player(id, std::move(name), std::move(password)); }
+    void InitPlayer(int id, std::string name, std::string password = "") {
+        player = new Player(id, std::move(name), std::move(password));
+    }
 
     void InitVariables(int playersNum = 3);
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../constructions/base.h"
-#include "../constructions/construction.h"
+#include "constructions/base.h"
+#include "constructions/construction.h"
 #include "hex.h"
 #include <map>
 #include <tuple>
@@ -21,11 +21,9 @@ public:
 
     [[nodiscard]] Hex *Get(const Point &p) const { return grid.at(p); }
 
-    [[nodiscard]] bool IsBasePoint(const Hex* point) const;
+    [[nodiscard]] bool IsBasePoint(const Hex *point) const;
 
-    [[nodiscard]] bool IsBasePoint(const Point& point) const;
-
-    static std::vector<Point> GetRing(Point center, int r);
+    [[nodiscard]] bool IsBasePoint(const Point &point) const;
 
     ~Map();
 };

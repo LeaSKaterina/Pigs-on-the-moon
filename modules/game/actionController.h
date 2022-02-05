@@ -1,8 +1,7 @@
 #pragma once
 
-//#include <tuple>
-#include "../map/hex.h"
-#include "../map/map.h"
+#include "map/hex.h"
+#include "map/map.h"
 #include <cstdlib>
 #include <iostream>
 #include <unordered_map>
@@ -23,9 +22,11 @@ public:
 
     static Point GetNextOnAxis(Point coordinates, Map *map);
 
-    static std::vector<bool> NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int playersNum);
+    static std::vector<bool>
+    NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int playersNum);
 
-    static std::unordered_map<Vehicle *, std::vector<Vehicle *>> GetPointsForShoot(const std::vector<std::vector<int>> &attackMatrix,
-                                                                                   const std::vector<std::vector<Vehicle *>> &vehicles,
-                                                                                   int playerId, int playersNum = 3);
+    static std::unordered_map<Vehicle *, std::vector<Vehicle *>>
+    GetPointsForShoot(const std::vector<std::vector<int>> &attackMatrix,
+                      const std::vector<std::vector<Vehicle *>> &vehicles,
+                      int playerId, int playersNum = 3);
 };

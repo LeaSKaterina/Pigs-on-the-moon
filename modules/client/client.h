@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../enums/action.h"
-#include "../enums/result.h"
+#include "enums/action.h"
+#include "enums/result.h"
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -72,9 +72,7 @@ public:
 
     Response Chat(const std::string &msg) const;
 
-    Response Move(int vehicleId, int x, int y, int z) const;
-
-    Response Shoot(int vehicleId, int x, int y, int z) const;
+    Response SendTankAction(Action action, int vehicleId, int x, int y, int z) const;
 
     static void PrintLogInfo(const std::string &info) { std::cout << info << '\n'; }
 };

@@ -12,7 +12,7 @@ bool Vehicle::Move(Hex *newPos) {
 
 int Vehicle::Shoot(Vehicle *v) { // return points for shooting this tank
     if (IsEnemy(v))
-        return v->GetHit(this->damage);
+        return v->GetHit(this->DAMAGE);
     return 0;
 }
 
@@ -32,26 +32,26 @@ void Vehicle::InitSpawn(Hex *p) {
 
 void Vehicle::Respawn() {
     Move(spawnPosition);
-    health = destructionPoints;
+    health = DESTRUCTION_POINTS;
     capturePoints = 0;
 }
 
 int Vehicle::GetHit(int damage) {
     this->health -= damage;
     if (health <= 0)
-        return destructionPoints;
+        return DESTRUCTION_POINTS;
     return 0;
 
 }
 
-std::multimap<int, Point> Vehicle::GetAvailableMovePoints(Point target) {
-    const Point& center = this->currentPosition->GetCoordinates();
+std::multimap<int, Point> Vehicle::GetAvailableMovePoints(const Point &target) {
+    const Point &center = this->currentPosition->GetCoordinates();
     std::multimap<int, Point> availablePoints;
 
-    for (int i = speedPoints; i > 0; --i) {
+    for (int i = SPEED_POINTS; i > 0; --i) {
         std::vector<Point> ring = Hex::GetRing(center, i);
-        for(const Point &point : ring){
-            if(Hex::GetDistance(point, Point(0, 0, 0)) < 12) // 12?
+        for (const Point &point: ring) {
+            if (Hex::GetDistance(point, Point(0, 0, 0)) < 12) // 12?
                 availablePoints.emplace(Hex::GetDistance(point, target), point);
         }
     }

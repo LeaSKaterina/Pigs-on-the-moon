@@ -1,4 +1,5 @@
 #include "hex.h"
+
 using namespace std;
 
 bool Hex::Occupy() {

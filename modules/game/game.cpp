@@ -4,7 +4,7 @@ using namespace std;
 using namespace VehiclesTypes;
 
 Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
-    for (auto *p : vehicles[adaptedPlayerId]) {
+    for (auto *p: vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
     }
@@ -14,8 +14,8 @@ Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
 Game::~Game() {
     delete player;
     delete map;
-    for (auto &vehicle : vehicles) {
-        for (auto v : vehicle) {
+    for (auto &vehicle: vehicles) {
+        for (auto v: vehicle) {
             delete v;
         }
     }
@@ -43,10 +43,10 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
     if (playerId != player->GetId())
         return;
     int next = 0;
-    for (int i = 0; i < VehiclesTypes::TypesNum; i++) {
-        auto &tanks = realId.at(VehiclesTypes::s_types[i]);
+    for (int i = 0; i < VehiclesTypes::typesNum; i++) {
+        auto &tanks = realId.at(VehiclesTypes::sTypes[i]);
         // q: is there more than one access?
-        for (const auto &id : tanks) {
+        for (const auto &id: tanks) {
             tanksIdAdapter[next++] = id;
         }
     }
@@ -56,7 +56,7 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
 
 void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
     // there choose type of tanks
-    Vehicle* t;
+    Vehicle *t;
     switch (type) {
         case MEDIUM_TANK:
             t = new MediumTank(playerId);
@@ -106,7 +106,7 @@ void Game::UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
 }
 
 bool TargetIsAvailable(const Point *target) {
-    auto [x, y, z] = *target;
+    auto[x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 
@@ -114,17 +114,17 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
     Point targetPoint = make_tuple(0, 0, 0);
     vector<tuple<Action, int, Hex *>> res;
     Point target;
-    const auto& playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
+    const auto &playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
 
     vector<multimap<int, Point>> priorityMoveTargets(numPlayerVehicles);
 
-    for(int i = 0; i < numPlayerVehicles; i++) {
+    for (int i = 0; i < numPlayerVehicles; i++) {
         // TODO: There will be another check for danger
-        if(!map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()))
+        if (!map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()))
             priorityMoveTargets[i] = move(playerVehicles[i]->GetAvailableMovePoints(targetPoint));
     }
 
-    unordered_map<Vehicle*, vector<Vehicle*>> priorityShootTargets =
+    unordered_map<Vehicle *, vector<Vehicle *>> priorityShootTargets =
             move(ActionController::GetPointsForShoot(attackMatrix, vehicles,
                                                      playersIdAdapter.at(player->GetId()),
                                                      numPlayers));
@@ -133,12 +133,12 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
 
     // TODO! Shoot -> Move
     bool round = false;
-    for(int i = 0; i < numPlayerVehicles;) {
-        auto* current = playerVehicles[i];
+    for (int i = 0; i < numPlayerVehicles;) {
+        auto *current = playerVehicles[i];
         bool satisfied = false;
         if (current->PriorityAction() == Action::MOVE || round) {
-            for (auto& [_, p] : priorityMoveTargets[i]) {
-                auto* point = map->Get(p);
+            for (auto&[_, p]: priorityMoveTargets[i]) {
+                auto *point = map->Get(p);
                 if (point->IsEmpty()) {
                     res.emplace_back(Action::MOVE, tanksIdAdapter[i], point);
                     satisfied = true;
@@ -150,7 +150,7 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
         if (!satisfied && !priorityShootTargets.empty() && current->PriorityAction() == Action::SHOOT) {
             if (!priorityShootTargets[current].empty()) {
                 // TODO: priority.
-                for (auto* vToAttack : priorityShootTargets.at(current)) {
+                for (auto *vToAttack: priorityShootTargets.at(current)) {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
@@ -166,8 +166,7 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
         if (satisfied || round) {
             i++;
             round = false;
-        }
-        else {
+        } else {
             round = true;
         }
     }
@@ -176,10 +175,10 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
 
 // TODO! priority
 void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> &priorityShootTargets) {
-    for(auto& [attackedV, playerV] : priorityShootTargets) {
+    for (auto&[attackedV, playerV]: priorityShootTargets) {
         if (attackedV->GetHp() > playerV.size())
             continue;
-        for (auto* v : playerV) {
+        for (auto *v: playerV) {
             priorityShootTargets[v].push_back(attackedV);
         }
     }
