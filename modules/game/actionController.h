@@ -23,7 +23,7 @@ public:
 
     static Point GetNextOnAxis(Point coordinates, Map *map);
 
-    static std::vector<bool> NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId);
+    static std::vector<bool> NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int playersNum);
 
     static std::unordered_map<Vehicle *, std::vector<Vehicle *>> GetPointsForShoot(const std::vector<std::vector<int>> &attackMatrix,
                                                                                    const std::vector<std::vector<Vehicle *>> &vehicles,
