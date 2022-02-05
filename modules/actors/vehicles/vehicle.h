@@ -13,7 +13,7 @@ public:
 
     bool Move(Hex *newPos);
 
-    virtual std::vector<Point> GetAvailableMovePoints() = 0;
+    virtual std::vector<Point> GetAvailableMovePoints(Point target, int r = 0) = 0;
 
     virtual std::vector<bool> IsAvailableForShoot(const std::vector<Point> &points) = 0;
 

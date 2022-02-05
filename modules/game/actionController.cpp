@@ -176,14 +176,21 @@ vector<int> ActionController::GetPotentialDamage(const vector<Vehicle*>& vehicle
     return potentialDamage;
 }
 
+// есть количество игроков
+// bool IsAvailableForShoot(Vehicle *)
+// возвращаем пары танк-таргет
 vector<Point> ActionController::GetPointsForShoot(const vector<vector<int>>& attackMatrix, vector<vector<Vehicle *>> vehicles, int playerId) {
-    vector<Point> enemyPoints;
-    vector<Vehicle *> playerVehicles = vehicles[playerId];
+    vector<Point> enemyPoints; // del
+    const vector<Vehicle *>& playerVehicles = vehicles[playerId];
 
-    for (auto vect : vehicles) {
-        if (vect[0]->GetPlayerId() != playerId) {
-            for (auto v : vect) {
-                enemyPoints.push_back(v->GetCurrentPosition());
+    for (auto our : playerVehicles) {
+        for (auto vect : vehicles) {
+            if (vect[0]->GetPlayerId() != playerId) {
+                for (auto v : vect) {
+                    enemyPoints.push_back(v->GetCurrentPosition());
+                    // is available for shoot
+                    // ...
+                }
             }
         }
     }

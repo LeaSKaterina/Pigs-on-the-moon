@@ -1,8 +1,0 @@
-"C:\Program Files (x86)\JetBrains\CLion 2021.3.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files (x86)/JetBrains/CLion 2021.3.2/bin/ninja/win/ninja.exe" -G Ninja D:\Pigs-on-the-moon
-CMake Error at CMakeLists.txt:14:
-  Parse error.  Expected a command name, got unquoted argument with text
-  "<<<<<<<".
-
-
--- Configuring incomplete, errors occurred!
-See also "D:/Pigs-on-the-moon/cmake-build-debug/CMakeFiles/CMakeOutput.log".
