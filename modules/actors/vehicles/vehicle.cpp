@@ -1,14 +1,6 @@
 #include "vehicle.h"
 
 
-Vehicle::Vehicle(int playerId, int hp, int speed, int damage) {
-    health = hp;
-    destructionPoints = health;
-    this->playerId = playerId;
-    speedPoints = speed;
-    this->damage = damage;
-}
-
 bool Vehicle::Move(Hex *newPos) {
     if (!newPos->Occupy())
         return false;
@@ -18,7 +10,7 @@ bool Vehicle::Move(Hex *newPos) {
     return true;
 }
 
-int Vehicle::Shoot(Vehicle *v) {// вернет сколько очков заработал
+int Vehicle::Shoot(Vehicle *v) { // return points for shooting this tank
     if (IsEnemy(v))
         return v->GetHit(this->damage);
     return 0;
@@ -49,6 +41,7 @@ int Vehicle::GetHit(int damage) {
     if (health <= 0)
         return destructionPoints;
     return 0;
+
 }
 
 std::multimap<int, Point> Vehicle::GetAvailableMovePoints(Point target) {

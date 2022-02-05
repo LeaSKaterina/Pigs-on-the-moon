@@ -4,9 +4,11 @@
 
 class Spg : public Vehicle {
 public:
-    Spg (int playerId) : Vehicle(playerId, 1, 1) {};
+    explicit Spg (int playerId) : Vehicle(playerId, 1, 1) {};
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
+
+    Action PriorityAction() const override {return Action::SHOOT;}
 };
 
 

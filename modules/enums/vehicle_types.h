@@ -7,5 +7,6 @@ namespace VehiclesTypes {
     };
     extern const int TypesNum;
     extern const std::string s_types[];
+//    extern const int numPlayerVehicles;
 }
 #endif //PIGS_ON_THE_MOON_VEHICLE_TYPES_H

@@ -21,5 +21,11 @@ public:
 
     [[nodiscard]] Hex *Get(const Point &p) const { return grid.at(p); }
 
+    [[nodiscard]] bool IsBasePoint(const Hex* point) const;
+
+    [[nodiscard]] bool IsBasePoint(const Point& point) const;
+
+    static std::vector<Point> GetRing(Point center, int r);
+
     ~Map();
 };

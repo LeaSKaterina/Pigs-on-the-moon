@@ -1,6 +1,7 @@
 #include "atSpg.h"
 using namespace std;
 
+
 bool AtSpg::IsAvailableForShoot(Vehicle *enemy) {
     int d = Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition());
     if (d == 1)

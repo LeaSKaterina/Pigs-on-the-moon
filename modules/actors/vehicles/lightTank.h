@@ -6,9 +6,12 @@
 class LightTank : public Vehicle {
 
 public:
-    LightTank(int playerId) : Vehicle(playerId, 1, 3){};
+    explicit LightTank(int playerId) : Vehicle(playerId, 1, 3){};
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
+
+    Action PriorityAction() const override {return Action::SHOOT;}
+
 };
 
 

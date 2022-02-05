@@ -164,6 +164,7 @@ vector<bool> ActionController::NeutralityRuleCheck(const std::vector<std::vector
         if (enemyId == playerId){
             continue;
         }
+
         canAttack[enemyId] = true;
         for (int i = 0; i < attackMatrix.size(); i++) {
             if (i == enemyId){

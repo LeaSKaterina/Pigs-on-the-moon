@@ -5,9 +5,12 @@
 
 class AtSpg : public Vehicle {
 public:
-    AtSpg(int playerId) : Vehicle(playerId, 2, 1) {};
+    explicit AtSpg(int playerId) : Vehicle(playerId, 2, 1) {};
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
+
+    Action PriorityAction() const override {return Action::SHOOT;}
+
 };
 
 

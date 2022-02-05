@@ -12,7 +12,6 @@ Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
 }
 
 Game::~Game() {
-    // TODO!
     delete player;
     delete map;
     for (auto &vehicle : vehicles) {
@@ -31,22 +30,12 @@ void Game::InitVariables(int playersNum) {
     attackMatrix.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
-    tanksIdAdapter.resize(5);
-    // TODO! magic constant
+    tanksIdAdapter.resize(numPlayerVehicles);
 }
 
 void Game::InitPlayersId(const vector<int> &realId) {
     for (int i = 0; i < realId.size(); i++) {
         playersIdAdapter[realId[i]] = i;
-    }
-}
-
-void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
-    if (playerId != player->GetId())
-        return;
-    // TODO _
-    for (int i = 0; i < realId.size(); i++) {
-        tanksIdAdapter[i] = realId[i];
     }
 }
 
@@ -107,12 +96,88 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
+void Game::UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
+    // TODO! square bool array.
+    vector<int> attackedId(numPlayers);
+    for (int i = 0; i < attacked.size(); i++) {
+        attackedId[i] = playersIdAdapter.at(attacked[i]);
+    }
+    attackMatrix[playersIdAdapter.at(playerId)] = std::move(attackedId);
+}
+
 bool TargetIsAvailable(const Point *target) {
     auto [x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 
 vector<tuple<Action, int, Hex *>> Game::Play() const {
+    Point targetPoint = make_tuple(0, 0, 0);
     vector<tuple<Action, int, Hex *>> res;
+    Point target;
+    const auto& playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
+
+    vector<multimap<int, Point>> priorityMoveTargets(numPlayerVehicles);
+
+    for(int i = 0; i < numPlayerVehicles; i++) {
+        // TODO: There will be another check for danger
+        if(!map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()))
+            priorityMoveTargets[i] = move(playerVehicles[i]->GetAvailableMovePoints(targetPoint));
+    }
+
+    unordered_map<Vehicle*, vector<Vehicle*>> priorityShootTargets =
+            move(ActionController::GetPointsForShoot(attackMatrix, vehicles,
+                                                     playersIdAdapter.at(player->GetId()),
+                                                     numPlayers, numPlayerVehicles));
+
+    ProcessAttackPossibility(priorityShootTargets); // Check if it's ok
+
+    // TODO! Shoot -> Move
+    bool round = false;
+    for(int i = 0; i < numPlayerVehicles;) {
+        auto* current = playerVehicles[i];
+        bool satisfied = false;
+        if (current->PriorityAction() == Action::MOVE) {
+            for (auto& [_, p] : priorityMoveTargets[i]) {
+                auto* point = map->Get(p);
+                if (point->IsEmpty()) {
+                    res.emplace_back(Action::MOVE, tanksIdAdapter[i], point);
+                    satisfied = true;
+                    point->Occupy();
+                    break;
+                }
+            }
+        }
+        if (!satisfied && current->PriorityAction() == Action::SHOOT) {
+            if (!priorityShootTargets.at(current).empty()) {
+                // TODO: priority.
+                for (auto* vToAttack : priorityShootTargets.at(current)) {
+                    if (vToAttack->IsAlive()) {
+                        vToAttack->GetHit();
+                        satisfied = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (satisfied) {
+            i++;
+            round = false;
+        }
+        else {
+            round = true;
+        }
+    }
     return res;
+}
+
+// TODO! priority
+void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> &priorityShootTargets) {
+    for(auto& [attackedV, playerV] : priorityShootTargets) {
+        if (attackedV->GetHp() > playerV.size())
+            continue;
+        for (auto* v : playerV) {
+            priorityShootTargets[v].push_back(attackedV);
+        }
+    }
 }
