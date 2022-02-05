@@ -7,20 +7,24 @@
 #include <tuple>
 #include <vector>
 
-using namespace std;
+typedef std::tuple<int,int,int> Point;
+
+//using namespace std;
 
 class Map {
 private:
     int size;
-    vector<Construction *> content;
-    map<tuple<int, int, int>, Hex *> grid;
+    std::vector<Construction *> content;
+    std::map<Point, Hex *> grid;
 
     void InitGrid();
 
 public:
     explicit Map(int size) : size(size) { InitGrid(); }
 
-    void AddBase(vector<tuple<int, int, int>> &points);
+    void AddBase(std::vector<Point> &points);
 
-    [[nodiscard]] Hex *Get(const tuple<int, int, int> &p) const { return grid.at(p); }
+    [[nodiscard]] Hex *Get(const Point &p) const { return grid.at(p); }
+
+    static std::vector<Point> GetRing(Point center, int r);
 };

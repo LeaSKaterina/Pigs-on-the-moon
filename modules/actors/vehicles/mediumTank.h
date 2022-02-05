@@ -4,10 +4,12 @@
 #include "vehicle.h"
 
 class MediumTank : public Vehicle {
+public:
+    MediumTank(VehiclesTypes::Type type, int playerId) : Vehicle(type, playerId) {};
 
-    virtual std::vector<Point> GetAvailableMovePoints() override;
+    std::vector<Point> GetAvailableMovePoints() override;
 
-    virtual std::vector<Point> GetAvailableShootPoints() override;
+    std::vector<bool> IsAvailableForShoot(const std::vector<Point>& points) override;
 };
 
 

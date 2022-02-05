@@ -45,4 +45,7 @@ int main() {
         gc.SendTurn();
     }
     std::cout << "Game is finished : " << std::boolalpha << gc.GameIsFinished() << '\n';
+
+
+
 }

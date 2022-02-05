@@ -3,10 +3,12 @@
 #include "vehicle.h"
 
 class Spg : public Vehicle {
+public:
+    Spg (VehiclesTypes::Type type, int playerId) : Vehicle(type, playerId) {};
 
-    virtual std::vector<Point> GetAvailableMovePoints() override;
+    std::vector<Point> GetAvailableMovePoints() override;
 
-    virtual std::vector<Point> GetAvailableShootPoints() override;
+    std::vector<bool> IsAvailableForShoot(const std::vector<Point>& points) override;
 };
 
 

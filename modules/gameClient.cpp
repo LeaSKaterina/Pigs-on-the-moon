@@ -1,6 +1,6 @@
 #include "gameClient.h"
 
-bool GameClient::InitGame(const string &name, const string &password, const string &game_name, int num_turns,
+bool GameClient::InitGame(const std::string &name, const std::string &password, const std::string &game_name, int num_turns,
                           int num_players, bool is_observer)  {
     // Login
     auto answer = client->Login(name, password, game_name, num_turns, num_players, is_observer);
@@ -39,7 +39,7 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
 
                 game->AddVehicle(index,
                                  VehiclesTypes::Type(i),
-                                 make_tuple(
+                                     std::make_tuple(
                                          point.value("x", -1),
                                          point.value("y", -1),
                                          point.value("z", -1)
@@ -52,10 +52,10 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
 
     auto content_info = map_info.value("content", nlohmann::ordered_json(""));
     auto base_info = content_info.value("base", nlohmann::ordered_json(""));
-    vector<tuple<int, int, int>> base_points;
+    std::vector<std::tuple<int, int, int>> base_points;
     for (auto& point : base_info) {
         base_points.emplace_back(
-                make_tuple(
+                std::make_tuple(
                         point.value("x", -1),
                         point.value("y", -1),
                         point.value("z",-1)
@@ -66,8 +66,8 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
     return true;
 }
 
-tuple<int, int, int> GameClient::MakePosTuple(nlohmann::ordered_json coordinate) {
-    return make_tuple(
+std::tuple<int, int, int> GameClient::MakePosTuple(nlohmann::ordered_json coordinate) {
+    return std::make_tuple(
             coordinate.value("x", -1),
             coordinate.value("y", -1),
             coordinate.value("z", -1)
@@ -100,7 +100,7 @@ void GameClient::CheckGameState() {
         // player id = pm.key, vector of attacks = pm.value
         // to upd : is there a way to do vector without a loop ?
 
-        vector<int> v_attacked;
+        std::vector<int> v_attacked;
 //        auto& arr_attacked = pm.value();
         for(int i : pm.value()) {
             v_attacked.push_back(i);
@@ -143,7 +143,7 @@ void GameClient::CheckGameState() {
     // win_points
 
     auto win_points = answer.answer.value("win_points", nlohmann::ordered_json(""));
-    cerr <<"DEBUG: " << win_points << endl;
+    std::cerr <<"DEBUG: " << win_points << std::endl;
     for(auto& player : win_points.items()) {
         auto& win_points_info = player.value();
         game->UpdateWinPoints(
@@ -183,7 +183,7 @@ void GameClient::SendAction() const {
 // must be called only when all players are connected
 void GameClient::InitPlayersId() {
     auto answer = client->GameState();
-    vector<int> real_ids;
+    std::vector<int> real_ids;
 
     // players id
 
@@ -193,9 +193,9 @@ void GameClient::InitPlayersId() {
     }
     game->InitPlayersId(real_ids);
 
-    // vehicle id
+    // vehicles id
     // TODO! recode
-    vector<int> vehicles_ids;
+    std::vector<int> vehicles_ids;
     int current_player_id = -1;
     auto vehicles = answer.answer.value("vehicles", nlohmann::ordered_json(""));
     for(auto& v : vehicles.items()) {

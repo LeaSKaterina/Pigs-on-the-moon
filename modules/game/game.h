@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../actors/player.h"
-#include "../actors/vehicle.h"
+#include "../actors/vehicles/vehicle.h"
 #include "../enums/action.h"
 #include "../map/map.h"
 #include "actionController.h"
@@ -51,20 +51,20 @@ public:
     // all inits must be called firstly!
     void InitMap(int size) { map = new Map(size); }
 
-    void InitPlayer(int id, string name, string password = "") { player = new Player(id, name, password); }
+    void InitPlayer(int id, std::string name, std::string password = "") { player = new Player(id, name, password); }
 
     void InitVariables(int playersNum = 3);
 
-    void InitPlayersId(const vector<int> &realId);
+    void InitPlayersId(const std::vector<int> &realId);
 
-    void InitVehiclesIds(int playerId, const vector<int> &realId);
+    void InitVehiclesIds(int playerId, const std::vector<int> &realId);
 
     // add methods
     void AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn);
 
     void AddVehicle(int playerId, std::string &type, std::tuple<int, int, int> spawn);
 
-    void AddBase(vector<tuple<int, int, int>> &points) { map->AddBase(points); }
+    void AddBase(std::vector<std::tuple<int, int, int>> &points) { map->AddBase(points); }
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
@@ -72,8 +72,8 @@ public:
     void UpdateVehicleState(int parentId, std::tuple<int, int, int> spawn, std::tuple<int, int, int> pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, vector<int> attacked) {
-        attackMatrix[playersIdAdapter.at(playerId)] = move(attacked);
+    void UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
+        attackMatrix[playersIdAdapter.at(playerId)] = std::move(attacked);
     }
 
     void UpdateWinPoints(int playerId, int capture, int kill);

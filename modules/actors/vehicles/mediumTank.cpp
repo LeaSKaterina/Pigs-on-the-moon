@@ -5,7 +5,7 @@ std::vector<Point> MediumTank::GetAvailableMovePoints() {
     return res;
 }
 
-std::vector<Point> MediumTank::GetAvailableShootPoints() {
-    std::vector<Point> res;
+std::vector<bool> MediumTank::IsAvailableForShoot(const std::vector<Point>& points) {
+    std::vector<bool> res;
     return res;
 }

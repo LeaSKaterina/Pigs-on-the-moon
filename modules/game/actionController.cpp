@@ -26,13 +26,13 @@ void ActionController::ModuleIncrement(int &n) {
         n--;
 }
 
-void Restore(int &x, int &y, int &z, const std::tuple<int, int, int> coordinates) {
-    x = get<0>(coordinates);
-    y = get<1>(coordinates);
-    z = get<2>(coordinates);
+void Restore(int &x, int &y, int &z, const Point coordinates) {
+    x = std::get<0>(coordinates);
+    y = std::get<1>(coordinates);
+    z = std::get<2>(coordinates);
 }
 
-std::tuple<int, int, int> ActionController::GetNextOnAxis(std::tuple<int, int, int> coordinates, Map *map) {
+Point ActionController::GetNextOnAxis(Point coordinates, Map *map) {
     auto [x, y, z] = coordinates;
     if (x == 0) {
         ReduceModule(y, 2);
@@ -46,7 +46,7 @@ std::tuple<int, int, int> ActionController::GetNextOnAxis(std::tuple<int, int, i
         ReduceModule(x, 2);
         ReduceModule(y, 2);
     }
-    tuple<int, int, int> res = make_tuple(x, y, z);
+    Point res = std::make_tuple(x, y, z);
     if (map->Get(res)->IsEmpty()) return res;
 
     Restore(x, y, z, coordinates);
@@ -65,7 +65,7 @@ std::tuple<int, int, int> ActionController::GetNextOnAxis(std::tuple<int, int, i
         ModuleIncrement(y);
         z = 0 - x - y;
     }
-    res = make_tuple(x, y, z);
+    res = std::make_tuple(x, y, z);
     if (map->Get(res)->IsEmpty()) return res;
 
     Restore(x, y, z, coordinates);
@@ -84,14 +84,14 @@ std::tuple<int, int, int> ActionController::GetNextOnAxis(std::tuple<int, int, i
         ModuleIncrement(x);
         z = 0 - x - y;
     }
-    res = make_tuple(x, y, z);
+    res = std::make_tuple(x, y, z);
     if (map->Get(res)->IsEmpty()) return res;
 
 
     return std::make_tuple(-1, -1, -1);// нам не нужно перемещаться
 }
 
-std::tuple<int, int, int> ActionController::GetTargetForMove(std::tuple<int, int, int> coordinates, Map *map) {
+Point ActionController::GetTargetForMove(Point coordinates, Map *map) {
     auto [x, y, z] = coordinates;
 
     if (x == 0 || y == 0 || z == 0)
@@ -109,7 +109,7 @@ std::tuple<int, int, int> ActionController::GetTargetForMove(std::tuple<int, int
     ModuleDecrement(z);
     ModuleDecrement(*maxAbs);
 
-    tuple<int, int, int> res = make_tuple(x, y, z);
+    Point res = std::make_tuple(x, y, z);
     if (map->Get(res)->IsEmpty()) return res;
 
 
@@ -129,7 +129,7 @@ std::tuple<int, int, int> ActionController::GetTargetForMove(std::tuple<int, int
         x = 0 - y - z;
     }
 
-    res = make_tuple(x, y, z);
+    res = std::make_tuple(x, y, z);
 
     if (map->Get(res)->IsEmpty()) return res;
 
@@ -149,15 +149,51 @@ std::tuple<int, int, int> ActionController::GetTargetForMove(std::tuple<int, int
         y = 0 - x - z;
     }
 
-    res = make_tuple(x, y, z);
+    res = std::make_tuple(x, y, z);
     if (map->Get(res)->IsEmpty()) return res;
 
     //    return res;
     return std::make_tuple(-1, -1, -1);// нам не нужно перемещаться
 }
 
-std::tuple<int, int, int>
-ActionController::GetTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
-                                    vector<vector<Vehicle *>> vehicles, int playerId) {
-    return std::tuple<int, int, int>(-1, -1, -1);
+Point ActionController::GetTargetForShoot(Point coordinates, std::vector<std::vector<int>> attackMatrix,
+                                          std::vector<std::vector<Vehicle *>> vehicles, int playerId) {
+    return Point(-1, -1, -1);
 }// какая-то логика выстрела. если не стрелять - возвращает (-1,-1,-1)
+
+
+std::vector<int> ActionController::GetPotentialDamage(const std::vector<Vehicle*>& vehicles, const std::vector<Point>& enemyPoints){
+    std::vector<int> potentialDamage(10);
+    std::vector<bool> buffer;
+    for (auto v : vehicles) {
+        buffer = v->IsAvailableForShoot(enemyPoints);
+        for (int i = 0; i < 10; i++) {
+            potentialDamage[i] += buffer[i];
+        }
+    }
+    return potentialDamage;
+}
+
+std::vector<Point> ActionController::GetPointsForShoot(const std::vector<std::vector<int>>& attackMatrix, std::vector<std::vector<Vehicle *>> vehicles, int playerId) {
+    std::vector<Point> enemyPoints;
+    std::vector<Vehicle *> playerVehicles = vehicles[playerId];
+
+    for (auto vect : vehicles) {
+        if (vect[0]->GetPlayerId() != playerId) {
+            for (auto v : vect) {
+                enemyPoints.push_back(v->GetCurrentPosition());
+            }
+        }
+    }
+
+    std::vector<int> potentialDamage = GetPotentialDamage(playerVehicles, enemyPoints);
+
+    // TODO
+    // check the rule of neutrality using attackMatrix
+    // if we can destroy the enemy - shoot
+    // if vehicle doesn't shoot res[id] = (-1,-1,-1)
+    // else res[id] = current position of target vehicle
+
+    std::vector<Point> res(5);
+    return res;
+}

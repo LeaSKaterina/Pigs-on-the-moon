@@ -1,7 +1,8 @@
 #include "game.h"
+#include "../actors/vehicles/spg.h"
 
 using namespace std;
-using namespace  VehiclesTypes;
+using namespace VehiclesTypes;
 
 Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
     for (auto *p : vehicles[adaptedPlayerId]) {
@@ -37,7 +38,7 @@ void Game::InitPlayersId(const vector<int> &realId) {
     }
 }
 
-void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
+void Game::InitVehiclesIds(int playerId, const std::vector<int> &realId) {
     if (playerId != player->GetId())
         return;
     // TODO _
@@ -48,20 +49,20 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
 
 // Add
 
-void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
+void Game::AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn) {
     // there choose type of tanks
-    switch(type){
-        case AtSpg:
-        case LightTank:
-        case HeavyTank:
-        case MediumTank:
-        case Spg:
-            Vehicle *t = new Vehicle(type, playerId);
+    switch (type) {
+        case VehiclesTypes::AtSpg:
+        case VehiclesTypes::LightTank:
+        case VehiclesTypes::HeavyTank:
+        case VehiclesTypes::MediumTank:
+        case VehiclesTypes::Spg: {
+            Vehicle *t = new Spg(type, playerId);
             t->InitSpawn(map->Get(spawn));
-            vehicles[playerId].push_back(t); // there player id passed from 0 to 2 (GameClient)
+            vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
             break;
+        }
     }
-
 }
 
 // get state
@@ -121,3 +122,4 @@ bool Game::IsFinished() const {
 bool Game::isPlayerTurn() const {
     return currentPlayerId == player->GetId();
 }
+

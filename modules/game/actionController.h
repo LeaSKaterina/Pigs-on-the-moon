@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 
+typedef std::tuple<int, int, int> Point;
 
 class ActionController {
 private:
@@ -19,11 +20,15 @@ private:
 
 
 public:
-    static std::tuple<int, int, int> GetTargetForMove(std::tuple<int, int, int> coordinates, Map *map);
+    static Point GetTargetForMove(Point coordinates, Map *map);
 
-    static std::tuple<int, int, int> GetNextOnAxis(std::tuple<int, int, int> coordinates, Map *map);
+    static Point GetNextOnAxis(Point coordinates, Map *map);
 
-    static std::tuple<int, int, int>
-    GetTargetForShoot(std::tuple<int, int, int> coordinates, vector<vector<int>> attackMatrix,
-                      vector<vector<Vehicle *>> vehicles, int playerId);
+    static Point GetTargetForShoot(Point coordinates, std::vector<std::vector<int>> attackMatrix,
+                                   std::vector<std::vector<Vehicle *>> vehicles, int playerId);
+
+    static std::vector<int> GetPotentialDamage(const std::vector<Vehicle*>& vehicles, const std::vector<Point>& enemyPoints);
+
+    static std::vector<Point> GetPointsForShoot(const std::vector<std::vector<int>>& attackMatrix,
+                                                std::vector<std::vector<Vehicle *>> vehicles, int playerId);
 };
