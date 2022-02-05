@@ -1,4 +1,3 @@
-#include <iostream>
 #include "map.h"
 
 void Map::AddBase(std::vector<Point> &points) {
@@ -40,12 +39,6 @@ std::vector<Point> Map::GetRing(Point center, int r) {
             res.push_back(std::make_tuple(pointArr[0], pointArr[1], pointArr[2]));
         }
     }
-
-    for (auto p : res){
-        std::cout << "x = " << std::get<0>(p) << ", y = " << std::get<1>(p) << ", z = " << std::get<2>(p) << std::endl;
-    }
-
-    std::cout << res.size() << std::endl;
 
     return res;
 }

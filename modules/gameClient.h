@@ -39,7 +39,7 @@ private:
     Game* game;
     Client* client;
 
-    static std::tuple<int, int, int> MakePosTuple(nlohmann::ordered_json coordinate);
+    static Point MakePosTuple(nlohmann::ordered_json coordinate);
 
 };
 

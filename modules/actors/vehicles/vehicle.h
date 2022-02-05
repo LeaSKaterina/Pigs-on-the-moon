@@ -7,8 +7,6 @@
 #include "../../map/hex.h"
 #include <vector>
 
-typedef std::tuple<int, int, int> Point;
-
 class Vehicle {
 public:
     Vehicle(VehiclesTypes::Type type, int playerId);

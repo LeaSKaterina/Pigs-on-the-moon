@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <iostream>
 
-typedef std::tuple<int, int, int> Point;
-
 class ActionController {
 private:
     static void ModuleDecrement(int &n);

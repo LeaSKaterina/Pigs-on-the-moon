@@ -52,7 +52,7 @@ bool GameClient::InitGame(const std::string &name, const std::string &password, 
 
     auto content_info = map_info.value("content", nlohmann::ordered_json(""));
     auto base_info = content_info.value("base", nlohmann::ordered_json(""));
-    std::vector<std::tuple<int, int, int>> base_points;
+    std::vector<Point> base_points;
     for (auto& point : base_info) {
         base_points.emplace_back(
                 std::make_tuple(
@@ -66,7 +66,7 @@ bool GameClient::InitGame(const std::string &name, const std::string &password, 
     return true;
 }
 
-std::tuple<int, int, int> GameClient::MakePosTuple(nlohmann::ordered_json coordinate) {
+Point GameClient::MakePosTuple(nlohmann::ordered_json coordinate) {
     return std::make_tuple(
             coordinate.value("x", -1),
             coordinate.value("y", -1),

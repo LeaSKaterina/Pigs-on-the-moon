@@ -7,10 +7,6 @@
 #include <tuple>
 #include <vector>
 
-typedef std::tuple<int,int,int> Point;
-
-//using namespace std;
-
 class Map {
 private:
     int size;

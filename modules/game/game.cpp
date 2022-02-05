@@ -4,7 +4,7 @@
 using namespace std;
 using namespace VehiclesTypes;
 
-Vehicle *Game::Find(int adaptedPlayerId, const tuple<int, int, int> &spawn) const {
+Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
     for (auto *p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
@@ -38,7 +38,7 @@ void Game::InitPlayersId(const vector<int> &realId) {
     }
 }
 
-void Game::InitVehiclesIds(int playerId, const std::vector<int> &realId) {
+void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
     if (playerId != player->GetId())
         return;
     // TODO _
@@ -49,7 +49,7 @@ void Game::InitVehiclesIds(int playerId, const std::vector<int> &realId) {
 
 // Add
 
-void Game::AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn) {
+void Game::AddVehicle(int playerId, VehiclesTypes::Type type, Point spawn) {
     // there choose type of tanks
     switch (type) {
         case VehiclesTypes::AtSpg:
@@ -72,7 +72,7 @@ void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     isFinished = finished;
 }
 
-void Game::UpdateVehicleState(int parentId, tuple<int, int, int> spawn, tuple<int, int, int> pos, int health,
+void Game::UpdateVehicleState(int parentId, Point spawn, Point pos, int health,
                               int capturePoints) {
     Vehicle *v = Find(playersIdAdapter.at(parentId), spawn);
     v->Update(health, map->Get(pos), capturePoints);
@@ -84,14 +84,14 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
-bool TargetIsAvailable(const tuple<int, int, int> *target) {
+bool TargetIsAvailable(const Point *target) {
     auto [x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 
 vector<tuple<Action, int, Hex *>> Game::Play() const {
     vector<tuple<Action, int, Hex *>> res;
-    tuple<int, int, int> target;
+    Point target;
     auto v = vehicles[playersIdAdapter.at(player->GetId())];
 
     for (int i = 0; i < 5; i++) {

@@ -3,21 +3,23 @@
 #include <cstdlib>
 #include <tuple>
 
+typedef std::tuple<int,int,int> Point;
+
 struct Hex {
 
 private:
-    std::tuple<int, int, int> coordinates;
+    Point coordinates;
     bool isEmpty = true;
     int ownerId = -1;
 
 public:
     Hex(int x, int y, int z) { coordinates = std::make_tuple(x, y, z); }
 
-    bool IsEmpty() const { return isEmpty; }
+    [[nodiscard]] bool IsEmpty() const { return isEmpty; }
 
-    bool IsSpecial() const { return ownerId == -1; }
+    [[nodiscard]] bool IsSpecial() const { return ownerId == -1; }
 
-    const std::tuple<int, int, int> &GetCoordinates() const { return coordinates; }
+    [[nodiscard]] const Point &GetCoordinates() const { return coordinates; }
 
     bool Occupy();
 

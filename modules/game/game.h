@@ -40,7 +40,7 @@ private:
 
     Player *player;
 
-    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const std::tuple<int, int, int> &spawn) const;
+    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point &spawn) const;
 
 public:
     Game() = default;
@@ -60,16 +60,16 @@ public:
     void InitVehiclesIds(int playerId, const std::vector<int> &realId);
 
     // add methods
-    void AddVehicle(int playerId, VehiclesTypes::Type type, std::tuple<int, int, int> spawn);
+    void AddVehicle(int playerId, VehiclesTypes::Type type, Point spawn);
 
-    void AddVehicle(int playerId, std::string &type, std::tuple<int, int, int> spawn);
+    void AddVehicle(int playerId, std::string &type, Point spawn);
 
-    void AddBase(std::vector<std::tuple<int, int, int>> &points) { map->AddBase(points); }
+    void AddBase(std::vector<Point> &points) { map->AddBase(points); }
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
 
-    void UpdateVehicleState(int parentId, std::tuple<int, int, int> spawn, std::tuple<int, int, int> pos, int health,
+    void UpdateVehicleState(int parentId,Point spawn, Point pos, int health,
                             int capturePoints);
 
     void UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
