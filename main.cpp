@@ -57,7 +57,6 @@ int main() {
         if (gc.IsPlayTime())// play only our turn
             gc.SendAction();
 
-
 #ifdef _DEBUG
         //            std::cout << gc.getClient()->GameState();
         std::cerr << "\n---------------------------------------\n";

@@ -22,6 +22,8 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
     if (!Login(name, password, gameName, numTurns, numPlayers, isObserver))
         return false;
     InitMap();
+  
+    return true;
 }
 
 GameClient::~GameClient() {
@@ -183,6 +185,7 @@ void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
     if (!vehiclesIds.empty())
         game->InitVehiclesIds(currentPlayerId, vehiclesIds);
 }
+
 
 void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
     for (auto &v : vehicles.items()) {
