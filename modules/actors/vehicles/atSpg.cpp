@@ -1,6 +1,6 @@
 #include "atSpg.h"
 
-std::vector<Point> AtSpg::GetAvailableMovePoints() {
+std::vector<Point> AtSpg::GetAvailableMovePoints(Point target, int r) {
     std::vector<Point> res;
     return res;
 }

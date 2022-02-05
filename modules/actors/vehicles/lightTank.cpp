@@ -1,6 +1,6 @@
 #include "lightTank.h"
 
-std::vector<Point> LightTank::GetAvailableMovePoints() {
+std::vector<Point> LightTank::GetAvailableMovePoints(Point target, int r) {
     std::vector<Point> res;
     return res;
 }

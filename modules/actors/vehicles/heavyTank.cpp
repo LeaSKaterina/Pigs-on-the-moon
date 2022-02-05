@@ -1,6 +1,6 @@
 #include "heavyTank.h"
 
-std::vector<Point> HeavyTank::GetAvailableMovePoints() {
+std::vector<Point> HeavyTank::GetAvailableMovePoints(Point target, int r) {
     std::vector<Point> res;
     return res;
 }
