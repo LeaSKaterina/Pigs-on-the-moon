@@ -23,4 +23,6 @@ public:
     [[nodiscard]] Hex *Get(const Point &p) const { return grid.at(p); }
 
     static std::vector<Point> GetRing(Point center, int r);
+
+    ~Map();
 };

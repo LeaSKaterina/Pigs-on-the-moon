@@ -4,13 +4,12 @@ project(Pigs_on_the_moon)
 set(CMAKE_CXX_STANDARD 17)
 
 #Debug
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
 #!Debug
 
 include(./conanBuild/conanbuildinfo.cmake)
 conan_basic_setup()
 link_libraries(ws2_32)
-
 
 file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.h) #collect all .h files
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.cpp) #collect all .cpp files

@@ -15,7 +15,7 @@ public:
 
     virtual std::vector<Point> GetAvailableMovePoints() = 0;
 
-    virtual std::vector<bool> IsAvailableForShoot(const std::vector<Point>& points) = 0;
+    virtual std::vector<bool> IsAvailableForShoot(const std::vector<Point> &points) = 0;
 
     int Shoot(Vehicle *v);
 

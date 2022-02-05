@@ -2,16 +2,16 @@
 
 using namespace VehiclesTypes;
 
-Vehicle::Vehicle(VehiclesTypes::Type type, int playerId) {
+Vehicle::Vehicle(Type type, int playerId) {
     switch (type) {
-        case MediumTank:
+        case MEDIUM_TANK:
             health = 2;
             speedPoints = 2;
             break;
-        case LightTank:
-        case HeavyTank:
-        case AtSpg:
-        case Spg:
+        case LIGHT_TANK:
+        case HEAVY_TANK:
+        case AT_SPG:
+        case SPG:
             break;
     }
     destructionPoints = health;

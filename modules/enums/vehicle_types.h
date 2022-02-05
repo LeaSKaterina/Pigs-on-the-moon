@@ -3,7 +3,7 @@
 #include <string>
 namespace VehiclesTypes {
     enum Type {
-        AtSpg, LightTank, HeavyTank, MediumTank, Spg
+        SPG, LIGHT_TANK, HEAVY_TANK, MEDIUM_TANK, AT_SPG
     };
     extern const int TypesNum;
     extern const std::string s_types[];

@@ -16,7 +16,11 @@ Game::~Game() {
     // TODO!
     delete player;
     delete map;
-    // vehicles?
+    for (auto &vehicle : vehicles) {
+        for (auto v : vehicle) {
+            delete v;
+        }
+    }
 }
 
 void Game::InitVariables(int playersNum) {
@@ -47,23 +51,36 @@ void Game::InitVehiclesIds(int playerId, const vector<int> &realId) {
     }
 }
 
-// Add
-
-void Game::AddVehicle(int playerId, VehiclesTypes::Type type, Point spawn) {
-    // there choose type of tanks
-    switch (type) {
-        case VehiclesTypes::AtSpg:
-        case VehiclesTypes::LightTank:
-        case VehiclesTypes::HeavyTank:
-        case VehiclesTypes::MediumTank:
-        case VehiclesTypes::Spg: {
-            Vehicle *t = new Spg(type, playerId);
-            t->InitSpawn(map->Get(spawn));
-            vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
-            break;
+void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector<int>> &realId) {
+    if (playerId != player->GetId())
+        return;
+    int next = 0;
+    for (int i = 0; i < VehiclesTypes::TypesNum; i++) {
+        auto &tanks = realId.at(VehiclesTypes::s_types[i]);
+        // q: is there more than one access?
+        for (const auto &id : tanks) {
+            tanksIdAdapter[next++] = id;
         }
     }
 }
+
+// Add
+
+void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
+    // there choose type of tanks
+    switch (type) {
+        case MEDIUM_TANK:
+        case LIGHT_TANK:
+        case HEAVY_TANK:
+        case AT_SPG:
+        case SPG:
+            auto *t = new Spg(type, playerId);
+            t->InitSpawn(map->Get(spawn));
+            vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
+            break;
+    }
+}
+
 
 // get state
 void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
@@ -108,18 +125,4 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
     }
 
     return res;
-    //    return vector<tuple<Action, int, Hex *>>();
 }
-
-int Game::GetNumPlayers() const {
-    return numPlayers;
-}
-
-bool Game::IsFinished() const {
-    return isFinished;
-}
-
-bool Game::isPlayerTurn() const {
-    return currentPlayerId == player->GetId();
-}
-
