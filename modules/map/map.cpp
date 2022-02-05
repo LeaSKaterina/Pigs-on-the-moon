@@ -58,5 +58,5 @@ bool Map::IsBasePoint(const Hex *point) const {
 }
 bool Map::IsBasePoint(const Point &point) const {
     // TODO!
-    return false;
+    return this->Get(point)->IsSpecial();
 }
