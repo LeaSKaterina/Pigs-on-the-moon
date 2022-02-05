@@ -5,7 +5,6 @@
 #include "hex.h"
 #include <map>
 #include <tuple>
-#include <vector>
 
 class Map {
 private:
@@ -21,8 +20,6 @@ public:
     void AddBase(std::vector<Point> &points);
 
     [[nodiscard]] Hex *Get(const Point &p) const { return grid.at(p); }
-
-    static std::vector<Point> GetRing(Point center, int r);
 
     ~Map();
 };

@@ -7,5 +7,5 @@ std::vector<Point> HeavyTank::GetAvailableMovePoints(Point target, int r) {
 
 bool HeavyTank::IsAvailableForShoot(Vehicle *enemy) {
     int d = Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition());
-    return d == 3 || d == 2;
+    return d == 1 || d == 2;
 }

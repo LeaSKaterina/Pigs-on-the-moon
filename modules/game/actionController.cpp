@@ -158,37 +158,39 @@ Point ActionController::GetTargetForMove(Point coordinates, Map *map) {
     return make_tuple(-1, -1, -1);// нам не нужно перемещаться
 }
 
-bool ActionController::NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId, int enemyId) {
-    for (int i = 0; i < attackMatrix.size(); i++) {
-        if (i == enemyId) {
-            continue;
-        }
-        for (int j = 0; j < attackMatrix[i].size(); j++) {
-            if (attackMatrix[i][j] == enemyId) {// he was attacked
-                for (auto id : attackMatrix[enemyId]) {
-                    if (id == playerId) {// but he attack us
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-    }
-    return true;
+vector<bool> ActionController::NeutralityRuleCheck(const std::vector<std::vector<int>> &attackMatrix, int playerId) {
+//    for (int i = 0; i < attackMatrix.size(); i++) {
+//        if (i == enemyId) {
+//            continue;
+//        }
+//        for (int j = 0; j < attackMatrix[i].size(); j++) {
+//            if (attackMatrix[i][j] == enemyId) {// he was attacked
+//                for (auto id : attackMatrix[enemyId]) {
+//                    if (id == playerId) {// but he attack us
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        }
+//    }
+//    return true;
 }
 
-std::unordered_map<Vehicle *, vector<Vehicle *>> ActionController::GetPointsForShoot(const std::vector<std::vector<int>> &attackMatrix,
-                                                                                     const std::vector<std::vector<Vehicle *>> &vehicles,
-                                                                                     int playerId, int playersNum, int playerVehiclesNum) {
+std::unordered_map<Vehicle *, vector<Vehicle *>> ActionController::GetPointsForShoot(const vector<vector<int>> &attackMatrix,
+                                                                                     const vector<vector<Vehicle *>> &vehicles,
+                                                                                     int playerId, int playersNum) {
 
     const vector<Vehicle *> &playerVehicles = vehicles[playerId];
-    std::unordered_map<Vehicle *, vector<Vehicle *>> res(playerVehiclesNum * (playersNum - 1));
+    vector<bool> canAttack(playersNum);
+    canAttack = move(NeutralityRuleCheck(attackMatrix, playerId));
+    std::unordered_map<Vehicle *, vector<Vehicle *>> res;
     for (auto &our : playerVehicles) {
-        for (auto vect : vehicles) {
-            if (vect[0]->GetPlayerId() != playerId)
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (vehicles[i][0]->GetPlayerId() == playerId || !canAttack[i])
                 continue;
-            for (auto enemy : vect) {
-                if (our->IsAvailableForShoot(enemy) && NeutralityRuleCheck(attackMatrix, playerId, enemy->GetPlayerId()))
+            for (auto enemy : vehicles[i]) {
+                if (our->IsAvailableForShoot(enemy))
                     res[enemy].push_back(our);
             }
         }

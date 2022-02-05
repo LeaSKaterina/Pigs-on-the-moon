@@ -20,31 +20,6 @@ void Map::InitGrid() {
     }
 }
 
-vector<Point> Map::GetRing(Point center, int r) {
-    vector<Point> res;
-    int pointArr[3]{0, 0, 0};
-    int centerArr[3]{0, 0, 0};
-    centerArr[0] = get<0>(center);
-    centerArr[1] = get<1>(center);
-    centerArr[2] = get<2>(center);
-
-    for (int dr = 0; dr < r; dr++) {
-        for (int i = 0; i < 3; i++) {
-            pointArr[i % 3] = centerArr[i % 3] + (r - dr);
-            pointArr[(i + 1) % 3] = centerArr[(i + 1) % 3] + dr;
-            pointArr[(i + 2) % 3] = centerArr[(i + 2) % 3] - r;
-            res.push_back(make_tuple(pointArr[0], pointArr[1], pointArr[2]));
-            pointArr[i % 3] = centerArr[i % 3] - (r - dr);
-            pointArr[(i + 1) % 3] = centerArr[(i + 1) % 3] - dr;
-            pointArr[(i + 2) % 3] = centerArr[(i + 2) % 3] + r;
-            res.push_back(make_tuple(pointArr[0], pointArr[1], pointArr[2]));
-        }
-    }
-
-    return res;
-}
-
-
 Map::~Map() {
     for (auto &[k, h] : grid) {
         delete h;
