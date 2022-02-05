@@ -114,21 +114,5 @@ bool TargetIsAvailable(const Point *target) {
 
 vector<tuple<Action, int, Hex *>> Game::Play() const {
     vector<tuple<Action, int, Hex *>> res;
-//    Point target;
-//    auto v = vehicles[playersIdAdapter.at(player->GetId())];
-//
-//    for (int i = 0; i < 5; i++) {
-//        target = ActionController::GetTargetForMove(v[i]->GetCurrentPosition(), map);
-//        if (TargetIsAvailable(&target)) {
-//            res.emplace_back(Action::MOVE, tanksIdAdapter[i], map->Get(target));
-//        } else {
-//            target = ActionController::GetTargetForShoot(v[i]->GetCurrentPosition(), attackMatrix, vehicles,
-//                                                         playersIdAdapter.at(player->GetId()));
-//            if (TargetIsAvailable(&target)) {
-//                res.emplace_back(Action::SHOOT, tanksIdAdapter[i], map->Get(target));
-//            }
-//        }
-//    }
-
     return res;
 }
