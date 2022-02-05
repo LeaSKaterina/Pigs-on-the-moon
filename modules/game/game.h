@@ -2,6 +2,11 @@
 
 #include "../actors/player.h"
 #include "../actors/vehicles/vehicle.h"
+#include "../actors/vehicles/spg.h"
+#include "../actors/vehicles/atSpg.h"
+#include "../actors/vehicles/heavyTank.h"
+#include "../actors/vehicles/lightTank.h"
+#include "../actors/vehicles/mediumTank.h"
 #include "../enums/action.h"
 #include "../enums/vehicle_types.h"
 #include "../map/map.h"

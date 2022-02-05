@@ -56,7 +56,7 @@ Response Client::GetAnswer() const {
     nlohmann::ordered_json ans = size ? nlohmann::ordered_json::parse(msg)
                                       : nlohmann::ordered_json();
     #ifdef _DEBUG
-        std::cerr << (int)result << " " << ans << std::endl;
+//        std::cerr << (int)result << " " << ans << std::endl;
     #endif
     return {result, ans};
 }

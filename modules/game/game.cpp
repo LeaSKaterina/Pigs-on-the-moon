@@ -1,5 +1,4 @@
 #include "game.h"
-#include "../actors/vehicles/spg.h"
 
 using namespace std;
 using namespace VehiclesTypes;
@@ -68,17 +67,25 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
 
 void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
     // there choose type of tanks
+    Vehicle* t;
     switch (type) {
         case MEDIUM_TANK:
-        case LIGHT_TANK:
-        case HEAVY_TANK:
-        case AT_SPG:
-        case SPG:
-            auto *t = new Spg(type, playerId);
-            t->InitSpawn(map->Get(spawn));
-            vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
+            t = new MediumTank(playerId);
             break;
+        case LIGHT_TANK:
+            t = new LightTank(playerId);
+            break;
+        case HEAVY_TANK:
+            t = new HeavyTank(playerId);
+            break;
+        case AT_SPG:
+            t = new AtSpg(playerId);
+            break;
+        case SPG:
+            t = new Spg(playerId);
     }
+    t->InitSpawn(map->Get(spawn));
+    vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
 }
 
 // get state

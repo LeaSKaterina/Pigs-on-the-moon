@@ -5,7 +5,6 @@ std::vector<Point> Spg::GetAvailableMovePoints() {
     return res;
 }
 
-std::vector<bool> Spg::IsAvailableForShoot(const std::vector<Point>& points) {
-    std::vector<bool> res;
-    return res;
+bool Spg::IsAvailableForShoot(Vehicle *enemy) {
+    return true;
 }

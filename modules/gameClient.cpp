@@ -1,6 +1,7 @@
 #include "gameClient.h"
 using namespace std;
 
+
 bool GameClient::Login(const string &name, const string &password, const string &gameName, int numTurns,
                        int numPlayers, bool isObserver) {
     // Login
@@ -16,11 +17,13 @@ bool GameClient::Login(const string &name, const string &password, const string 
     return true;
 }
 
+
 bool GameClient::InitGame(const string &name, const string &password, const string &gameName, int numTurns,
                           int numPlayers, bool isObserver) {
     if (!Login(name, password, gameName, numTurns, numPlayers, isObserver))
         return false;
     InitMap();
+  
     return true;
 }
 
@@ -107,8 +110,8 @@ void GameClient::InitMap() {
     game->InitMap(size);
 
 #ifdef _DEBUG
-    cout << "Map request:\n"
-         << mapInfo << "\n:Map request" << endl;
+//    cout << "Map request:\n"
+//         << mapInfo << "\n:Map request" << endl;
 #endif
 
     InitSpawns(mapInfo.value("spawn_points", nlohmann::ordered_json("")));
@@ -163,7 +166,7 @@ void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
 
 void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
     // TODO! do we need all players?
-    // strings ...
+    // copy strings ...
     unordered_map<string, vector<int>> vehiclesIds;
     int currentPlayerId = -1;
     for (auto &v : vehicles.items()) {
