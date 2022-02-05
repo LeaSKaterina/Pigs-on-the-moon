@@ -83,9 +83,7 @@ public:
     void UpdateVehicleState(int parentId, Point spawn, Point pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
-        attackMatrix[playersIdAdapter.at(playerId)] = std::move(attacked);
-    }
+    void UpdateAttackMatrix(int playerId, std::vector<int> attacked);
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 

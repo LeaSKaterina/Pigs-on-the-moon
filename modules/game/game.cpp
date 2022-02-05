@@ -96,6 +96,15 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
+void Game::UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
+    // TODO! square bool array.
+    vector<int> attackedId(numPlayers);
+    for (int i = 0; i < attacked.size(); i++) {
+        attackedId[i] = playersIdAdapter.at(attacked[i]);
+    }
+    attackMatrix[playersIdAdapter.at(playerId)] = std::move(attackedId);
+}
+
 bool TargetIsAvailable(const Point *target) {
     auto [x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
@@ -173,4 +182,3 @@ void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> 
         }
     }
 }
-
