@@ -4,7 +4,7 @@
 
 class Spg : public Vehicle {
 public:
-    Spg (VehiclesTypes::Type type, int playerId) : Vehicle(type, playerId) {};
+    Spg (int playerId) : Vehicle(playerId, 1, 1) {};
 
     std::vector<Point> GetAvailableMovePoints() override;
 

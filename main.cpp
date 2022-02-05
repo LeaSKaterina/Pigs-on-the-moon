@@ -1,5 +1,6 @@
 #include "modules/gameClient.h"
 #include <iostream>
+#include <algorithm>
 #include <thread>
 
 #include <nlohmann/json.hpp>
@@ -29,8 +30,7 @@ int main() {
     int ourOrder = 1;                         // our connection number. Values from [1, 2, 3] // may be more than numberCount
     ///////////////////////////////////////////////////////////////////////////////
 
-    // TODO I can't use std::min( why??????????
-    ourOrder = min(ourOrder, playersCount);// simple check for easy life
+    ourOrder = std::min(ourOrder, playersCount);// simple check for easy life
 
 
     gameName += "_" + std::to_string(playersCount) + "_" + std::to_string(ourOrder);

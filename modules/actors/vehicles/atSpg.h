@@ -5,7 +5,7 @@
 
 class AtSpg : public Vehicle {
 public:
-    AtSpg(VehiclesTypes::Type type, int playerId) : Vehicle(type, playerId) {};
+    AtSpg(int playerId) : Vehicle(playerId, 2, 1) {};
 
     std::vector<Point> GetAvailableMovePoints() override;
 

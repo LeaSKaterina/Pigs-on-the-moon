@@ -1,22 +1,12 @@
 #include "vehicle.h"
 
-using namespace VehiclesTypes;
 
-Vehicle::Vehicle(Type type, int playerId) {
-    switch (type) {
-        case MEDIUM_TANK:
-            health = 2;
-            speedPoints = 2;
-            break;
-        case LIGHT_TANK:
-        case HEAVY_TANK:
-        case AT_SPG:
-        case SPG:
-            break;
-    }
+Vehicle::Vehicle(int playerId, int hp, int speed, int damage) {
+    health = hp;
     destructionPoints = health;
     this->playerId = playerId;
-    this->type = type;
+    speedPoints = speed;
+    this->damage = damage;
 }
 
 bool Vehicle::Move(Hex *newPos) {

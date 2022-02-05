@@ -5,7 +5,7 @@
 
 class HeavyTank : public Vehicle {
 public:
-    HeavyTank(VehiclesTypes::Type type, int playerId) : Vehicle(type, playerId) {};
+    HeavyTank(int playerId) : Vehicle(playerId, 3, 1) {};
 
     std::vector<Point> GetAvailableMovePoints() override;
 
