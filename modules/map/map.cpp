@@ -53,3 +53,10 @@ Map::~Map() {
     for (auto c : content)
         delete c;
 }
+bool Map::IsBasePoint(const Hex *point) const {
+    return false;
+}
+bool Map::IsBasePoint(const Point &point) const {
+    // TODO!
+    return false;
+}

@@ -31,7 +31,7 @@ public:
     static std::vector<Point> GetPointsForShoot(const std::vector<std::vector<int>>& attackMatrix,
                                                 std::vector<std::vector<Vehicle *>> vehicles, int playerId);
 
-    static std::unordered_map<Vehicle*, std::vector<int>> GetPointsForShoot
+    static std::unordered_map<Vehicle*, std::vector<Vehicle*>> GetPointsForShoot
             (const std::vector<std::vector<int>>& attackMatrix,
              const std::vector<std::vector<Vehicle *>>& vehicles,
              int playerId, int playersNum = 3, int playerVehiclesNum = 5);

@@ -2,17 +2,26 @@
 #define PIGS_ON_THE_MOON_VEHICLE_H
 
 #include "../../map/hex.h"
+#include "../../enums/action.h"
+#include <map>
 #include <vector>
 
 class Vehicle {
 public:
-    Vehicle(int playerId, int hp, int speed, int damage = 1);
+    Vehicle (int ownerId, int hp, int speed, int damage_ = 1)
+        : playerId(ownerId),
+          damage(damage_),
+          health(hp),
+          speedPoints(speed),
+          destructionPoints(hp) {}
 
     bool Move(Hex *newPos);
 
-    virtual std::vector<Point> GetAvailableMovePoints() = 0;
+    virtual std::multimap<int, Point> GetAvailableMovePoints(Point target, int r = 0) const  = 0;
 
     virtual std::vector<bool> IsAvailableForShoot(const std::vector<Point> &points) = 0;
+
+    virtual Action PriorityAction() const = 0;
 
     int Shoot(Vehicle *v);
 
@@ -28,21 +37,25 @@ public:
 
     [[nodiscard]] const Point &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
+    int GetHp() const { return health; }
+
+    bool IsAlive() const { return health > 0; }
+
     void InitSpawn(Hex *p);
 
     void Respawn();
 
+    int GetHit(int damage = 1);
+
 private:
-    int playerId;
+    const int playerId;
     int health;
-    int destructionPoints;
-    int speedPoints;
-    int damage;
+    const int destructionPoints;
+    const int speedPoints;
+    const int damage;
     int capturePoints = 0;
     Hex *spawnPosition = nullptr;
     Hex *currentPosition = nullptr;
-
-    int GetHit(int damage = 1);
 
     bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
 };

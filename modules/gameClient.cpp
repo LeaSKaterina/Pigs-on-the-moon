@@ -65,7 +65,6 @@ void GameClient::SendAction() const {
         switch (actionType) {
             case Action::MOVE:
                 client->Move(vehicleId, x, y, z);
-                // TODO make other move/shoot in Client private
                 break;
             case Action::SHOOT:
                 client->Shoot(vehicleId, x, y, z);
@@ -126,7 +125,6 @@ void GameClient::InitMap() {
     game->AddBase(basePoints);
 }
 
-
 void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {
 #ifdef _DEBUG
     cerr << "Spawn Info: "
@@ -154,7 +152,6 @@ void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {
     }
 }
 
-
 void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
     vector<int> realIds;
     for (auto &pm : am.items()) {
@@ -162,7 +159,6 @@ void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
     }
     game->InitPlayersId(realIds);
 }
-
 
 void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
     // TODO! do we need all players?
@@ -186,6 +182,7 @@ void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
     if (!vehiclesIds.empty())
         game->InitVehiclesIds(currentPlayerId, vehiclesIds);
 }
+
 
 void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
     for (auto &v : vehicles.items()) {
@@ -219,7 +216,6 @@ void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
         game->UpdateAttackMatrix(stoi(pm.key()), vAttacked);
     }
 }
-
 
 void GameClient::UpdateWinPoints(const nlohmann::ordered_json &&winPoints) {
     cerr << "DEBUG: " << winPoints << endl;

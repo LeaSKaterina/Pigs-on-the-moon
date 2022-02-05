@@ -34,6 +34,7 @@ private:
     std::vector<int> kills;
 
     const int numRounds = 15;
+    static constexpr int numPlayerVehicles = 5;
 
     int numTurns;
     int currentTurn;
@@ -50,6 +51,9 @@ private:
 
     [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point &spawn) const;
 
+    // Strategy
+    static void ProcessAttackPossibility(std::unordered_map<Vehicle*, std::vector<Vehicle*>>& priorityShootTargets) ;
+
 public:
     Game() = default;
 
@@ -64,8 +68,6 @@ public:
     void InitVariables(int playersNum = 3);
 
     void InitPlayersId(const std::vector<int> &realId);
-
-    void InitVehiclesIds(int playerId, const std::vector<int> &realId);
 
     void InitVehiclesIds(int playerId, const std::unordered_map<std::string, std::vector<int>> &realId);
 

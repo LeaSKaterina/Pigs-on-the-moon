@@ -6,11 +6,13 @@
 class LightTank : public Vehicle {
 
 public:
-    LightTank(int playerId) : Vehicle(playerId, 1, 3){};
+    explicit LightTank(int playerId) : Vehicle(playerId, 1, 3){};
 
-    std::vector<Point> GetAvailableMovePoints() override;
+    [[nodiscard]] std::multimap<int, Point> GetAvailableMovePoints(Point target, int r) const override;
 
     std::vector<bool> IsAvailableForShoot(const std::vector<Point>& points) override;
+
+    Action PriorityAction() const override {return Action::SHOOT;}
 };
 
 

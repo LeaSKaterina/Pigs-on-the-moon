@@ -7,9 +7,11 @@ class MediumTank : public Vehicle {
 public:
     MediumTank(int playerId) : Vehicle(playerId, 2, 2) {};
 
-    std::vector<Point> GetAvailableMovePoints() override;
+    [[nodiscard]]  std::multimap<int, Point> GetAvailableMovePoints(Point target, int r) const override;
 
     std::vector<bool> IsAvailableForShoot(const std::vector<Point>& points) override;
+
+    Action PriorityAction() const override {return Action::MOVE;}
 };
 
 

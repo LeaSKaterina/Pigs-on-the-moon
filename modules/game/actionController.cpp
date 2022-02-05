@@ -181,15 +181,15 @@ vector<Point> ActionController::GetPointsForShoot(const vector<vector<int>>& att
     const vector<Vehicle *>& playerVehicles = vehicles[playerId];
 
     vector<vector<bool>> toAttack(5);
-    std::unordered_map<Vehicle*, std::vector<int>> res;
+    std::unordered_map<Vehicle*, std::vector<int>> r;
     for (auto& our : playerVehicles){
         for (auto vect : vehicles) {
                     if (vect[0]->GetPlayerId() != playerId)
                         continue;
                     for (auto v : vect) {
                         enemyPoints.push_back(v->GetCurrentPosition());
-                        if(our->mayAttack(v))
-                            res[v].push_back(our->id);
+//                        if(our->mayAttack(v))
+//                            res[v].push_back(our->id);
                     }
                 }
     }
@@ -206,6 +206,7 @@ vector<Point> ActionController::GetPointsForShoot(const vector<vector<int>>& att
     vector<Point> res(5);
     return res;
 }
-std::unordered_map<Vehicle *, std::vector<int>> ActionController::GetPointsForShoot(const vector<std::vector<int>> &attackMatrix, const vector<std::vector<Vehicle *>> &vehicles, int playerId, int playersNum, int playerVehiclesNum) {
+
+std::unordered_map<Vehicle *, vector<Vehicle*>> ActionController::GetPointsForShoot(const vector<std::vector<int>> &attackMatrix, const vector<std::vector<Vehicle *>> &vehicles, int playerId, int playersNum, int playerVehiclesNum) {
     return {};
 }
