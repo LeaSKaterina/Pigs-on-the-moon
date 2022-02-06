@@ -33,6 +33,8 @@ void Game::InitVariables(int playersNum) {
 
     vehicles.resize(playersNum);
     attackMatrix.resize(playersNum);
+    for (auto& v : attackMatrix)
+        v.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
     tanksIdAdapter.resize(numPlayerVehicles);
@@ -50,7 +52,6 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
     int next = 0;
     for (int i = 0; i < VehiclesTypes::typesNum; i++) {
         auto &tanks = realId.at(VehiclesTypes::sTypes[i]);
-        // q: is there more than one access?
         for (const auto &id: tanks) {
             tanksIdAdapter[next++] = id;
         }
@@ -101,13 +102,14 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
-void Game::UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
-    // TODO! square bool array.
-    vector<int> attackedId(numPlayers);
-    for (int i = 0; i < attacked.size(); i++) {
-        attackedId[i] = playersIdAdapter.at(attacked[i]);
+void Game::UpdateAttackMatrix(int playerId, const std::vector<int>& attacked) {
+    int customId = playersIdAdapter.at(playerId);
+    for (int i = 0; i < numPlayers; i++) {
+        attackMatrix[customId][i] = false;
     }
-    attackMatrix[playersIdAdapter.at(playerId)] = std::move(attackedId);
+    for (const int & i : attacked) {
+        attackMatrix[customId][playersIdAdapter.at(i)] = true;
+    }
 }
 
 bool TargetIsAvailable(const Point *target) {

@@ -205,7 +205,7 @@ void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
         for (int i: pm.value()) {
             vAttacked.push_back(i);
         }
-        game->UpdateAttackMatrix(stoi(pm.key()), move(vAttacked));
+        game->UpdateAttackMatrix(stoi(pm.key()), vAttacked);
     }
 }
 
