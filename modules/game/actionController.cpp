@@ -3,26 +3,26 @@
 using namespace std;
 
 // TODO
-vector<bool> ActionController::NeutralityRuleCheck2(const std::vector<std::vector<bool>> &attackMatrix, int playerId, int playersNum) {
-    vector<bool> canAttack;
-    canAttack.reserve(playersNum);
-    for (int i = 0; i < playersNum; i++) {
-        canAttack.push_back(true);
-    }
-    canAttack[playerId] = false;
 
-    for (int i = 0; i < attackMatrix.size(); i++) {
+//method analyze attackMatrix and return vector<bool>. If v[i] = true - we can attack i player
+vector<bool> ActionController::NeutralityRuleCheck2(const std::vector<std::vector<bool>> &attackMatrix, int playerId,
+                                                    int playersNum) {
+    vector<bool> canAttack(attackMatrix.size(), true); // return vector. Default we can attack anyone.
+    canAttack[playerId] = false;
+    // check
+    for (int i = 0; i < attackMatrix.size(); i++) { // consider who i is attacking
+        if (i == playerId)
+            continue;
         for (int j = 0; j < attackMatrix[i].size(); j++) {
-            if (i == j || i == playerId)
+            if (i == j || j == playerId) // we can skip j == playerId because canAttack[i] = true default
                 continue;
-            if (attackMatrix[i][j]) {
-                if (j == playerId)
-                    break;
-                canAttack[j] = attackMatrix[j][playerId];
+            if (attackMatrix[i][j]) {// j is the last enemy (third player). If true - i attacks j player.
+                canAttack[j] = attackMatrix[j][playerId]; // And if j don't attack us - we can't attack him.
                 break;
             }
         }
     }
+
     return canAttack;
 }
 
@@ -41,7 +41,7 @@ ActionController::NeutralityRuleCheck(const std::vector<std::vector<int>> &attac
             }
             for (int j = 0; j < attackMatrix[i].size(); j++) {
                 if (attackMatrix[i][j] == enemyId) {// he was attacked
-                    for (auto id : attackMatrix[enemyId]) {
+                    for (auto id: attackMatrix[enemyId]) {
                         if (id == playerId) {// but he attack us
                             break;
                         }
@@ -64,11 +64,11 @@ ActionController::GetPointsForShoot(const vector<vector<int>> &attackMatrix,
     vector<bool> canAttack(playersNum);
     canAttack = move(NeutralityRuleCheck(attackMatrix, playerId, playersNum));
     std::unordered_map<Vehicle *, vector<Vehicle *>> res;
-    for (auto &our : playerVehicles) {
+    for (auto &our: playerVehicles) {
         for (int i = 0; i < vehicles.size(); i++) {
             if (vehicles[i][0]->GetPlayerId() == playerId || !canAttack[i])
                 continue;
-            for (auto enemy : vehicles[i]) {
+            for (auto enemy: vehicles[i]) {
                 if (our->IsAvailableForShoot(enemy))
                     res[enemy].push_back(our);
             }
