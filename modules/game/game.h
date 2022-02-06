@@ -83,7 +83,7 @@ public:
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
-    [[nodiscard]] std::vector<std::tuple<Action, int, Hex *>> Play() const;
+    [[nodiscard]] std::vector<std::tuple<Action, int, Point>> Play() const;
 
     // get action
     // ...

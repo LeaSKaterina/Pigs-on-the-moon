@@ -22,7 +22,7 @@ public:
 
     virtual Action PriorityAction() const = 0;
 
-    int Shoot(Vehicle *v);
+    virtual Point Shoot(Vehicle *enemy) { return enemy->GetCurrentPosition();};
 
     void IncCapture() { capturePoints++; }
 

@@ -61,7 +61,7 @@ void GameClient::SendAction() const {
     auto actions = game->Play();
     for (auto &act: actions) {
         auto &[actionType, vehicleId, coordinate] = act;
-        auto &[x, y, z] = coordinate->GetCoordinates();
+        auto &[x, y, z] = coordinate;
         // TODO? Is there any check needed? as Hex* == nullptr
         Response resp = client->SendTankAction(actionType, vehicleId, x, y, z);
 #ifdef _DEBUG

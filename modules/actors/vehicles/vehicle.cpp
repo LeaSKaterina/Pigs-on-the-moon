@@ -10,12 +10,6 @@ bool Vehicle::Move(Hex *newPos) {
     return true;
 }
 
-int Vehicle::Shoot(Vehicle *v) { // return points for shooting this tank
-    if (IsEnemy(v))
-        return v->GetHit(this->DAMAGE);
-    return 0;
-}
-
 void Vehicle::Update(int health, Hex *newPos, int capture) {
     if (currentPosition)
         currentPosition->Free();

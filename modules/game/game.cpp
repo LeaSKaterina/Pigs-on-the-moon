@@ -115,9 +115,9 @@ bool TargetIsAvailable(const Point *target) {
     return !(x == -1 && y == -1 && z == -1);
 }
 
-vector<tuple<Action, int, Hex *>> Game::Play() const {
+vector<tuple<Action, int, Point>> Game::Play() const {
     Point targetPoint = make_tuple(0, 0, 0);
-    vector<tuple<Action, int, Hex *>> res;
+    vector<tuple<Action, int, Point>> res;
     Point target;
     const auto &playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
 
@@ -144,7 +144,7 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
             for (auto&[_, p]: priorityMoveTargets[i]) {
                 auto *point = map->Get(p);
                 if (point->IsEmpty()) {
-                    res.emplace_back(Action::MOVE, tanksIdAdapter[i], point);
+                    res.emplace_back(Action::MOVE, tanksIdAdapter[i], point->GetCoordinates());
                     satisfied = true;
                     point->Occupy();
                     break;
@@ -158,8 +158,7 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
-                        res.emplace_back(Action::SHOOT, tanksIdAdapter[i],
-                                         vToAttack->GetHexOfCurrentPosition());
+                        res.emplace_back(Action::SHOOT, tanksIdAdapter[i], playerVehicles[i]->Shoot(vToAttack));
 
                         break;
                     }
