@@ -36,8 +36,6 @@ public:
 
     [[nodiscard]] const Point &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
-    Hex *GetHexOfCurrentPosition() const { return currentPosition; }
-
     int GetHp() const { return health; }
 
     bool IsAlive() const { return health > 0; }
