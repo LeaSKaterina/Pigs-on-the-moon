@@ -10,10 +10,8 @@ bool AtSpg::IsAvailableForShoot(Vehicle *enemy) {
     if (d > 3)
         return false;
 
-    vector<Point> ring = move(Hex::GetRing(this->GetCurrentPosition(), d));
-    for (int i = 0; i < 6; i++) {
-        if (enemy->GetCurrentPosition() == ring[i])
-            return true;
-    }
-    return false;
+    return (get<0>(this->GetCurrentPosition()) == get<0>(enemy->GetCurrentPosition()) ||
+            get<1>(this->GetCurrentPosition()) == get<1>(enemy->GetCurrentPosition()) ||
+            get<2>(this->GetCurrentPosition()) == get<2>(enemy->GetCurrentPosition()));
+
 }
