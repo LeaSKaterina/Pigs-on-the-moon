@@ -4,7 +4,7 @@ using namespace std;
 using namespace VehiclesTypes;
 
 Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
-    for (auto *p: vehicles[adaptedPlayerId]) {
+    for (auto *p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
     }
@@ -14,8 +14,8 @@ Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
 Game::~Game() {
     delete player;
     delete map;
-    for (auto &vehicle: vehicles) {
-        for (auto v: vehicle) {
+    for (auto &vehicle : vehicles) {
+        for (auto v : vehicle) {
             delete v;
         }
     }
@@ -33,6 +33,8 @@ void Game::InitVariables(int playersNum) {
 
     vehicles.resize(playersNum);
     attackMatrix.resize(playersNum);
+    for (auto &v : attackMatrix)
+        v.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
     tanksIdAdapter.resize(numPlayerVehicles);
@@ -50,8 +52,7 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
     int next = 0;
     for (int i = 0; i < VehiclesTypes::typesNum; i++) {
         auto &tanks = realId.at(VehiclesTypes::sTypes[i]);
-        // q: is there more than one access?
-        for (const auto &id: tanks) {
+        for (const auto &id : tanks) {
             tanksIdAdapter[next++] = id;
         }
     }
@@ -101,17 +102,18 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
-void Game::UpdateAttackMatrix(int playerId, std::vector<int> attacked) {
-    // TODO! square bool array.
-    vector<int> attackedId(numPlayers);
-    for (int i = 0; i < attacked.size(); i++) {
-        attackedId[i] = playersIdAdapter.at(attacked[i]);
+void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
+    int customId = playersIdAdapter.at(playerId);
+    for (int i = 0; i < numPlayers; i++) {
+        attackMatrix[customId][i] = false;
     }
-    attackMatrix[playersIdAdapter.at(playerId)] = std::move(attackedId);
+    for (const int &i : attacked) {
+        attackMatrix[customId][playersIdAdapter.at(i)] = true;
+    }
 }
 
 bool TargetIsAvailable(const Point *target) {
-    auto[x, y, z] = *target;
+    auto [x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 
@@ -134,14 +136,14 @@ vector<tuple<Action, int, Point>> Game::Play() const {
                                                      playersIdAdapter.at(player->GetId()),
                                                      numPlayers));
 
-    ProcessAttackPossibility(priorityShootTargets); // Check if it's ok
+    ProcessAttackPossibility(priorityShootTargets);// Check if it's ok
 
     bool round = false;
     for (int i = 0; i < numPlayerVehicles;) {
         auto *current = playerVehicles[i];
         bool satisfied = false;
         if (current->PriorityAction() == Action::MOVE || round) {
-            for (auto&[_, p]: priorityMoveTargets[i]) {
+            for (auto &[_, p] : priorityMoveTargets[i]) {
                 auto *point = map->Get(p);
                 if (point->IsEmpty()) {
                     res.emplace_back(Action::MOVE, tanksIdAdapter[i], point->GetCoordinates());
@@ -154,7 +156,7 @@ vector<tuple<Action, int, Point>> Game::Play() const {
         if (!satisfied && !priorityShootTargets.empty() && current->PriorityAction() == Action::SHOOT) {
             if (!priorityShootTargets[current].empty()) {
                 // TODO: priority.
-                for (auto *vToAttack: priorityShootTargets.at(current)) {
+                for (auto *vToAttack : priorityShootTargets.at(current)) {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
@@ -178,10 +180,10 @@ vector<tuple<Action, int, Point>> Game::Play() const {
 
 // TODO! priority
 void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> &priorityShootTargets) {
-    for (auto&[attackedV, playerV]: priorityShootTargets) {
+    for (auto &[attackedV, playerV] : priorityShootTargets) {
         if (attackedV->GetHp() > playerV.size())
             continue;
-        for (auto *v: playerV) {
+        for (auto *v : playerV) {
             priorityShootTargets[v].push_back(attackedV);
         }
     }

@@ -1,16 +1,16 @@
 #pragma once
 
+#include "actionController.h"
 #include "actors/player.h"
-#include "actors/vehicles/vehicle.h"
-#include "actors/vehicles/spg.h"
 #include "actors/vehicles/atSpg.h"
 #include "actors/vehicles/heavyTank.h"
 #include "actors/vehicles/lightTank.h"
 #include "actors/vehicles/mediumTank.h"
+#include "actors/vehicles/spg.h"
+#include "actors/vehicles/vehicle.h"
 #include "enums/action.h"
 #include "enums/vehicleTypes.h"
 #include "map/map.h"
-#include "actionController.h"
 #include <map>
 #include <string>
 #include <tuple>
@@ -42,7 +42,7 @@ private:
 
     bool isFinished = false;
 
-    std::vector<std::vector<int>> attackMatrix;// {"id" : "whom attack"}
+    std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
     Map *map;
 
     Player *player;
@@ -79,7 +79,7 @@ public:
     void UpdateVehicleState(int parentId, Point spawn, Point pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, std::vector<int> attacked);
+    void UpdateAttackMatrix(int playerId, const std::vector<int> &attacked);
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
