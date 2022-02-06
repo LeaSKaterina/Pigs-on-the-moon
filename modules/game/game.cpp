@@ -21,6 +21,11 @@ Game::~Game() {
     }
 }
 
+Game::Game(int playerId, std::string name, std::string password, int playersNum) {
+    player = new Player(playerId, std::move(name), std::move(password));
+    InitVariables(playersNum);
+}
+
 void Game::InitVariables(int playersNum) {
     numPlayers = playersNum;
     numTurns = numRounds * numPlayers;
@@ -131,7 +136,6 @@ vector<tuple<Action, int, Hex *>> Game::Play() const {
 
     ProcessAttackPossibility(priorityShootTargets); // Check if it's ok
 
-    // TODO! Shoot -> Move
     bool round = false;
     for (int i = 0; i < numPlayerVehicles;) {
         auto *current = playerVehicles[i];

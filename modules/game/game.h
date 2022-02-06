@@ -28,8 +28,6 @@ private:
     std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]
     std::vector<int> tanksIdAdapter;    // save real id for server
 
-    // order??
-
     std::vector<int> captures;
     std::vector<int> kills;
 
@@ -51,23 +49,19 @@ private:
 
     [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point &spawn) const;
 
+    void InitVariables(int playersNum = 3);
+
     // Strategy
     static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
 
 public:
-    Game() = default;
+    Game(int playerId, std::string name, std::string password = "", int playersNum = 3);
 
     ~Game();
 
     // init methods
     // all inits must be called firstly!
     void InitMap(int size) { map = new Map(size); }
-
-    void InitPlayer(int id, std::string name, std::string password = "") {
-        player = new Player(id, std::move(name), std::move(password));
-    }
-
-    void InitVariables(int playersNum = 3);
 
     void InitPlayersId(const std::vector<int> &realId);
 

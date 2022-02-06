@@ -11,10 +11,10 @@ bool GameClient::Login(const string &name, const string &password, const string 
         return false;
 
     int id = answer.answer.value("idx", -1);
-    this->game->InitPlayer(id, name, password);
 
     // Always init game for _3_ players
-    game->InitVariables();
+    game = new Game(id, name, password);
+
     return true;
 }
 
