@@ -9,7 +9,7 @@
 
 class GameClient {
 public:
-    explicit GameClient() : game(new Game()), client(new Client()) {}
+    explicit GameClient() : game(nullptr), client(new Client()) {}
 
     ~GameClient();
 
