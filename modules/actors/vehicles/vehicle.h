@@ -14,21 +14,15 @@ public:
               SPEED_POINTS(speed),
               DESTRUCTION_POINTS(hp) {}
 
-    bool Move(Hex *newPos);
+    void InitSpawn(Hex *p);
 
     std::multimap<int, Point> GetAvailableMovePoints(const Point &target);
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 
-    virtual Action PriorityAction() const = 0;
-
     virtual Point Shoot(Vehicle *enemy) { return enemy->GetCurrentPosition();};
 
-    void IncCapture() { capturePoints++; }
-
-    void DropCapture() { capturePoints = 0; }
-
-    void Update(int health, Hex *newPos, int capture);
+    // getters
 
     [[nodiscard]] int GetPlayerId() const { return PLAYER_ID; }
 
@@ -36,15 +30,27 @@ public:
 
     [[nodiscard]] const Point &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
-    int GetHp() const { return health; }
+    [[nodiscard]] int GetHp() const { return health; }
 
-    bool IsAlive() const { return health > 0; }
+    [[nodiscard]] bool IsAlive() const { return health > 0; }
 
-    void InitSpawn(Hex *p);
+    [[nodiscard]] virtual Action PriorityAction() const = 0;
+
+    std::vector<Point> PriorityMoveTriangle(const Point&& target);
+
+    // mods
 
     void Respawn();
 
     int GetHit(int damage = 1);
+
+    void IncCapture() { capturePoints++; }
+
+    void DropCapture() { capturePoints = 0; }
+
+    void Update(int health, Hex *newPos, int capture);
+
+    bool Move(Hex *newPos);
 
 private:
     const int PLAYER_ID;
@@ -57,5 +63,6 @@ private:
     Hex *currentPosition = nullptr;
 
     bool IsEnemy(Vehicle *v) const { return this->PLAYER_ID != v->PLAYER_ID; }
+    static bool IsBetweenCoo(int coo, int first, int second);
 };
 

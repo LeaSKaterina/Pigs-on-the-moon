@@ -36,4 +36,8 @@ public:
 
     static std::vector<Point> GetRing(Point center, int r);
 
+    static int GetCooValue(const Point& p, int index);
+
+//    static Point GetDiagonalVector(const Point& from, const Point& to, int radius);
+    static Point GetDiagonalVector(const int* from, const int* to, int radius); // Point array : int[3]
 };

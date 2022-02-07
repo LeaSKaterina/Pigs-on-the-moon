@@ -29,13 +29,48 @@ vector<Point> Hex::GetRing(Point center, int r) {
             pointArr[i % 3] = centerArr[i % 3] + (r - dr);
             pointArr[(i + 1) % 3] = centerArr[(i + 1) % 3] + dr;
             pointArr[(i + 2) % 3] = centerArr[(i + 2) % 3] - r;
-            res.push_back(make_tuple(pointArr[0], pointArr[1], pointArr[2]));
+            res.emplace_back(pointArr[0], pointArr[1], pointArr[2]);
             pointArr[i % 3] = centerArr[i % 3] - (r - dr);
             pointArr[(i + 1) % 3] = centerArr[(i + 1) % 3] - dr;
             pointArr[(i + 2) % 3] = centerArr[(i + 2) % 3] + r;
-            res.push_back(make_tuple(pointArr[0], pointArr[1], pointArr[2]));
+            res.emplace_back(pointArr[0], pointArr[1], pointArr[2]);
         }
     }
 
     return res;
+}
+
+int Hex::GetCooValue(const Point &p, int index) {
+    return !index
+           ? get<0>(p)
+           : index == 1
+           ? get<1>(p)
+           : get<2>(p);
+//    switch(index) {
+//        case 0:
+//            return std::get<0>(p);
+//        case 1:
+//            return std::get<1>(p);
+//        default:
+//            return std::get<2>(p);
+//    }
+}
+Point Hex::GetDiagonalVector(const int* from, const int *to, int radius) {
+    // find on which coordinate this diagonal is:
+    int coo = 0;
+    for (; coo < 3; coo++) {
+        if (from[coo] == to[coo])
+            break;
+    }
+    if (coo > 3) return Point{-1, -1, -1};
+    int res[3];
+    for (int i = 0; i < 3; i++){
+        if (i == coo)
+            res[i] = from[i];
+        else {
+            int direction = to[i] > 0 ? 1 : -1;
+            res[i] = from[i] + radius * direction;
+        }
+    }
+    return {res[0], res[1], res[2]};
 }
