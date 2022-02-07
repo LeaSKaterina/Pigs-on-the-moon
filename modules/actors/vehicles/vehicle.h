@@ -22,7 +22,7 @@ public:
 
     virtual Action PriorityAction() const = 0;
 
-    int Shoot(Vehicle *v);
+    virtual Point Shoot(Vehicle *enemy) { return enemy->GetCurrentPosition();};
 
     void IncCapture() { capturePoints++; }
 
@@ -35,8 +35,6 @@ public:
     [[nodiscard]] const Point &GetSpawn() const { return spawnPosition->GetCoordinates(); }
 
     [[nodiscard]] const Point &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
-
-    Hex *GetHexOfCurrentPosition() const { return currentPosition; }
 
     int GetHp() const { return health; }
 

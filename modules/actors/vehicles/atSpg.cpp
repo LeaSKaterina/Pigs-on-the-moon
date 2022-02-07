@@ -10,10 +10,36 @@ bool AtSpg::IsAvailableForShoot(Vehicle *enemy) {
     if (d > 3)
         return false;
 
-    vector<Point> ring = move(Hex::GetRing(this->GetCurrentPosition(), d));
-    for (int i = 0; i < 6; i++) {
-        if (enemy->GetCurrentPosition() == ring[i])
-            return true;
+    return (get<0>(this->GetCurrentPosition()) == get<0>(enemy->GetCurrentPosition()) ||
+            get<1>(this->GetCurrentPosition()) == get<1>(enemy->GetCurrentPosition()) ||
+            get<2>(this->GetCurrentPosition()) == get<2>(enemy->GetCurrentPosition()));
+}
+
+Point AtSpg::Shoot(Vehicle *enemy) {
+
+    const auto &[x, y, z] = this->GetCurrentPosition();
+    const auto &[enemyX, enemyY, enemyZ] = enemy->GetCurrentPosition();
+
+    if (x == enemyX) {
+        if (y > enemyY) {
+            return make_tuple(x, y - 1, z + 1);
+        } else {
+            return make_tuple(x, y + 1, z - 1);
+        }
     }
-    return false;
+    if (y == enemyY) {
+        if (x > enemyX) {
+            return make_tuple(x - 1, y, z + 1);
+        } else {
+            return make_tuple(x + 1, y, z - 1);
+        }
+    }
+    if (z == enemyZ) {
+        if (x > enemyX) {
+            return make_tuple(x - 1, y + 1, z);
+        } else {
+            return make_tuple(x + 1, y - 1, z);
+        }
+    }
+    return make_tuple(0, 0, 0);
 }

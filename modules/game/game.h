@@ -1,16 +1,16 @@
 #pragma once
 
+#include "actionController.h"
 #include "actors/player.h"
-#include "actors/vehicles/vehicle.h"
-#include "actors/vehicles/spg.h"
 #include "actors/vehicles/atSpg.h"
 #include "actors/vehicles/heavyTank.h"
 #include "actors/vehicles/lightTank.h"
 #include "actors/vehicles/mediumTank.h"
+#include "actors/vehicles/spg.h"
+#include "actors/vehicles/vehicle.h"
 #include "enums/action.h"
 #include "enums/vehicleTypes.h"
 #include "map/map.h"
-#include "actionController.h"
 #include <map>
 #include <string>
 #include <tuple>
@@ -83,7 +83,7 @@ public:
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
-    [[nodiscard]] std::vector<std::tuple<Action, int, Hex *>> Play() const;
+    [[nodiscard]] std::vector<std::tuple<Action, int, Point>> Play() const;
 
     // get action
     // ...

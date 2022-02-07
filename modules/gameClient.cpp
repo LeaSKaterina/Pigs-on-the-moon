@@ -59,13 +59,13 @@ bool GameClient::SendTurn() const {
 
 void GameClient::SendAction() const {
     auto actions = game->Play();
-    for (auto &act: actions) {
+    for (auto &act : actions) {
         auto &[actionType, vehicleId, coordinate] = act;
-        auto &[x, y, z] = coordinate->GetCoordinates();
+        auto &[x, y, z] = coordinate;
         // TODO? Is there any check needed? as Hex* == nullptr
         Response resp = client->SendTankAction(actionType, vehicleId, x, y, z);
 #ifdef _DEBUG
-        std::cerr << (int)resp.result << " " << resp.answer << std::endl;
+        std::cerr << (int) resp.result << " " << resp.answer << std::endl;
 #endif
     }
 }
@@ -112,7 +112,7 @@ void GameClient::InitMap() {
     auto contentInfo = mapInfo.value("content", nlohmann::ordered_json(""));
     auto baseInfo = contentInfo.value("base", nlohmann::ordered_json(""));
     vector<tuple<int, int, int>> basePoints;
-    for (auto &point: baseInfo) {
+    for (auto &point : baseInfo) {
         basePoints.emplace_back(MakePosTuple(point));
     }
     game->AddBase(basePoints);
@@ -125,15 +125,17 @@ void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {
          << " :Spawn Info" << endl;
 #endif
     int index = 0;
-    for (auto &player: spawnInfo.items()) {
+    for (auto &player : spawnInfo.items()) {
         for (int i = 0; i < VehiclesTypes::typesNum; i++) {
             const auto &type = VehiclesTypes::sTypes[i];
             auto spawns = player.value().value(type, nlohmann::ordered_json(""));
-            for (auto &spawn: spawns.items()) {
+            for (auto &spawn : spawns.items()) {
                 auto &point = spawn.value();
 #ifdef _DEBUG
-                cout << "SPAWNS:\n" << spawns << "\n:SPAWNS" << endl;
-                cout << "POINT:\n" << point << "\n:POINTS" << endl;
+                cout << "SPAWNS:\n"
+                     << spawns << "\n:SPAWNS" << endl;
+                cout << "POINT:\n"
+                     << point << "\n:POINTS" << endl;
 #endif
                 game->AddVehicle(index,
                                  VehiclesTypes::Type(i),
@@ -146,7 +148,7 @@ void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {
 
 void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
     vector<int> realIds;
-    for (auto &pm: am.items()) {
+    for (auto &pm : am.items()) {
         realIds.push_back(stoi(pm.key()));
     }
     game->InitPlayersId(realIds);
@@ -157,7 +159,7 @@ void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
     // copy strings ...
     unordered_map<string, vector<int>> vehiclesIds;
     int currentPlayerId = -1;
-    for (auto &v: vehicles.items()) {
+    for (auto &v : vehicles.items()) {
         auto &vehicleInfo = v.value();
         int playerId = vehicleInfo.value("player_id", -1);
         string vehicleType = vehicleInfo.value("vehicle_type", "unknown");
@@ -177,7 +179,7 @@ void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
 
 
 void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
-    for (auto &v: vehicles.items()) {
+    for (auto &v : vehicles.items()) {
         auto &vehicleInfo = v.value();
 
         auto pos = MakePosTuple(
@@ -196,13 +198,13 @@ void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
 
 void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
     //    const int vector_size = game->GetNumPlayers();
-    for (auto &pm: am.items()) {
+    for (auto &pm : am.items()) {
         // player id = pm.key, vector of attacks = pm.value
         // to upd : is there a way to do vector without a loop ?
 
         vector<int> vAttacked;
         //        auto& arr_attacked = pm.value();
-        for (int i: pm.value()) {
+        for (int i : pm.value()) {
             vAttacked.push_back(i);
         }
         game->UpdateAttackMatrix(stoi(pm.key()), vAttacked);
@@ -211,7 +213,7 @@ void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
 
 void GameClient::UpdateWinPoints(const nlohmann::ordered_json &&winPoints) {
     cerr << "DEBUG: " << winPoints << endl;
-    for (auto &player: winPoints.items()) {
+    for (auto &player : winPoints.items()) {
         auto &winPointsInfo = player.value();
         game->UpdateWinPoints(
                 stoi(player.key()),
