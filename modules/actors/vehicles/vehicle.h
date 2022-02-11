@@ -8,27 +8,27 @@
 class Vehicle {
 public:
     Vehicle(int ownerId, int hp, int speed, int damage = 1)
-            : PLAYER_ID(ownerId),
-              DAMAGE(damage),
+            : playerId(ownerId),
+          damage(damage),
               health(hp),
-              SPEED_POINTS(speed),
-              DESTRUCTION_POINTS(hp) {}
+          speedPoints(speed),
+          destructionPoints(hp) {}
 
     void InitSpawn(Hex *p);
 
-    std::multimap<int, Point> GetAvailableMovePoints(const Point &target);
+    std::multimap<int, Point3D> GetAvailableMovePoints(const Point3D &target);
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 
-    virtual Point Shoot(Vehicle *enemy) { return enemy->GetCurrentPosition();};
+    virtual Point3D Shoot(Vehicle *enemy) { return enemy->GetCurrentPosition();};
 
     // getters
 
-    [[nodiscard]] int GetPlayerId() const { return PLAYER_ID; }
+    [[nodiscard]] int GetPlayerId() const { return playerId; }
 
-    [[nodiscard]] const Point &GetSpawn() const { return spawnPosition->GetCoordinates(); }
+    [[nodiscard]] const Point3D &GetSpawn() const { return spawnPosition->GetCoordinates(); }
 
-    [[nodiscard]] const Point &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
+    [[nodiscard]] const Point3D &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
     [[nodiscard]] int GetHp() const { return health; }
 
@@ -36,7 +36,7 @@ public:
 
     [[nodiscard]] virtual Action PriorityAction() const = 0;
 
-    std::vector<Point> PriorityMoveTriangle(const Point&& target);
+    std::vector<Point3D> PriorityMoveTriangle(const Point3D&& target);
 
     // mods
 
@@ -53,16 +53,16 @@ public:
     bool Move(Hex *newPos);
 
 private:
-    const int PLAYER_ID;
+    const int playerId;
     int health;
-    const int DESTRUCTION_POINTS;
-    const int SPEED_POINTS;
-    const int DAMAGE;
+    const int destructionPoints;
+    const int speedPoints;
+    const int damage;
     int capturePoints = 0;
     Hex *spawnPosition = nullptr;
     Hex *currentPosition = nullptr;
 
-    bool IsEnemy(Vehicle *v) const { return this->PLAYER_ID != v->PLAYER_ID; }
+    bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
     static bool IsBetweenCoo(int coo, int first, int second);
 };
 

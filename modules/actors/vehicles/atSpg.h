@@ -10,5 +10,5 @@ public:
 
     Action PriorityAction() const override { return Action::SHOOT; }
 
-    Point Shoot(Vehicle *enemy) override;
+    Point3D Shoot(Vehicle *enemy) override;
 };

@@ -3,7 +3,7 @@
 using namespace std;
 using namespace VehiclesTypes;
 
-Vehicle *Game::Find(int adaptedPlayerId, const Point &spawn) const {
+Vehicle *Game::Find(int adaptedPlayerId, const Point3D &spawn) const {
     for (auto *p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
@@ -60,7 +60,7 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
 
 // Add
 
-void Game::AddVehicle(int playerId, Type type, tuple<int, int, int> spawn) {
+void Game::AddVehicle(int playerId, Type type, Point3D spawn) {
     // there choose type of tanks
     Vehicle *t;
     switch (type) {
@@ -90,7 +90,7 @@ void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
     isFinished = finished;
 }
 
-void Game::UpdateVehicleState(int parentId, Point spawn, Point pos, int health,
+void Game::UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
                               int capturePoints) {
     Vehicle *v = Find(playersIdAdapter.at(parentId), spawn);
     v->Update(health, map->Get(pos), capturePoints);
@@ -113,18 +113,18 @@ void Game::UpdateAttackMatrix(int playerId, const std::vector<int>& attacked) {
     }
 }
 
-bool TargetIsAvailable(const Point *target) {
-    auto [x, y, z] = *target;
+bool TargetIsAvailable(const Point3D *target) {
+    auto [_, x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 
-vector<tuple<Action, int, Point>> Game::Play() const {
-    Point targetPoint = make_tuple(0, 0, 0);
-    vector<tuple<Action, int, Point>> res;
-    Point target;
+vector<tuple<Action, int, Point3D>> Game::Play() const {
+    Point3D targetPoint {0, 0, 0};
+    vector<tuple<Action, int, Point3D>> res;
+    Point3D target;
     const auto &playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
 
-    vector<multimap<int, Point>> priorityMoveTargets(numPlayerVehicles);
+    vector<multimap<int, Point3D>> priorityMoveTargets(numPlayerVehicles);
 
     for (int i = 0; i < numPlayerVehicles; i++) {
         // TODO: There will be another check for danger

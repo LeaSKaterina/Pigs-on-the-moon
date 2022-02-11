@@ -1,11 +1,12 @@
 #pragma once
 
 #include "client/client.h"
-#include "game/game.h"
 #include "enums/vehicleTypes.h"
+#include "game/game.h"
+#include "map/Point3D.h"
 
-#include <unordered_map>
 #include <nlohmann/json.hpp>
+#include <unordered_map>
 
 class GameClient {
 public:
@@ -36,12 +37,16 @@ public:
 
     void SendAction() const;
 
+    void StartAI(const std::string &name, const std::string &password = "",
+                  const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
+                  bool isObserver = false);
+
 private:
     // entities
     Game *game;
     Client *client;
 
-    static Point MakePosTuple(const nlohmann::json &&coordinate);
+    static Point3D MakePosTuple(const nlohmann::json &&coordinate);
 
     // init methods
     bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
@@ -62,5 +67,4 @@ private:
     void UpdateAttackMatrix(const nlohmann::ordered_json &&am);
 
     void UpdateWinPoints(const nlohmann::ordered_json &&winPoints);
-
 };

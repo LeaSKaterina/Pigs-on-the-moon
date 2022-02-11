@@ -26,40 +26,41 @@ void Vehicle::InitSpawn(Hex *p) {
 
 void Vehicle::Respawn() {
     Move(spawnPosition);
-    health = DESTRUCTION_POINTS;
+    health = destructionPoints;
     capturePoints = 0;
 }
 
 int Vehicle::GetHit(int damage) {
     this->health -= damage;
     if (health <= 0)
-        return DESTRUCTION_POINTS;
+        return destructionPoints;
     return 0;
 
 }
 
-std::multimap<int, Point> Vehicle::GetAvailableMovePoints(const Point &target) {
-    const Point &center = this->currentPosition->GetCoordinates();
-    std::multimap<int, Point> availablePoints;
+std::multimap<int, Point3D> Vehicle::GetAvailableMovePoints(const Point3D &target) {
+    const Point3D &center = this->currentPosition->GetCoordinates();
+    std::multimap<int, Point3D> availablePoints;
 
-    for (int i = SPEED_POINTS; i > 0; --i) {
-        std::vector<Point> ring = Hex::GetRing(center, i);
-        for (const Point &point: ring) {
-            if (Hex::GetDistance(point, Point(0, 0, 0)) < 12) // 12?
-                availablePoints.emplace(Hex::GetDistance(point, target), point);
+    for (int i = speedPoints; i > 0; --i) {
+        std::vector<Point3D> ring = Hex::GetRing(center, i);
+        for (const Point3D &point: ring) {
+            if (point.Distance(Point3D(0, 0, 0)) < 12) // 12?
+                availablePoints.emplace(point.Distance(target), point);
         }
     }
 
     return availablePoints;
 }
-std::vector<Point> Vehicle::PriorityMoveTriangle(const Point &&target) {
+std::vector<Point3D> Vehicle::PriorityMoveTriangle(const Point3D &&target) {
     // 0 1 2
     std::vector<int[3]> to_check(6);
-    int current[3] = {
-            std::get<0>(this->currentPosition->GetCoordinates()),
-            std::get<1>(this->currentPosition->GetCoordinates()),
-            std::get<2>(this->currentPosition->GetCoordinates())
-    };
+//    int current[3] = {
+//            std::get<0>(this->currentPosition->GetCoordinates()),
+//            std::get<1>(this->currentPosition->GetCoordinates()),
+//            std::get<2>(this->currentPosition->GetCoordinates())
+//    };
+    Point3D current = this->currentPosition->GetCoordinates();
     int next = 0;
 
     // point of two triangles.
@@ -87,12 +88,13 @@ std::vector<Point> Vehicle::PriorityMoveTriangle(const Point &&target) {
             valid_ind.push_back(i);
     }
 
-    std::vector<Point> triangle_base_points(2);
+    std::vector<Point3D> triangleBasePoints(2);
     for (int i = 0; i < 2; i++) {
-        triangle_base_points[i] = std::move(Hex::GetDiagonalVector(current, to_check[valid_ind[i]], SPEED_POINTS));
+        Point3D checkPoint (to_check[valid_ind[i]][0], to_check[valid_ind[i]][1], to_check[valid_ind[i]][2]);
+        triangleBasePoints[i] = Hex::GetDiagonalVector(current, checkPoint, speedPoints);
     }
 
-    return triangle_base_points;
+    return triangleBasePoints;
 }
 
 bool Vehicle::IsBetweenCoo(int coo, int first, int second) {

@@ -30,11 +30,10 @@ int main() {
 
     ourOrder = min(ourOrder, playersCount);// simple check for easy life
 
-
     gameName += "_" + std::to_string(playersCount) + "_" + std::to_string(ourOrder);
 
     GameClient gc;                                        // our overmind
-    std::vector<GameClient> gameClients(playersCount - 1);// bots
+    std::vector<GameClient> gameClients(playersCount - 1);//, GameClient());// bots
     std::vector<std::thread> threads;
 
     int botCount = 0;

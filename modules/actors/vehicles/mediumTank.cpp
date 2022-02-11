@@ -2,6 +2,6 @@
 
 
 bool MediumTank::IsAvailableForShoot(Vehicle *enemy) {
-    return Hex::GetDistance(this->GetCurrentPosition(), enemy->GetCurrentPosition()) == 2;
+    return this->GetCurrentPosition().Distance(enemy->GetCurrentPosition()) == 2;
 }
 
