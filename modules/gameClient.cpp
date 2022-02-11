@@ -224,6 +224,19 @@ void GameClient::UpdateWinPoints(const nlohmann::ordered_json &&winPoints) {
 
 void GameClient::StartAI(const string &name, const string &password, const string &gameName, int numTurns,
                          int numPlayers, bool isObserver) {
+    InitGame(name, password, gameName, numTurns, numPlayers);
+    while (!SendTurn()) {}// wait all players
+    InitIds();
+    while (!GameIsFinished()) {
+        UpdateGameState();
+        if (IsPlayTime())// play only our turn
+            SendAction();
 
+#ifdef _DEBUG
+        std::cerr << "\n---------------------------------------\n";
+#endif
+
+        SendTurn();
+    }
 
 }
