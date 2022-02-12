@@ -61,7 +61,7 @@ void GameClient::SendAction() const {
     auto actions = game->Play();
     for (auto &act : actions) {
         auto &[actionType, vehicleId, coordinate] = act;
-        auto &[x, y, z] = coordinate;
+        auto &[_, x, y, z] = coordinate;
         // TODO? Is there any check needed? as Hex* == nullptr
         Response resp = client->SendTankAction(actionType, vehicleId, x, y, z);
 #ifdef _DEBUG
@@ -88,8 +88,8 @@ void GameClient::InitIds() {
 }
 
 
-Point GameClient::MakePosTuple(const nlohmann::json &&coordinate) {
-    return make_tuple(
+Point3D GameClient::MakePosTuple(const nlohmann::json &&coordinate) {
+    return Point3D(
             coordinate.value("x", -1),
             coordinate.value("y", -1),
             coordinate.value("z", -1));
@@ -110,14 +110,15 @@ void GameClient::InitMap() {
     InitSpawns(mapInfo.value("spawn_points", nlohmann::ordered_json("")));
 
     auto contentInfo = mapInfo.value("content", nlohmann::ordered_json(""));
+
     for (int i = 0; i < ConstructionsTypes::typesNum; i++) {
         auto cInfo = contentInfo
                              .value(
                                      ConstructionsTypes::sTypes[i],
                                      nlohmann::ordered_json(""));
-        vector<tuple<int, int, int>> basePoints;
+        vector<Point3D> basePoints;
         for (auto &point : cInfo) {
-            basePoints.emplace_back(MakePosTuple(point));
+            basePoints.push_back(MakePosTuple(point));
         }
         game->AddConstruct(ConstructionsTypes::Type(i), basePoints);
     }
@@ -225,4 +226,23 @@ void GameClient::UpdateWinPoints(const nlohmann::ordered_json &&winPoints) {
                 winPointsInfo.value("capture", 0),
                 winPointsInfo.value("kill", 0));
     }
+}
+
+void GameClient::StartAI(const string &name, const string &password, const string &gameName, int numTurns,
+                         int numPlayers, bool isObserver) {
+    InitGame(name, password, gameName, numTurns, numPlayers);
+    while (!SendTurn()) {}// wait all players
+    InitIds();
+    while (!GameIsFinished()) {
+        UpdateGameState();
+        if (IsPlayTime())// play only our turn
+            SendAction();
+
+#ifdef _DEBUG
+        std::cerr << "\n---------------------------------------\n";
+#endif
+
+        SendTurn();
+    }
+
 }

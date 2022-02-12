@@ -47,7 +47,7 @@ private:
 
     Player *player;
 
-    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point &spawn) const;
+    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point3D &spawn) const;
 
     void InitVariables(int playersNum = 3);
 
@@ -69,21 +69,22 @@ public:
 
     // add methods
 
-    void AddVehicle(int playerId, VehiclesTypes::Type type, Point spawn);
+    void AddVehicle(int playerId, VehiclesTypes::Type type, Point3D spawn);
 
-    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point> &points) { map->AddConstruction(type, points); }
+    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point3D> &points) { map->AddConstruction(type, points); }
+
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
 
-    void UpdateVehicleState(int parentId, Point spawn, Point pos, int health,
+    void UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
                             int capturePoints);
 
     void UpdateAttackMatrix(int playerId, const std::vector<int>& attacked);
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
-    [[nodiscard]] std::vector<std::tuple<Action, int, Point>> Play() const;
+    [[nodiscard]] std::vector<std::tuple<Action, int, Point3D>> Play() const;
 
     // get action
     // ...

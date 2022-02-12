@@ -1,33 +1,30 @@
 #pragma once
 
+#include "map/Point3D.h"
 #include <cstdlib>
 #include <tuple>
 #include <vector>
 
-typedef std::tuple<int, int, int> Point;
-
 struct Hex {
 
 private:
-    Point coordinates;
+    Point3D coordinates;
     bool isEmpty = true;
     // TODO! remove. it's useless
     int ownerId = -1;
 
 public:
-    Hex(int x, int y, int z) { coordinates = std::make_tuple(x, y, z); }
+    Hex(int x, int y, int z) : coordinates(x, y, z) {}
 
     [[nodiscard]] bool IsEmpty() const { return isEmpty; }
 
     [[nodiscard]] bool IsSpecial() const { return ownerId != -1; }
 
-    [[nodiscard]] const Point &GetCoordinates() const { return coordinates; }
+    [[nodiscard]] const Point3D &GetCoordinates() const { return coordinates; }
 
     bool Occupy();
 
     void Free() { isEmpty = true; }
-
-    static int GetDistance(const Point &f, const Point &s);
 
     void SetOwnerId(int id) { ownerId = id; }
 
@@ -35,10 +32,10 @@ public:
 
     bool operator==(const Hex &rhs) const { return coordinates == rhs.coordinates; }
 
-    static std::vector<Point> GetRing(Point center, int r);
+    static std::vector<Point3D> GetRing(Point3D center, int r);
 
-    static int GetCooValue(const Point& p, int index);
+    static int GetCooValue(const Point3D& p, int index);
 
 //    static Point GetDiagonalVector(const Point& from, const Point& to, int radius);
-    static Point GetDiagonalVector(const int* from, const int* to, int radius); // Point array : int[3]
+    static Point3D GetDiagonalVector(const Point3D &from, const Point3D &to, int radius); // Point array : int[3]
 };
