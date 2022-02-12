@@ -22,8 +22,6 @@ mkdir conanBuild
 cd conanBuild
 conan install ..
 ```
-As sfml is a shared lib in folder conanBuild creates bin folder. Move this folder to bin folder
-with executable file.
 
 ## Some words about development
 
