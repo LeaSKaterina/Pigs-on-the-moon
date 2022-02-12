@@ -11,6 +11,7 @@ struct Hex {
 private:
     Point coordinates;
     bool isEmpty = true;
+    // TODO! remove. it's useless
     int ownerId = -1;
 
 public:

@@ -2,7 +2,7 @@
 
 #include "client/client.h"
 #include "game/game.h"
-#include "enums/vehicleTypes.h"
+#include "enums/types.h"
 
 #include <unordered_map>
 #include <nlohmann/json.hpp>

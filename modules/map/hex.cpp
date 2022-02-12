@@ -46,14 +46,6 @@ int Hex::GetCooValue(const Point &p, int index) {
            : index == 1
            ? get<1>(p)
            : get<2>(p);
-//    switch(index) {
-//        case 0:
-//            return std::get<0>(p);
-//        case 1:
-//            return std::get<1>(p);
-//        default:
-//            return std::get<2>(p);
-//    }
 }
 Point Hex::GetDiagonalVector(const int* from, const int *to, int radius) {
     // find on which coordinate this diagonal is:

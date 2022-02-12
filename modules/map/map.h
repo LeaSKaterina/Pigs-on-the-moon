@@ -1,7 +1,7 @@
 #pragma once
 
-#include "constructions/base.h"
 #include "constructions/construction.h"
+#include "enums/types.h"
 #include "hex.h"
 #include <map>
 #include <tuple>
@@ -17,7 +17,7 @@ private:
 public:
     explicit Map(int size) : size(size) { InitGrid(); }
 
-    void AddBase(std::vector<Point> &points);
+    void AddConstruction(ConstructionsTypes::Type type, std::vector<Point> &points);
 
     [[nodiscard]] Hex *Get(const Point &p) const { return grid.at(p); }
 
