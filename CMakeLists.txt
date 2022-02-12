@@ -15,7 +15,8 @@ file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.h) #collect
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.cpp) #collect all .cpp files
 
 set(SOURCES ${HEADER_FILES} ${SOURCE_FILES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} main.cpp) #save folders tree
+#source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} main.cpp) #save folders tree
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES main.cpp) #save folders tree
 
 add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
 

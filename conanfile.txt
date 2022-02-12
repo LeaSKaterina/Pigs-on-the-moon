@@ -1,5 +1,12 @@
 [requires]
 nlohmann_json/3.10.5
+sfml/2.5.1
+
+[options]
+sfml:shared=True
+
+[imports]
+bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder
 
 [generators]
 cmake
