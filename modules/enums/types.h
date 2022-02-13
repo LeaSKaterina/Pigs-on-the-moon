@@ -10,3 +10,11 @@ namespace VehiclesTypes {
     extern const std::string sTypes[];
 //    extern const int numPlayerVehicles;
 }
+
+namespace ConstructionsTypes {
+    enum Type {
+        BASE, OBSTACLE
+    };
+    extern const int typesNum;
+    extern const std::string sTypes[];
+}

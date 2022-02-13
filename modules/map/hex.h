@@ -10,6 +10,7 @@ struct Hex {
 private:
     Point3D coordinates;
     bool isEmpty = true;
+    // TODO! remove. it's useless
     int ownerId = -1;
 
 public:

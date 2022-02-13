@@ -1,8 +1,8 @@
 #pragma once
 
 #include "client/client.h"
-#include "enums/vehicleTypes.h"
 #include "game/game.h"
+#include "enums/types.h"
 #include "map/Point3D.h"
 
 #include <nlohmann/json.hpp>

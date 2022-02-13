@@ -110,12 +110,18 @@ void GameClient::InitMap() {
     InitSpawns(mapInfo.value("spawn_points", nlohmann::ordered_json("")));
 
     auto contentInfo = mapInfo.value("content", nlohmann::ordered_json(""));
-    auto baseInfo = contentInfo.value("base", nlohmann::ordered_json(""));
-    vector<Point3D> basePoints;
-    for (auto &point : baseInfo) {
-        basePoints.emplace_back(MakePosTuple(point));
+
+    for (int i = 0; i < ConstructionsTypes::typesNum; i++) {
+        auto cInfo = contentInfo
+                             .value(
+                                     ConstructionsTypes::sTypes[i],
+                                     nlohmann::ordered_json(""));
+        vector<Point3D> basePoints;
+        for (auto &point : cInfo) {
+            basePoints.push_back(MakePosTuple(point));
+        }
+        game->AddConstruct(ConstructionsTypes::Type(i), basePoints);
     }
-    game->AddBase(basePoints);
 }
 
 void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {

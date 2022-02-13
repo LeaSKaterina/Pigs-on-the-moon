@@ -9,7 +9,7 @@
 #include "actors/vehicles/spg.h"
 #include "actors/vehicles/vehicle.h"
 #include "enums/action.h"
-#include "enums/vehicleTypes.h"
+#include "enums/types.h"
 #include "map/map.h"
 #include <map>
 #include <string>
@@ -71,7 +71,8 @@ public:
 
     void AddVehicle(int playerId, VehiclesTypes::Type type, Point3D spawn);
 
-    void AddBase(std::vector<Point3D> &points) { map->AddBase(points); }
+    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point3D> &points) { map->AddConstruction(type, points); }
+
 
     // get state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);

@@ -31,6 +31,7 @@ vector<Point3D> Hex::GetRing(Point3D center, int r) {
     return res;
 }
 
+
 int Hex::GetCooValue(const Point3D &p, int index) {
     return p.points[index];
 }

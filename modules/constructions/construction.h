@@ -2,6 +2,7 @@
 
 #include "actors/vehicles/vehicle.h"
 #include "map/hex.h"
+#include "enums/types.h"
 
 #include <vector>
 
@@ -9,11 +10,15 @@ class Construction {
 private:
     static int counter;
     int id;
+    ConstructionsTypes::Type type;
 
 public:
-    virtual void Play(Vehicle *) = 0;
 
-    virtual ~Construction() = default;
+    ~Construction() = default;
 
-    explicit Construction(std::vector<Hex *> &basis);
+    [[nodiscard]] ConstructionsTypes::Type GetType() const {
+        return type;
+    }
+
+    Construction(ConstructionsTypes::Type type, std::vector<Hex *> &basis);
 };
