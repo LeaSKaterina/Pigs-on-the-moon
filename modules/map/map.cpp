@@ -36,3 +36,6 @@ void Map::AddConstruction(ConstructionsTypes::Type type, vector<Point3D> &points
     }
     content.push_back(new Construction(type, basis));
 }
+const map<Point3D, Hex *> &Map::GetGrid() const {
+    return grid;
+}

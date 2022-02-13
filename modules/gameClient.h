@@ -41,6 +41,9 @@ public:
                   const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
                   bool isObserver = false);
 
+    Game *GetGame() const;
+
+
 private:
     // entities
     Game *game;

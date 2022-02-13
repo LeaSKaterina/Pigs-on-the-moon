@@ -246,3 +246,6 @@ void GameClient::StartAI(const string &name, const string &password, const strin
     }
 
 }
+Game *GameClient::GetGame() const {
+    return game;
+}

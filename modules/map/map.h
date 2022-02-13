@@ -27,4 +27,5 @@ public:
     [[nodiscard]] bool IsBasePoint(const Point3D &point) const;
 
     ~Map();
+    const std::map<Point3D, Hex *> &GetGrid() const;
 };

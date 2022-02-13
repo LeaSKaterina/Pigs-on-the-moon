@@ -93,7 +93,10 @@ public:
 
     [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
 
+    Map *GetMap() const;
+
     [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
 
     [[nodiscard]] bool IsFinished() const { return isFinished; }
+
 };
