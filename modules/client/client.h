@@ -5,11 +5,9 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
-#include <valarray>
-#include <winerror.h>
-#include <winsock2.h>
 
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
+#include <SFML/Network.hpp>
 
 
 struct Response {
@@ -21,58 +19,63 @@ struct Response {
 
 class Client {
 private:
-    const char ADDRESS[14] = {"92.223.34.102"};
-    const int PORT = 443;
-    SOCKET server;                      // server descriptor
-    const int PROTOCOL = AF_INET;       //socket config
-    const int SOCKET_TYPE = SOCK_STREAM;// socket config
-    WSAData WSAData;                    //info about connect
+    const char address[26] = "wgforge-srv.wargaming.net";
+    const int port = 443;
+    sf::TcpSocket tcpSocket;
+    const int codeSize = 4;// action size in bytes
 
-    void SendRequest(Action action, const std::string &msg) const;
+    //send to server msg
+    void SendRequest(Action action, const std::string &msg);
 
-    int GetIntFromServer() const;
+    //receive int from server
+    int GetIntFromServer();
 
-    Response GetAnswer() const;
+    //receive data from server. Guaranteed that all packages are received
+    std::vector<char> Receive(size_t size);
+
+    //gets response after request
+    Response GetAnswer();
 
     bool debug;
 
 public:
     Client();
 
-    ~Client() { shutdown(server, 1); }
+    ~Client() { tcpSocket.disconnect(); }
 
     Response Login(const std::string &name, const std::string &password = "",
                    const std::string &game = "", int numTurns = 0, int numPlayers = 1,
-                   bool isObserver = false) const;
+                   bool isObserver = false);
 
-    Response Logout() const {
+    Response Logout() {
         this->SendRequest(Action::LOGOUT, "");
         return this->GetAnswer();
     }
 
-    Response Map() const {
+    Response Map() {
         this->SendRequest(Action::MAP, "");
         return this->GetAnswer();
     }
 
-    Response GameState() const {
+    Response GameState() {
         this->SendRequest(Action::GAME_STATE, "");
         return this->GetAnswer();
     }
 
-    Response GameActions() const {
+    Response GameActions() {
         this->SendRequest(Action::GAME_ACTIONS, "");
         return this->GetAnswer();
     }
 
-    Response Turn() const {
+    Response Turn() {
         this->SendRequest(Action::TURN, "");
         return this->GetAnswer();
     }
 
-    Response Chat(const std::string &msg) const;
+    Response Chat(const std::string &msg);
 
-    Response SendTankAction(Action action, int vehicleId, int x, int y, int z) const;
+    //send Shoot or Move. This actions has same param
+    Response SendTankAction(Action action, int vehicleId, int x, int y, int z);
 
     static void PrintLogInfo(const std::string &info) { std::cout << info << '\n'; }
 };

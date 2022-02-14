@@ -4,7 +4,7 @@
 
 struct Point3D{
 public:
-    int points[3];
+    int points[3] {0, 0, 0};
     int& x = points[0];
     int& y = points[1];
     int& z = points[2];

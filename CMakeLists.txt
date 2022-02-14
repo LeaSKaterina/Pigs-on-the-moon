@@ -11,7 +11,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/${ConanFolder}/conanbuildinfo.cmake)
 conan_basic_setup()
-link_libraries(ws2_32)
 
 file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.h) #collect all .h files
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.cpp) #collect all .cpp files
