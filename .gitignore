@@ -1,5 +1,0 @@
-.idea/
-cmake-build-debug/
-conanBuild/
-build
-.gitignore
