@@ -1,0 +1,3 @@
+/home/katsiaryna/ClionProjects/Pigs-on-the-moon/build/CMakeFiles/rebuild_cache.dir
+/home/katsiaryna/ClionProjects/Pigs-on-the-moon/build/CMakeFiles/Pigs_on_the_moon.dir
+/home/katsiaryna/ClionProjects/Pigs-on-the-moon/build/CMakeFiles/edit_cache.dir

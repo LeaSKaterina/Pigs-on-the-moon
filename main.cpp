@@ -14,6 +14,7 @@ Screen center;
 int main() {
     Screen screen(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
     sf::RenderWindow window(sf::VideoMode(screen.width * width, screen.height * height), "WoT_strategy_Pigs-on-the-moon");
+
     window.setPosition(sf::Vector2i(screen.width * xPosition, screen.height * yPosition));
     window.setFramerateLimit(30);
     center = {window.getSize().x / 2, window.getSize().y / 2};
