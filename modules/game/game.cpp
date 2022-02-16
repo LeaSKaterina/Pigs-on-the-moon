@@ -114,7 +114,7 @@ void Game::UpdateAttackMatrix(int playerId, const std::vector<int>& attacked) {
 }
 
 bool TargetIsAvailable(const Point3D *target) {
-    auto [_, x, y, z] = *target;
+    auto [x, y, z] = *target;
     return !(x == -1 && y == -1 && z == -1);
 }
 

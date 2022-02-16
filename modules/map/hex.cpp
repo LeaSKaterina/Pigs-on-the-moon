@@ -32,9 +32,6 @@ vector<Point3D> Hex::GetRing(Point3D center, int r) {
 }
 
 
-int Hex::GetCooValue(const Point3D &p, int index) {
-    return p.points[index];
-}
 Point3D Hex::GetDiagonalVector(const Point3D &from, const Point3D &to, int radius) {
     // find on which coordinate this diagonal is:
     int coo = 0;
@@ -53,4 +50,7 @@ Point3D Hex::GetDiagonalVector(const Point3D &from, const Point3D &to, int radiu
         }
     }
     return {res[0], res[1], res[2]};
+}
+int Hex::GetOwnerId() const {
+    return ownerId;
 }
