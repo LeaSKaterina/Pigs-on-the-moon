@@ -65,7 +65,7 @@ std::vector<Point3D> Vehicle::PriorityMoveTriangle(const Point3D &&target) {
 
     // point of two triangles.
     for (int const_coo = 0; const_coo < 3; const_coo++) {
-        to_check[next][const_coo] = Hex::GetCooValue(target, const_coo);
+        to_check[next][const_coo] = target[const_coo];
         for (int aim_coo = 0; aim_coo < 3; aim_coo++) {
             if (aim_coo == const_coo)
                 continue;
@@ -80,7 +80,7 @@ std::vector<Point3D> Vehicle::PriorityMoveTriangle(const Point3D &&target) {
         for (; coo < 3; coo++) {
             if (!IsBetweenCoo(
                         to_check[i][coo],
-                        Hex::GetCooValue(target, coo),
+                        target[coo],
                         current[coo]))
                 break;
         }

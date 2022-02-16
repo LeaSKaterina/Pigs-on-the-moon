@@ -17,8 +17,8 @@ bool AtSpg::IsAvailableForShoot(Vehicle *enemy) {
 
 Point3D AtSpg::Shoot(Vehicle *enemy) {
 
-    const auto &[_, x, y, z] = this->GetCurrentPosition();
-    const auto &[__, enemyX, enemyY, enemyZ] = enemy->GetCurrentPosition();
+    const auto &[ x, y, z] = this->GetCurrentPosition();
+    const auto &[enemyX, enemyY, enemyZ] = enemy->GetCurrentPosition();
 
     if (x == enemyX) {
         if (y > enemyY) {
