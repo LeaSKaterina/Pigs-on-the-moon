@@ -16,5 +16,6 @@ const int ConstructionsTypes::typesNum = 2;
 
 const std::string ConstructionsTypes::sTypes[] = {
         "base",
-        "obstacle"
+        "obstacle",
+        "empty"
 };

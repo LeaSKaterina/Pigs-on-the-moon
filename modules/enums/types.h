@@ -13,7 +13,7 @@ namespace VehiclesTypes {
 
 namespace ConstructionsTypes {
     enum Type {
-        BASE, OBSTACLE
+        BASE, OBSTACLE, EMPTY
     };
     extern const int typesNum;
     extern const std::string sTypes[];
