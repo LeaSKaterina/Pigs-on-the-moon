@@ -47,7 +47,7 @@ private:
 
     Player *player;
 
-    [[nodiscard]] Vehicle *Find(int adaptedPlayerId, const Point3D &spawn) const;
+    [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
 
     void InitVariables(int playersNum = 3);
 

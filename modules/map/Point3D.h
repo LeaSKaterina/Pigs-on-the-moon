@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 struct Point3D{
 public:
@@ -47,5 +48,19 @@ public:
 
     int Distance(const Point3D &other) const {
         return (abs(this->x - other.x) + abs(this->y - other.y) + abs(this->z - other.z)) / 2;
+    }
+
+    static std::vector<Point3D> GetNeighborDirections(){
+        return {Point3D(+1, -1,  0), Point3D(+1,  0, -1), Point3D( 0, +1, -1),
+                Point3D(-1, +1,  0), Point3D(-1,  0, +1), Point3D( 0, -1, +1)};
+    }
+
+
+};
+
+template<>
+struct std::hash<Point3D> {
+    size_t operator()(const Point3D point) const{
+        return point.x + 31 * point.y + 997 * point.z;
     }
 };

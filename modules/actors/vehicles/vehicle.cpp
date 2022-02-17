@@ -38,20 +38,14 @@ int Vehicle::GetHit(int damage) {
 
 }
 
-std::multimap<int, Point3D> Vehicle::GetAvailableMovePoints(const Point3D &target) {
-    const Point3D &center = this->currentPosition->GetCoordinates();
-    std::multimap<int, Point3D> availablePoints;
-
-    for (int i = speedPoints; i > 0; --i) {
-        std::vector<Point3D> ring = Hex::GetRing(center, i);
-        for (const Point3D &point: ring) {
-            if (point.Distance(Point3D(0, 0, 0)) < 12) // 12?
-                availablePoints.emplace(point.Distance(target), point);
-        }
+Hex * Vehicle::GetAvailableMovePoints(const std::vector<Hex *> &minPath) {
+    for (int i = std::min(this->speedPoints, (int)minPath.size() - 1); i > 0; --i) {
+        if (minPath[i]->IsEmpty())
+            return minPath[i];
     }
-
-    return availablePoints;
+    return nullptr;
 }
+
 std::vector<Point3D> Vehicle::PriorityMoveTriangle(const Point3D &&target) {
     // 0 1 2
     std::vector<int[3]> to_check(6);
@@ -107,3 +101,4 @@ bool Vehicle::IsBetweenCoo(int coo, int first, int second) {
     }
     return coo >= l && coo <= r;
 }
+

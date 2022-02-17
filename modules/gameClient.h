@@ -49,8 +49,6 @@ private:
     Game *game;
     Client *client;
 
-    static Point3D MakePosTuple(const nlohmann::json &&coordinate);
-
     // init methods
     bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
                int numPlayers, bool isObserver);
@@ -58,6 +56,8 @@ private:
     // init methods
 
     void InitMap();
+
+    static Point3D MakePosTuple(const nlohmann::json &&coordinate);
 
     void InitSpawns(const nlohmann::ordered_json &&spawnInfo);
 

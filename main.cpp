@@ -69,6 +69,12 @@ int main() {
 
 
         window.display();
+        if(gc.GameIsFinished() == false) {
+            gc.UpdateGameState();
+            if (gc.IsPlayTime())// play only our turn
+                gc.SendAction();
+            gc.SendTurn();
+        }
     }
 
     return 0;

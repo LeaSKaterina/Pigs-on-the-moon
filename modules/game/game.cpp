@@ -3,7 +3,7 @@
 using namespace std;
 using namespace VehiclesTypes;
 
-Vehicle *Game::Find(int adaptedPlayerId, const Point3D &spawn) const {
+Vehicle *Game::FindVehicle(int adaptedPlayerId, const Point3D &spawn) const {
     for (auto *p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p;
@@ -33,7 +33,7 @@ void Game::InitVariables(int playersNum) {
 
     vehicles.resize(playersNum);
     attackMatrix.resize(playersNum);
-    for (auto& v : attackMatrix)
+    for (auto &v : attackMatrix)
         v.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
@@ -52,7 +52,7 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
     int next = 0;
     for (int i = 0; i < VehiclesTypes::typesNum; i++) {
         auto &tanks = realId.at(VehiclesTypes::sTypes[i]);
-        for (const auto &id: tanks) {
+        for (const auto &id : tanks) {
             tanksIdAdapter[next++] = id;
         }
     }
@@ -79,7 +79,7 @@ void Game::AddVehicle(int playerId, Type type, Point3D spawn) {
         case SPG:
             t = new Spg(playerId);
     }
-    t->InitSpawn(map->Get(spawn));
+    t->InitSpawn(map->GetHexByPoint(spawn));
     vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
 }
 
@@ -92,8 +92,8 @@ void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
 
 void Game::UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
                               int capturePoints) {
-    Vehicle *v = Find(playersIdAdapter.at(parentId), spawn);
-    v->Update(health, map->Get(pos), capturePoints);
+    Vehicle *v = FindVehicle(playersIdAdapter.at(parentId), spawn);
+    v->Update(health, map->GetHexByPoint(pos), capturePoints);
 }
 
 void Game::UpdateWinPoints(int playerId, int capture, int kill) {
@@ -102,13 +102,13 @@ void Game::UpdateWinPoints(int playerId, int capture, int kill) {
     kills[adaptedPlayerId] = kill;
 }
 
-void Game::UpdateAttackMatrix(int playerId, const std::vector<int>& attacked) {
+void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
     int customId = playersIdAdapter.at(playerId);
     for (int i = 0; i < numPlayers; i++) {
         attackMatrix[customId][i] = false;
     }
 
-    for (const int & i : attacked) {
+    for (const int &i : attacked) {
         attackMatrix[customId][playersIdAdapter.at(i)] = true;
     }
 }
@@ -119,17 +119,16 @@ bool TargetIsAvailable(const Point3D *target) {
 }
 
 vector<tuple<Action, int, Point3D>> Game::Play() const {
-    Point3D targetPoint {0, 0, 0};
+    Point3D targetPoint{0, 0, 0};
     vector<tuple<Action, int, Point3D>> res;
-    Point3D target;
     const auto &playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
 
-    vector<multimap<int, Point3D>> priorityMoveTargets(numPlayerVehicles);
+    std::vector<std::vector<Hex *>> paths(numPlayerVehicles);
 
     for (int i = 0; i < numPlayerVehicles; i++) {
         // TODO: There will be another check for danger
-        if (!map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()))
-            priorityMoveTargets[i] = move(playerVehicles[i]->GetAvailableMovePoints(targetPoint));
+        if (map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()) == false)
+        paths[i] = std::move(this->map->GetShortestWay(*playerVehicles[i]->GetCurrentHex(), *map->GetHexByPoint(targetPoint)));
     }
 
     unordered_map<Vehicle *, vector<Vehicle *>> priorityShootTargets =
@@ -141,23 +140,20 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
 
     bool round = false;
     for (int i = 0; i < numPlayerVehicles;) {
-        auto *current = playerVehicles[i];
+        auto *currentVehicle = playerVehicles[i];
         bool satisfied = false;
-        if (current->PriorityAction() == Action::MOVE || round) {
-            for (auto &[_, p] : priorityMoveTargets[i]) {
-                auto *point = map->Get(p);
-                if (point->IsEmpty()) {
-                    res.emplace_back(Action::MOVE, tanksIdAdapter[i], point->GetCoordinates());
-                    satisfied = true;
-                    point->Occupy();
-                    break;
-                }
+        if (currentVehicle->PriorityAction() == Action::MOVE || round) {
+            auto hex = currentVehicle->GetAvailableMovePoints(paths[i]);
+            if(hex != nullptr) {
+                res.emplace_back(Action::MOVE, tanksIdAdapter[i], hex->GetCoordinates());
+                satisfied = true;
+                hex->Occupy();
             }
         }
-        if (!satisfied && !priorityShootTargets.empty() && current->PriorityAction() == Action::SHOOT) {
-            if (!priorityShootTargets[current].empty()) {
+        if (!satisfied && !priorityShootTargets.empty() && currentVehicle->PriorityAction() == Action::SHOOT) {
+            if (!priorityShootTargets[currentVehicle].empty()) {
                 // TODO: priority.
-                for (auto *vToAttack : priorityShootTargets.at(current)) {
+                for (auto *vToAttack : priorityShootTargets.at(currentVehicle)) {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
