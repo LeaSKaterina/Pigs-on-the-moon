@@ -10,7 +10,7 @@ std::vector<sf::CircleShape*> VehicleLogo::logos;
 sf::CircleShape* VehicleLogo::InitLogo(int pointCount, float rotation, int separatorCount) {
     auto *instance = new sf::CircleShape(r, pointCount);
     instance->setOrigin(instance->getLocalBounds().width/2, instance->getLocalBounds().height/2);
-    instance->setOutlineThickness(2.f);
+    instance->setOutlineThickness(1.f);
     instance->setOutlineColor(sf::Color::Black);
     instance->setFillColor(sf::Color::Transparent);
     if (rotation != 0.f) { instance->setRotation(rotation); }

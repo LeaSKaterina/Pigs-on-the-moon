@@ -4,6 +4,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 double xPosition = 0.2;
 double yPosition = 0.2;
@@ -87,6 +89,7 @@ int main() {
             gc.UpdateGameState();
             if (gc.IsPlayTime())// play only our turn
                 gc.SendAction();
+            std::this_thread::sleep_for(std::chrono::seconds(5));
             gc.SendTurn();
         }
     }
