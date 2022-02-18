@@ -5,19 +5,23 @@
 class VehicleLogo {
 
     static bool isCreated;
-    static std::vector<sf::CircleShape> logos;
+    static std::vector<sf::CircleShape*> logos;
     static float r;
 
-    static sf::CircleShape InitLogo(int pointCount, float rotation, int separatorCount);
+    static sf::CircleShape* InitLogo(int pointCount, float rotation, int separatorCount);
 
     explicit VehicleLogo();
 
+    static void SetColor(const sf::Color &color);
+
 public:
-    static sf::CircleShape *GetVehicleLogo(VehiclesTypes::Type type, const sf::Color &color);
+    static sf::CircleShape *GetLogoOfType(VehiclesTypes::Type type);
 
-    static std::vector<sf::CircleShape> *GetLogos(const sf::Color &color);
+//    static sf::CircleShape *GetLogoOfType(VehiclesTypes::Type type, float rotation);
 
-    static std::vector<sf::CircleShape> *GetLogos(float newR, const sf::Color &color);
+    static void GenerateLogos(float radius, int playerId);
 
     static void SetRadius(float newR);
+
+    static void DestructLogos();
 };

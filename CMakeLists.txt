@@ -15,7 +15,7 @@ conan_basic_setup()
 file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.h) #collect all .h files
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/modules/*.cpp) #collect all .cpp files
 
-set(SOURCES ${HEADER_FILES} ${SOURCE_FILES})
+set(SOURCES ${HEADER_FILES} ${SOURCE_FILES} modules/gui/GameWindow.cpp modules/gui/GameWindow.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} main.cpp) #save folders tree
 
 add_executable(${PROJECT_NAME} main.cpp ${SOURCES})

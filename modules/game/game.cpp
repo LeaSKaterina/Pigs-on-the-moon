@@ -192,3 +192,6 @@ void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> 
 Map *Game::GetMap() const {
     return map;
 }
+const vector<std::vector<Vehicle *>> &Game::GetVehicles() const {
+    return vehicles;
+}

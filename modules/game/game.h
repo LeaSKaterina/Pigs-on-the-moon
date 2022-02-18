@@ -37,6 +37,10 @@ private:
     int numTurns;
     int currentTurn;
 
+public:
+    const std::vector<std::vector<Vehicle *>> &GetVehicles() const;
+
+private:
     int numPlayers;
     int currentPlayerId;
 
