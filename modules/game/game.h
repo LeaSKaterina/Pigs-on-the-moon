@@ -44,6 +44,7 @@ private:
 
     std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
     Map *map;
+//    ActionController actionController;
 
     Player *player;
 

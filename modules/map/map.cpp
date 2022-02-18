@@ -41,13 +41,13 @@ ConstructionsTypes::Type Map::GetType(const Hex &hex) const {
     return this->content[hex.GetOwnerId()]->GetType();
 }
 
-struct QueueElement {
-    int pathLength;
-    Hex *hex;// path (start, hex)
-    QueueElement(int pathLength, Hex *hex) : pathLength(pathLength), hex(hex) {}
-};
+std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes) const {
+    struct QueueElement {
+        int pathLength;
+        Hex *hex;// path (start, hex)
+        QueueElement(int pathLength, Hex *hex) : pathLength(pathLength), hex(hex) {}
+    };
 
-std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes) {
     std::unordered_map<Point3D, Hex *> visitedHexes;// first unique key (hex), second - previous hex on path
     for (const auto &blockHex : blockHexes) {
         visitedHexes[blockHex->GetCoordinates()] = nullptr;

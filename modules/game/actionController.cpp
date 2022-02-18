@@ -2,7 +2,6 @@
 
 using namespace std;
 
-// TODO
 
 //method analyze attackMatrix and return vector<bool>. If v[i] = true - we can attack i player
 vector<bool> ActionController::NeutralityRuleCheck(const std::vector<std::vector<bool>> &attackMatrix, int playerId,
@@ -32,9 +31,8 @@ ActionController::GetPointsForShoot(const vector<vector<bool>> &attackMatrix,
                                     int playerId, int playersNum) {
 
     const vector<Vehicle *> &playerVehicles = vehicles[playerId];
-    vector<bool> canAttack(playersNum);
-    canAttack = move(NeutralityRuleCheck(attackMatrix, playerId, playersNum));
-    std::unordered_map<Vehicle *, vector<Vehicle *>> res;
+    vector<bool> canAttack = move(NeutralityRuleCheck(attackMatrix, playerId, playersNum));
+    std::unordered_map<Vehicle *, vector<Vehicle *>> res;// key - enemy tank, value - who can attack
     for (auto &our : playerVehicles) {
         for (int i = 0; i < vehicles.size(); i++) {
             if (vehicles[i][0]->GetPlayerId() == playerId || !canAttack[i])
@@ -48,3 +46,4 @@ ActionController::GetPointsForShoot(const vector<vector<bool>> &attackMatrix,
 
     return res;
 }
+

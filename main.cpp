@@ -22,13 +22,11 @@ int main() {
     sf::Music music;
     if (!music.openFromFile("resources/music/Intro.ogg"))
         std::cerr << "can't load Intro music" << '\n';
-//    music.setLoopPoints(sf::Time(10000));
     music.play();
 
     GameClient gc;
     gc.InitGame("Den-Pig");
     gc.InitIds();
-
 
     sf::Texture texture;
     if (!texture.loadFromFile("resources/image/background.jpg")) {
@@ -54,10 +52,6 @@ int main() {
             int y = size * (sqrt(3) / 2 * point.first.x + std::sqrt(3) * point.first.y) + center.height;
             hex.setPosition(x, y);
             window.draw(hex);
-        }
-        auto content = gc.GetGame()->GetMap()->GetContent();
-        for (auto construction : content) {
-            if (construction->GetType() == ConstructionsTypes::BASE) hex.setOutlineColor(sf::Color::Blue);
         }
 
         sf::Event event;

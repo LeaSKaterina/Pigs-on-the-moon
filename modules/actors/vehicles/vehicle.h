@@ -17,9 +17,11 @@ public:
 
     void InitSpawn(Hex *p);
 
+    virtual ~Vehicle() = default;
+
     //based on the minimum path form point(Hex) available to move most priority. Consider hex.IsEmpty
     //minPath = currentPosition -> neighbor -> neighbor -> ...
-    Hex *GetAvailableMovePoints(const std::vector<Hex *> &minPath);
+    Hex *GetAvailableMovePoint(const std::vector<Hex *> &minPath);
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 

@@ -5,14 +5,12 @@ using namespace std;
 
 bool AtSpg::IsAvailableForShoot(Vehicle *enemy) {
     int d = this->GetCurrentPosition().Distance(enemy->GetCurrentPosition());
-    if (d == 1)
-        return true;
     if (d > 3)
         return false;
 
     return ((this->GetCurrentPosition().x == enemy->GetCurrentPosition().x) ||
-            (this->GetCurrentPosition().x == enemy->GetCurrentPosition().y) ||
-            (this->GetCurrentPosition().x == enemy->GetCurrentPosition().z));
+            (this->GetCurrentPosition().y == enemy->GetCurrentPosition().y) ||
+            (this->GetCurrentPosition().z == enemy->GetCurrentPosition().z));
 }
 
 Point3D AtSpg::Shoot(Vehicle *enemy) {

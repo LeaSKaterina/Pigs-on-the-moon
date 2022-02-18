@@ -89,10 +89,9 @@ void GameClient::InitIds() {
 
 
 Point3D GameClient::MakePosTuple(const nlohmann::json &&coordinate) {
-    return Point3D(
-            coordinate.value("x", -1),
+    return {coordinate.value("x", -1),
             coordinate.value("y", -1),
-            coordinate.value("z", -1));
+            coordinate.value("z", -1)};
 }
 
 

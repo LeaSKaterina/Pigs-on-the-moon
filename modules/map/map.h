@@ -41,5 +41,5 @@ public:
 //blockHexes is a vector of hexes which we can't visit right now but can visit in general. For example we can add to this vector vehicles point because
 //on the last run this function, we tried to go to the cell occupied by the tank. We can't stand on an occupied cell, but we can drive through it.
 //Now function use breadth first search. It works fast for map with size 11. If size will become greater than 100 change BFS to A*(A star).
-    std::vector<Hex *> GetShortestWay(Hex& startHex, Hex& endHex, const std::vector<Hex *> &blockHexes = {});
+    std::vector<Hex *> GetShortestWay(Hex& startHex, Hex& endHex, const std::vector<Hex *> &blockHexes = {}) const;
 };

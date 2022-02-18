@@ -119,7 +119,7 @@ bool TargetIsAvailable(const Point3D *target) {
 }
 
 vector<tuple<Action, int, Point3D>> Game::Play() const {
-    Point3D targetPoint{0, 0, 0};
+    Point3D targetPoint{-3, 10, -7};
     vector<tuple<Action, int, Point3D>> res;
     const auto &playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
 
@@ -143,7 +143,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
         auto *currentVehicle = playerVehicles[i];
         bool satisfied = false;
         if (currentVehicle->PriorityAction() == Action::MOVE || round) {
-            auto hex = currentVehicle->GetAvailableMovePoints(paths[i]);
+            auto hex = currentVehicle->GetAvailableMovePoint(paths[i]);
             if(hex != nullptr) {
                 res.emplace_back(Action::MOVE, tanksIdAdapter[i], hex->GetCoordinates());
                 satisfied = true;

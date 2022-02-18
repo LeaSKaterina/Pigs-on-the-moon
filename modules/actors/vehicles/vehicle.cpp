@@ -38,7 +38,7 @@ int Vehicle::GetHit(int damage) {
 
 }
 
-Hex * Vehicle::GetAvailableMovePoints(const std::vector<Hex *> &minPath) {
+Hex * Vehicle::GetAvailableMovePoint(const std::vector<Hex *> &minPath) {
     for (int i = std::min(this->speedPoints, (int)minPath.size() - 1); i > 0; --i) {
         if (minPath[i]->IsEmpty())
             return minPath[i];
@@ -49,11 +49,6 @@ Hex * Vehicle::GetAvailableMovePoints(const std::vector<Hex *> &minPath) {
 std::vector<Point3D> Vehicle::PriorityMoveTriangle(const Point3D &&target) {
     // 0 1 2
     std::vector<int[3]> to_check(6);
-//    int current[3] = {
-//            std::get<0>(this->currentPosition->GetCoordinates()),
-//            std::get<1>(this->currentPosition->GetCoordinates()),
-//            std::get<2>(this->currentPosition->GetCoordinates())
-//    };
     Point3D current = this->currentPosition->GetCoordinates();
     int next = 0;
 
@@ -101,4 +96,3 @@ bool Vehicle::IsBetweenCoo(int coo, int first, int second) {
     }
     return coo >= l && coo <= r;
 }
-
