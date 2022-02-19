@@ -3,6 +3,7 @@
 #include "enums/types.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <iostream>
 
 bool VehicleLogo::isCreated = false;
 float VehicleLogo::r = 8;
@@ -93,6 +94,9 @@ sf::RectangleShape *VehicleLogo::CreateDetail(int separatorCount) {
 
 std::tuple<sf::CircleShape *, sf::RectangleShape *> VehicleLogo::GetLogoOfType(VehiclesTypes::Type type) {
     if (!isCreated) VehicleLogo();
+    if (details.find(type) == details.end()){
+        return std::make_tuple(logos[type], nullptr);
+    }
     return std::make_tuple(logos[type], details.find(type)->second);
 }
 
