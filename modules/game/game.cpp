@@ -119,7 +119,7 @@ bool TargetIsAvailable(const Point3D *target) {
 }
 
 vector<tuple<Action, int, Point3D>> Game::Play() const {
-    Point3D targetPoint{-3, 10, -7};
+    Point3D targetPoint{0, 0, 0};
     vector<tuple<Action, int, Point3D>> res;
     const auto &playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
 

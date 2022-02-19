@@ -11,7 +11,7 @@ double xPosition = 0.2;
 double yPosition = 0.2;
 double width = 0.5;
 double height = 0.6;
-int size = 20;
+int size = 17;
 Screen center;
 
 
@@ -47,26 +47,32 @@ int main() {
     hex.setOrigin(hex.getLocalBounds().width/2, hex.getLocalBounds().height/2);
     hex.setRotation(30.f);
 
+    VehicleLogo vehicleLogo(size * 0.6);
+    auto vehiclesVectors = gc.GetGame()->GetVehicles();
 
     while (window.isOpen()) {
         window.draw(sprite);
         auto map = gc.GetGame()->GetMap();
+        //draw grid
         for (const auto point : map->GetGrid()) {
             hex.setOutlineColor(sf::Color::Green);
+            hex.setFillColor(sf::Color::Transparent);
             if (map->GetType(*point.second) == ConstructionsTypes::BASE) hex.setOutlineColor(sf::Color::Blue);
-            if (map->GetType(*point.second) == ConstructionsTypes::OBSTACLE) hex.setOutlineColor(sf::Color::Red);
+            if (map->GetType(*point.second) == ConstructionsTypes::OBSTACLE){
+                hex.setOutlineColor(sf::Color::Red);
+                hex.setFillColor(sf::Color(255, 20, 20, 70));
+            }
             int x = size * 3. / 2 * point.first.x + center.width;
             int y = size * (sqrt(3) / 2 * point.first.x + std::sqrt(3) * point.first.y) + center.height;
             hex.setPosition(x, y);
             window.draw(hex);
         }
 
-        auto vehiclesVectors = gc.GetGame()->GetVehicles();
 
         for (int i = 0; i < vehiclesVectors.size(); i++){
-            VehicleLogo::GenerateLogos(size - 6, i);
+            vehicleLogo.ChangeColorById(i);
             for (int j = 0; j < vehiclesVectors[i].size(); j++) {
-                auto logo = VehicleLogo::GetLogoOfType(VehiclesTypes::Type(j));
+                auto logo = vehicleLogo.GetLogoByType(VehiclesTypes::Type(j));
                 auto point = vehiclesVectors[i][j]->GetCurrentPosition();
                 int x = size * 3. / 2 * point.x + center.width;
                 int y = size * (sqrt(3) / 2 * point.x + std::sqrt(3) * point.y) + center.height;
@@ -78,7 +84,6 @@ int main() {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                VehicleLogo::DestructLogos();
                 window.close();
             }
         }
@@ -89,7 +94,6 @@ int main() {
             gc.UpdateGameState();
             if (gc.IsPlayTime())// play only our turn
                 gc.SendAction();
-            std::this_thread::sleep_for(std::chrono::seconds(5));
             gc.SendTurn();
         }
     }

@@ -1,78 +1,51 @@
 #include "VehicleLogo.h"
 
-#include "enums/types.h"
-#include <SFML/Graphics.hpp>
+sf::CircleShape VehicleLogo::CreateFigure(int pointCount, float rotation, int separatorCount) {
+    sf::CircleShape shape(r, pointCount);
+    shape.setOrigin(shape.getLocalBounds().width / 2, shape.getLocalBounds().height / 2);
+    shape.setOutlineThickness(1.f);
+    shape.setOutlineColor(sf::Color::Black);
+    shape.setFillColor(sf::Color::Transparent);
+    shape.setRotation(rotation);
 
-bool VehicleLogo::isCreated = false;
-float VehicleLogo::r;
-std::vector<sf::CircleShape*> VehicleLogo::logos;
-
-sf::CircleShape* VehicleLogo::InitLogo(int pointCount, float rotation, int separatorCount) {
-    auto *instance = new sf::CircleShape(r, pointCount);
-    instance->setOrigin(instance->getLocalBounds().width/2, instance->getLocalBounds().height/2);
-    instance->setOutlineThickness(1.f);
-    instance->setOutlineColor(sf::Color::Black);
-    instance->setFillColor(sf::Color::Transparent);
-    if (rotation != 0.f) { instance->setRotation(rotation); }
+    // for Medium separatorCount = 1, for Heavy separatorCount = 2
     if (separatorCount != 0) {
-        // for Medium separatorCount = 1, for Heavy separatorCount = 2
+//        shape.
     }
-    return instance;
+    return shape;
 }
 
-VehicleLogo::VehicleLogo(){
-    r = 5;
-    logos.push_back(InitLogo(3, -30.f, 0));
-    logos.push_back(InitLogo(4, 0.f, 1));
-    logos.push_back(InitLogo(4, 0.f, 2));
-    logos.push_back(InitLogo(4, 0.f, 0));
-    logos.push_back(InitLogo(4, 45.f, 0));
-    isCreated = true;
-}
-
-sf::CircleShape* VehicleLogo::GetLogoOfType(VehiclesTypes::Type type) {
-    if (!isCreated) VehicleLogo();
-    return logos[type];
+//ToDo order????
+VehicleLogo::VehicleLogo(float radius) : r(radius) {
+    logos.push_back(std::move(CreateFigure(3, 180.f, 0)));//at_spg
+    logos.push_back(std::move(CreateFigure(4, 0.f, 1)));  //medium
+    logos.push_back(std::move(CreateFigure(4, 0.f, 2)));  //hard
+    logos.push_back(std::move(CreateFigure(4, 0.f, 0)));  //light
+    logos.push_back(std::move(CreateFigure(4, 45.f, 0))); //spg
 }
 
 void VehicleLogo::SetColor(const sf::Color &color) {
-//    if (!isCreated) VehicleLogo();
-    for (auto logo : logos) {
-        logo->setOutlineColor(color);
+    for (auto &logo : logos) {
+        logo.setOutlineColor(color);
     }
 }
 
-void VehicleLogo::GenerateLogos(float radius, int playerId) {
-    if (!isCreated) VehicleLogo();
-    SetRadius(radius);
-    for (auto logo : logos) {
-        logo->rotate(120*(float) playerId);
-    }
-    switch(playerId) {
-        case 0:{
+void VehicleLogo::ChangeColorById(int playerId) {
+    switch (playerId) {
+        case 0: {
             SetColor(sf::Color::Blue);
             break;
         }
-        case 1:{
+        case 1: {
             SetColor(sf::Color::White);
             break;
         }
-        case 2:{
+        case 2: {
             SetColor(sf::Color::Yellow);
             break;
         }
-        default:{
+        default: {
             SetColor(sf::Color::Black);
         }
-    }
-}
-
-void VehicleLogo::SetRadius(float newR) {
-    r = newR;
-}
-
-void VehicleLogo::DestructLogos() {
-    for (auto logo : logos){
-        delete[] logo;
     }
 }
