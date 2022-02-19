@@ -15,7 +15,6 @@ int size = 17;
 Screen center;
 
 
-
 int main() {
     Screen screen(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
     sf::RenderWindow window(sf::VideoMode(screen.width * width, screen.height * height), "WoT_strategy_Pigs-on-the-moon");
@@ -41,14 +40,23 @@ int main() {
     sf::Sprite sprite;
     sprite.setTexture(texture);
 
-    sf::CircleShape hex(size - 3, 6);
+    sf::CircleShape hex(size * 0.8, 6);
     hex.setOutlineThickness(1.f);
     hex.setFillColor(sf::Color::Transparent);
-    hex.setOrigin(hex.getLocalBounds().width/2, hex.getLocalBounds().height/2);
+    hex.setOrigin(hex.getLocalBounds().width / 2, hex.getLocalBounds().height / 2);
     hex.setRotation(30.f);
 
-    VehicleLogo vehicleLogo(size * 0.6);
+    VehicleLogo vehicleLogo(size * 0.4);
     auto vehiclesVectors = gc.GetGame()->GetVehicles();
+
+    sf::Font font;
+    if (!font.loadFromFile("resources/font/nimbusMono.ttf")) {
+        std::cerr << "Error! Font isn't loaded!" << '\n';
+    }
+    sf::Text text;
+    text.setFont(font);
+    text.setCharacterSize(size * 0.6);
+    text.setOrigin(text.getLocalBounds().width/2, text.getLocalBounds().height/2);
 
     while (window.isOpen()) {
         window.draw(sprite);
@@ -75,9 +83,18 @@ int main() {
                 auto logo = vehicleLogo.GetLogoByType(VehiclesTypes::Type(j));
                 auto point = vehiclesVectors[i][j]->GetCurrentPosition();
                 int x = size * 3. / 2 * point.x + center.width;
-                int y = size * (sqrt(3) / 2 * point.x + std::sqrt(3) * point.y) + center.height;
-                logo->setPosition(x, y);
-                window.draw(*logo);
+                int y = size * (sqrt(3) / 2 * point.x + std::sqrt(3) * point.y) + center.height - 2;
+                std::get<0>(logo).setPosition(x, y);
+                window.draw(std::get<0>(logo));
+                if (std::get<1>(logo)) {
+                    std::get<1>(logo)->setPosition(x, y);
+                    window.draw(*std::get<1>(logo));
+                }
+
+                text.setString(std::to_string(vehiclesVectors[i][j]->GetHp()));
+                text.setFillColor(std::get<0>(logo).getOutlineColor());
+                text.setPosition(x,y+4);
+                window.draw(text);
             }
         }
 
