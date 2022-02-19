@@ -55,7 +55,7 @@ void VehicleLogo::GenerateLogos(float radius, int playerId) {
     }
     switch(playerId) {
         case 0:{
-            SetColor(sf::Color::Blue);
+            SetColor(sf::Color::Cyan);
             break;
         }
         case 1:{
