@@ -87,14 +87,6 @@ void GameClient::InitIds() {
     InitVehiclesIds(answer.answer.value("vehicles", nlohmann::ordered_json("")));
 }
 
-
-Point3D GameClient::MakePosTuple(const nlohmann::json &&coordinate) {
-    return {coordinate.value("x", -1),
-            coordinate.value("y", -1),
-            coordinate.value("z", -1)};
-}
-
-
 void GameClient::InitMap() {
     // Map
     nlohmann::ordered_json mapInfo = client->Map().answer;
@@ -123,7 +115,13 @@ void GameClient::InitMap() {
     }
 }
 
-void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {
+Point3D GameClient::MakePosTuple(const nlohmann::json &coordinate) {
+    return {coordinate.value("x", -1),
+            coordinate.value("y", -1),
+            coordinate.value("z", -1)};
+}
+
+void GameClient::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
 #ifdef _DEBUG
     cerr << "Spawn Info: "
          << spawnInfo
@@ -151,7 +149,7 @@ void GameClient::InitSpawns(const nlohmann::ordered_json &&spawnInfo) {
     }
 }
 
-void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
+void GameClient::InitPlayersIds(const nlohmann::ordered_json &am) {
     vector<int> realIds;
     for (auto &pm : am.items()) {
         realIds.push_back(stoi(pm.key()));
@@ -159,7 +157,7 @@ void GameClient::InitPlayersIds(const nlohmann::ordered_json &&am) {
     game->InitPlayersId(realIds);
 }
 
-void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
+void GameClient::InitVehiclesIds(const nlohmann::ordered_json &vehicles) {
     // TODO! do we need all players?
     // copy strings ...
     unordered_map<string, vector<int>> vehiclesIds;
@@ -183,7 +181,7 @@ void GameClient::InitVehiclesIds(const nlohmann::ordered_json &&vehicles) {
 }
 
 
-void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
+void GameClient::UpdateVehicles(const nlohmann::ordered_json &vehicles) {
     for (auto &v : vehicles.items()) {
         auto &vehicleInfo = v.value();
 
@@ -201,7 +199,7 @@ void GameClient::UpdateVehicles(const nlohmann::ordered_json &&vehicles) {
     }
 }
 
-void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
+void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &am) {
     //    const int vector_size = game->GetNumPlayers();
     for (auto &pm : am.items()) {
         // player id = pm.key, vector of attacks = pm.value
@@ -216,7 +214,7 @@ void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &&am) {
     }
 }
 
-void GameClient::UpdateWinPoints(const nlohmann::ordered_json &&winPoints) {
+void GameClient::UpdateWinPoints(const nlohmann::ordered_json &winPoints) {
     cerr << "DEBUG: " << winPoints << endl;
     for (auto &player : winPoints.items()) {
         auto &winPointsInfo = player.value();
@@ -240,11 +238,12 @@ void GameClient::StartAI(const string &name, const string &password, const strin
 #ifdef _DEBUG
         std::cerr << "\n---------------------------------------\n";
 #endif
-
+        std::this_thread::sleep_for(std::chrono::seconds(5));
         SendTurn();
     }
 
 }
+
 Game *GameClient::GetGame() const {
     return game;
 }

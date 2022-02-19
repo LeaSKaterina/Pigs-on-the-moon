@@ -8,6 +8,9 @@
 #include <nlohmann/json.hpp>
 #include <unordered_map>
 
+#include <chrono>
+#include <thread>
+
 class GameClient {
 public:
     explicit GameClient() : game(nullptr), client(new Client()) {}
@@ -57,17 +60,17 @@ private:
 
     void InitMap();
 
-    static Point3D MakePosTuple(const nlohmann::json &&coordinate);
+    static Point3D MakePosTuple(const nlohmann::json &coordinate);
 
-    void InitSpawns(const nlohmann::ordered_json &&spawnInfo);
+    void InitSpawns(const nlohmann::ordered_json &spawnInfo);
 
-    void InitPlayersIds(const nlohmann::ordered_json &&am);
+    void InitPlayersIds(const nlohmann::ordered_json &am);
 
-    void InitVehiclesIds(const nlohmann::ordered_json &&vehicles);
+    void InitVehiclesIds(const nlohmann::ordered_json &vehicles);
 
-    void UpdateVehicles(const nlohmann::ordered_json &&vehicles);
+    void UpdateVehicles(const nlohmann::ordered_json &vehicles);
 
-    void UpdateAttackMatrix(const nlohmann::ordered_json &&am);
+    void UpdateAttackMatrix(const nlohmann::ordered_json &am);
 
-    void UpdateWinPoints(const nlohmann::ordered_json &&winPoints);
+    void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
 };

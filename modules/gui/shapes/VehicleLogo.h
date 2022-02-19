@@ -1,6 +1,6 @@
 #include "enums/types.h"
 #include <SFML/Graphics.hpp>
-
+#include <cmath>
 
 class VehicleLogo {
 private:

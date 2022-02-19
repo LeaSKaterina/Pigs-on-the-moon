@@ -15,9 +15,22 @@ int size = 17;
 Screen center;
 
 
+void ClientThreadFunction(GameClient *gc) {
+    while (!gc->SendTurn()) {}
+    gc->InitIds();
+    while (!gc->GameIsFinished()) {
+        gc->UpdateGameState();
+        if (gc->IsPlayTime())// play only our turn
+            gc->SendAction();
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        gc->SendTurn();
+    }
+}
+
 int main() {
     Screen screen(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
-    sf::RenderWindow window(sf::VideoMode(screen.width * width, screen.height * height), "WoT_strategy_Pigs-on-the-moon");
+    sf::RenderWindow window(sf::VideoMode(screen.width * width, screen.height * height), "Pigs-on-the-moon_GUI");
 
     window.setPosition(sf::Vector2i(screen.width * xPosition, screen.height * yPosition));
     window.setFramerateLimit(30);
@@ -29,9 +42,19 @@ int main() {
         std::cerr << "can't load Intro music" << '\n';
     music.play();
 
+    std::string game = "game2";
     GameClient gc;
-    gc.InitGame("Den-Pig");
-    gc.InitIds();
+    GameClient gc2;
+    GameClient gc3;
+    gc.InitGame("Den-Pig", "", game, 0, 3);
+    gc2.InitGame("Den-Pig2", "", game, 0, 3);
+    gc3.InitGame("Den-Pig3", "", game, 0, 3);
+    std::thread thread = std::thread(ClientThreadFunction, &gc);
+    std::thread thread2 = std::thread(ClientThreadFunction, &gc2);
+    std::thread thread3 = std::thread(ClientThreadFunction, &gc3);
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+//    gc.InitIds();
 
     sf::Texture texture;
     if (!texture.loadFromFile("resources/image/background.jpg")) {
@@ -47,7 +70,8 @@ int main() {
     hex.setRotation(30.f);
 
     VehicleLogo vehicleLogo(size * 0.4);
-    auto vehiclesVectors = gc.GetGame()->GetVehicles();
+    auto vehiclesVectors = std::move(gc.GetGame()->GetVehicles());
+    auto map = gc.GetGame()->GetMap();
 
     sf::Font font;
     if (!font.loadFromFile("resources/font/nimbusMono.ttf")) {
@@ -60,7 +84,6 @@ int main() {
 
     while (window.isOpen()) {
         window.draw(sprite);
-        auto map = gc.GetGame()->GetMap();
         //draw grid
         for (const auto point : map->GetGrid()) {
             hex.setOutlineColor(sf::Color::Green);
@@ -101,18 +124,20 @@ int main() {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
+//                thread2.detach();
+//                thread3.detach();
                 window.close();
             }
         }
 
 
         window.display();
-        if(gc.GameIsFinished() == false) {
-            gc.UpdateGameState();
-            if (gc.IsPlayTime())// play only our turn
-                gc.SendAction();
-            gc.SendTurn();
-        }
+//        if(gc.GameIsFinished() == false) {
+//            gc.UpdateGameState();
+//            if (gc.IsPlayTime())// play only our turn
+//                gc.SendAction();
+//            gc.SendTurn();
+//        }
     }
 
     return 0;

@@ -36,12 +36,6 @@ void VehicleLogo::SetColor(const sf::Color &color) {
 }
 
 void VehicleLogo::ChangeColorById(int playerId) {
-//    for (auto logo : logos) {
-//        logo->rotate(120*(float) playerId);
-//    }
-//    for (auto detail: details){
-//        detail.second->rotate(120*(float) playerId);
-//    }
     switch(playerId) {
         case 0:{
             SetColor(sf::Color::Cyan);

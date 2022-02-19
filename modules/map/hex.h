@@ -26,6 +26,7 @@ public:
     int GetOwnerId() const;
 
     bool Occupy();
+
     void Free() { isEmpty = true; }
 
     void SetOwnerId(int id) { ownerId = id; }

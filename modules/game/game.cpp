@@ -188,6 +188,10 @@ void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> 
 Map *Game::GetMap() const {
     return map;
 }
-const vector<std::vector<Vehicle *>> &Game::GetVehicles() const {
-    return vehicles;
+std::vector<std::vector<Vehicle *>> Game::GetVehicles() const {
+    std::vector<std::vector<Vehicle *>> playersVehicles;
+    for (const auto &item : playersIdAdapter) {
+        playersVehicles.push_back(this->vehicles[item.second]);
+    }
+    return playersVehicles;
 }

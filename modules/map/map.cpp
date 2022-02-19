@@ -38,7 +38,7 @@ void Map::AddConstruction(ConstructionsTypes::Type type, vector<Point3D> &points
 }
 ConstructionsTypes::Type Map::GetType(const Hex &hex) const {
     if(hex.IsSpecial() == false) return ConstructionsTypes::EMPTY;
-    return this->content[hex.GetOwnerId()]->GetType();
+    return this->content[hex.GetOwnerId() % 2]->GetType();
 }
 
 std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes) const {

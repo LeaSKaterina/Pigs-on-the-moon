@@ -37,9 +37,6 @@ private:
     int numTurns;
     int currentTurn;
 
-public:
-    const std::vector<std::vector<Vehicle *>> &GetVehicles() const;
-
 private:
     int numPlayers;
     int currentPlayerId;
@@ -97,6 +94,8 @@ public:
     // Getters
 
     [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
+
+    std::vector<std::vector<Vehicle *>> GetVehicles() const;
 
     Map *GetMap() const;
 
