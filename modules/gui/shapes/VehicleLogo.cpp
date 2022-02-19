@@ -5,16 +5,14 @@
 #include <cmath>
 
 bool VehicleLogo::isCreated = false;
-float VehicleLogo::r;
+float VehicleLogo::r = 8;
 std::vector<sf::CircleShape*> VehicleLogo::logos;
 std::map<VehiclesTypes::Type, sf::RectangleShape*> VehicleLogo::details;
 
 sf::CircleShape* VehicleLogo::CreateLogo(int pointCount, float rotation, int separatorCount) {
     auto *instance = new sf::CircleShape(r, pointCount);
     instance->setOrigin(instance->getLocalBounds().width/2, instance->getLocalBounds().height/2);
-    instance->setOutlineThickness(2.f);
-    instance->setOutlineColor(sf::Color::Black);
-    instance->setFillColor(sf::Color::Transparent);
+    instance->setFillColor(sf::Color::Black);
     if (rotation != 0.f) { instance->setRotation(rotation); }
     if (separatorCount != 0) {
         VehiclesTypes::Type type;
@@ -28,7 +26,6 @@ sf::CircleShape* VehicleLogo::CreateLogo(int pointCount, float rotation, int sep
 }
 
 VehicleLogo::VehicleLogo(){
-    r = 5;
     logos.push_back(CreateLogo(3, -30.f, 0)); //AtSpg
     logos.push_back(CreateLogo(4, 0.f, 1)); //MediumTank
     logos.push_back(CreateLogo(4, 0.f, 2)); //HeavyTank
@@ -37,24 +34,19 @@ VehicleLogo::VehicleLogo(){
     isCreated = true;
 }
 
-sf::CircleShape* VehicleLogo::GetLogoOfType(VehiclesTypes::Type type) {
-    if (!isCreated) VehicleLogo();
-    return logos[type];
-}
-
 void VehicleLogo::SetColor(const sf::Color &color) {
 //    if (!isCreated) VehicleLogo();
     for (auto logo : logos) {
-        logo->setOutlineColor(color);
+        logo->setFillColor(color);
     }
     for (auto detail: details){
-        detail.second->setOutlineColor(color);
+        detail.second->setFillColor(color);
     }
 }
 
 void VehicleLogo::GenerateLogos(float radius, int playerId) {
     if (!isCreated) VehicleLogo();
-    SetRadius(radius);
+    if (r != radius) SetRadius(radius);
     for (auto logo : logos) {
         logo->rotate(120*(float) playerId);
     }
@@ -80,10 +72,6 @@ void VehicleLogo::GenerateLogos(float radius, int playerId) {
     }
 }
 
-void VehicleLogo::SetRadius(float newR) {
-    r = newR;
-}
-
 void VehicleLogo::DestructLogos() {
     for (auto logo : logos){
         delete[] logo;
@@ -94,8 +82,8 @@ void VehicleLogo::DestructLogos() {
 }
 
 sf::RectangleShape *VehicleLogo::CreateDetail(int separatorCount) {
-    auto *detail = new sf::RectangleShape(sf::Vector2f(2*r/std::sqrt(2.f),2*(float(separatorCount) - 1)));
-    detail->setOutlineThickness(1.f);
+    auto *detail = new sf::RectangleShape(sf::Vector2f(2*r/std::sqrt(2.f), r*0.15*(separatorCount - 1)));
+    detail->setOutlineThickness(2.f);
     detail->setOutlineColor(sf::Color::Black);
     detail->setFillColor(sf::Color::Transparent);
     detail->setOrigin(detail->getSize().x/2, detail->getSize().y/2);
@@ -103,7 +91,19 @@ sf::RectangleShape *VehicleLogo::CreateDetail(int separatorCount) {
     return detail;
 }
 
-std::tuple<sf::CircleShape *, sf::RectangleShape *> VehicleLogo::GetLogoWithDetailsOfType(VehiclesTypes::Type type) {
+std::tuple<sf::CircleShape *, sf::RectangleShape *> VehicleLogo::GetLogoOfType(VehiclesTypes::Type type) {
     if (!isCreated) VehicleLogo();
     return std::make_tuple(logos[type], details.find(type)->second);
+}
+
+void VehicleLogo::SetRadius(float radius) {
+    r = radius;
+    for (auto logo : logos){
+        logo->setRadius(radius);
+        logo->setOrigin(logo->getLocalBounds().width/2, logo->getLocalBounds().height/2);
+    }
+    for (auto detail : details){
+        detail.second->setSize(sf::Vector2(2*r/std::sqrt(2.f),2*detail.second->getSize().y));
+        detail.second->setOrigin(detail.second->getSize().x/2, detail.second->getSize().y/2);
+    }
 }

@@ -8,7 +8,7 @@
 double xPosition = 0.2;
 double yPosition = 0.2;
 double width = 0.5;
-double height = 0.6;
+double height = 0.7;
 int size = 20;
 Screen center;
 
@@ -68,14 +68,18 @@ int main() {
         auto vehiclesVectors = gc.GetGame()->GetVehicles();
 
         for (int i = 0; i < vehiclesVectors.size(); i++){
-            VehicleLogo::GenerateLogos(size - 6, i);
+            VehicleLogo::GenerateLogos(size - 13, i);
             for (int j = 0; j < vehiclesVectors[i].size(); j++) {
                 auto logo = VehicleLogo::GetLogoOfType(VehiclesTypes::Type(j));
                 auto point = vehiclesVectors[i][j]->GetCurrentPosition();
                 int x = size * 3. / 2 * point.x + center.width;
                 int y = size * (sqrt(3) / 2 * point.x + std::sqrt(3) * point.y) + center.height;
-                logo->setPosition(x, y);
-                window.draw(*logo);
+                std::get<0>(logo)->setPosition(x,y);
+                window.draw(*std::get<0>(logo));
+                if (std::get<1>(logo)) {
+                    std::get<1>(logo)->setPosition(x, y);
+                    window.draw(*std::get<1>(logo));
+                }
             }
         }
 
