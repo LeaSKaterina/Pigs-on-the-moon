@@ -128,7 +128,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
     for (int i = 0; i < numPlayerVehicles; i++) {
         // TODO: There will be another check for danger
         if (map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()) == false)
-        paths[i] = std::move(this->map->GetShortestWay(*playerVehicles[i]->GetCurrentHex(), *map->GetHexByPoint(targetPoint)));
+            paths[i] = std::move(this->map->GetShortestWay(*playerVehicles[i]->GetCurrentHex(), *map->GetHexByPoint(targetPoint)));
     }
 
     unordered_map<Vehicle *, vector<Vehicle *>> priorityShootTargets =
@@ -144,7 +144,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
         bool satisfied = false;
         if (currentVehicle->PriorityAction() == Action::MOVE || round) {
             auto hex = currentVehicle->GetAvailableMovePoint(paths[i]);
-            if(hex != nullptr) {
+            if (hex != nullptr) {
                 res.emplace_back(Action::MOVE, tanksIdAdapter[i], hex->GetCoordinates());
                 satisfied = true;
                 hex->Occupy();

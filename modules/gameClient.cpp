@@ -225,9 +225,7 @@ void GameClient::UpdateWinPoints(const nlohmann::ordered_json &winPoints) {
     }
 }
 
-void GameClient::StartAI(const string &name, const string &password, const string &gameName, int numTurns,
-                         int numPlayers, bool isObserver) {
-    InitGame(name, password, gameName, numTurns, numPlayers);
+void GameClient::StartAI() {
     while (!SendTurn()) {}// wait all players
     InitIds();
     while (!GameIsFinished()) {
@@ -238,10 +236,9 @@ void GameClient::StartAI(const string &name, const string &password, const strin
 #ifdef _DEBUG
         std::cerr << "\n---------------------------------------\n";
 #endif
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         SendTurn();
     }
-
 }
 
 Game *GameClient::GetGame() const {

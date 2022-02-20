@@ -46,4 +46,3 @@ ActionController::GetPointsForShoot(const vector<vector<bool>> &attackMatrix,
 
     return res;
 }
-

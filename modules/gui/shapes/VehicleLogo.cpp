@@ -30,14 +30,14 @@ void VehicleLogo::SetColor(const sf::Color &color) {
     for (auto &logo : logos) {
         logo.setFillColor(color);
     }
-    for (auto detail: details){
+    for (auto detail : details) {
         detail.second->setFillColor(color);
     }
 }
 
 void VehicleLogo::ChangeColorById(int playerId) {
-    switch(playerId) {
-        case 0:{
+    switch (playerId) {
+        case 0: {
             SetColor(sf::Color::Cyan);
             break;
         }
@@ -55,18 +55,18 @@ void VehicleLogo::ChangeColorById(int playerId) {
     }
 }
 std::tuple<sf::CircleShape, sf::RectangleShape *> VehicleLogo::GetLogoByType(VehiclesTypes::Type type) {
-    if (details.find(type) == details.end()){
+    if (details.find(type) == details.end()) {
         return std::make_tuple(logos[type], nullptr);
     }
     return std::make_tuple(logos[type], details.find(type)->second);
 }
 
 sf::RectangleShape *VehicleLogo::CreateDetail(int separatorCount) const {
-    auto *detail = new sf::RectangleShape(sf::Vector2f(2*r/std::sqrt(2.f), r*0.15*(separatorCount - 1)));
+    auto *detail = new sf::RectangleShape(sf::Vector2f(2 * r / std::sqrt(2.f), r * 0.15 * (separatorCount - 1)));
     detail->setOutlineThickness(2.f);
     detail->setOutlineColor(sf::Color::Black);
     detail->setFillColor(sf::Color::Transparent);
-    detail->setOrigin(detail->getSize().x/2, detail->getSize().y/2);
+    detail->setOrigin(detail->getSize().x / 2, detail->getSize().y / 2);
     detail->setRotation(45);
     return detail;
 }

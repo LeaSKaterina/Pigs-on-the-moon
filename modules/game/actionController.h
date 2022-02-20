@@ -8,10 +8,10 @@
 
 class ActionController {
 private:
-//    const Map &map;
+    //    const Map &map;
 
 public:
-//    ActionController(const Map &map) : map(map) {}
+    //    ActionController(const Map &map) : map(map) {}
 
     static std::vector<bool>
     NeutralityRuleCheck(const std::vector<std::vector<bool>> &attackMatrix, int playerId, int playersNum);

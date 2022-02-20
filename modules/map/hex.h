@@ -1,7 +1,7 @@
 #pragma once
 
-#include "map/Point3D.h"
 #include "enums/types.h"
+#include "map/Point3D.h"
 #include <cstdlib>
 #include <tuple>
 #include <vector>
@@ -37,6 +37,6 @@ public:
 
     static std::vector<Point3D> GetRing(Point3D center, int r);
 
-//    static Point GetDiagonalVector(const Point& from, const Point& to, int radius);
-    static Point3D GetDiagonalVector(const Point3D &from, const Point3D &to, int radius); // Point array : int[3]
+    //    static Point GetDiagonalVector(const Point& from, const Point& to, int radius);
+    static Point3D GetDiagonalVector(const Point3D &from, const Point3D &to, int radius);// Point array : int[3]
 };

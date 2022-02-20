@@ -13,11 +13,11 @@ void Map::InitGrid() {
 }
 
 Map::~Map() {
-    for (auto &[k, h]: grid) {
+    for (auto &[k, h] : grid) {
         delete h;
     }
 
-    for (auto c: content)
+    for (auto c : content)
         delete c;
 }
 
@@ -37,7 +37,7 @@ void Map::AddConstruction(ConstructionsTypes::Type type, vector<Point3D> &points
     content.push_back(new Construction(type, basis));
 }
 ConstructionsTypes::Type Map::GetType(const Hex &hex) const {
-    if(hex.IsSpecial() == false) return ConstructionsTypes::EMPTY;
+    if (hex.IsSpecial() == false) return ConstructionsTypes::EMPTY;
     return this->content[hex.GetOwnerId() % 2]->GetType();
 }
 
@@ -62,18 +62,17 @@ std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::ve
         for (const auto &direction : Point3D::GetNeighborDirections()) {
             Point3D neighbor = currentElement.hex->GetCoordinates() + direction;
             //add to queue if not visited and not obstacle
-            if (visitedHexes.count(neighbor) == 0 && this->IsHexAreExistForPoint(neighbor)
-                && this->GetType(*GetHexByPoint(neighbor)) != ConstructionsTypes::OBSTACLE) {
+            if (visitedHexes.count(neighbor) == 0 && this->IsHexAreExistForPoint(neighbor) && this->GetType(*GetHexByPoint(neighbor)) != ConstructionsTypes::OBSTACLE) {
                 visitedHexes[neighbor] = currentElement.hex;
                 queue.emplace(currentElement.pathLength + 1, GetHexByPoint(neighbor));
             }
         }
     }
     std::vector<Hex *> path;
-    if (visitedHexes.count(endHex.GetCoordinates()) == 1){
+    if (visitedHexes.count(endHex.GetCoordinates()) == 1) {
         Hex *currentHex = &endHex;
         path.push_back(currentHex);
-        while(currentHex != &startHex){
+        while (currentHex != &startHex) {
             currentHex = visitedHexes[currentHex->GetCoordinates()];
             path.push_back(currentHex);
         }

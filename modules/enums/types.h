@@ -3,18 +3,24 @@
 #include <string>
 
 namespace VehiclesTypes {
-    enum Type { // turn order
-        SPG, LIGHT_TANK, HEAVY_TANK, MEDIUM_TANK, AT_SPG
+    enum Type {// turn order
+        SPG,
+        LIGHT_TANK,
+        HEAVY_TANK,
+        MEDIUM_TANK,
+        AT_SPG
     };
     extern const int typesNum;
     extern const std::string sTypes[];
-//    extern const int numPlayerVehicles;
-}
+    //    extern const int numPlayerVehicles;
+}// namespace VehiclesTypes
 
 namespace ConstructionsTypes {
     enum Type {
-        BASE, OBSTACLE, EMPTY
+        BASE,
+        OBSTACLE,
+        EMPTY
     };
     extern const int typesNum;
     extern const std::string sTypes[];
-}
+}// namespace ConstructionsTypes

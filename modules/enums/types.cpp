@@ -8,13 +8,11 @@ const std::string VehiclesTypes::sTypes[] = {
         "light_tank",
         "heavy_tank",
         "medium_tank",
-        "at_spg"
-};
+        "at_spg"};
 
 const int ConstructionsTypes::typesNum = 2;
 
 
 const std::string ConstructionsTypes::sTypes[] = {
         "base",
-        "obstacle"
-};
+        "obstacle"};

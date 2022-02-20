@@ -2,11 +2,10 @@
 
 Client::Client() {
     sf::Socket::Status status = tcpSocket.connect(this->address, this->port);
-    if(status != sf::Socket::Done){
+    if (status != sf::Socket::Done) {
         throw std::invalid_argument("can't connect ot server");
     }
-    if (status != sf::Socket::Done)
-    {
+    if (status != sf::Socket::Done) {
         PrintLogInfo("can't connect to server" + status);
     }
 }

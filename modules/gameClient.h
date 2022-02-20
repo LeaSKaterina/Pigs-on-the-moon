@@ -1,8 +1,8 @@
 #pragma once
 
 #include "client/client.h"
-#include "game/game.h"
 #include "enums/types.h"
+#include "game/game.h"
 #include "map/Point3D.h"
 
 #include <nlohmann/json.hpp>
@@ -34,15 +34,14 @@ public:
     [[nodiscard]] bool GameIsFinished() const { return game->IsFinished(); }
 
     void UpdateGameState();
-    //    void UpdateGameAction();  Do we really need it?
 
     bool SendTurn() const;
 
     void SendAction() const;
 
-    void StartAI(const std::string &name, const std::string &password = "",
-                  const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
-                  bool isObserver = false);
+    // starts magit in cycle
+    // requires connection to the game
+    void StartAI();
 
     Game *GetGame() const;
 

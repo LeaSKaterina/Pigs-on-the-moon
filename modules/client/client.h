@@ -6,8 +6,8 @@
 #include <iostream>
 #include <memory>
 
-#include <nlohmann/json.hpp>
 #include <SFML/Network.hpp>
+#include <nlohmann/json.hpp>
 
 
 struct Response {

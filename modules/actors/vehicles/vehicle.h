@@ -2,9 +2,9 @@
 
 #include "enums/action.h"
 #include "map/hex.h"
+#include <algorithm>
 #include <map>
 #include <vector>
-#include <algorithm>
 
 class Vehicle {
 public:
@@ -35,15 +35,13 @@ public:
 
     [[nodiscard]] const Point3D &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
-    Hex *GetCurrentHex() const {return currentPosition;}
+    Hex *GetCurrentHex() const { return currentPosition; }
 
     [[nodiscard]] int GetHp() const { return health; }
 
     [[nodiscard]] bool IsAlive() const { return health > 0; }
 
     [[nodiscard]] virtual Action PriorityAction() const = 0;
-
-    std::vector<Point3D> PriorityMoveTriangle(const Point3D &&target);
 
     // mods
 
@@ -70,5 +68,4 @@ private:
     Hex *currentPosition = nullptr;
 
     bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
-    static bool IsBetweenCoo(int coo, int first, int second);
 };

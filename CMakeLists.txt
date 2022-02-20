@@ -3,7 +3,7 @@ project(Pigs_on_the_moon)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set (ConanFolder conanBuild)
+set(ConanFolder conanBuild)
 
 #Debug
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
@@ -25,31 +25,30 @@ target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/modules) # need for include project files
 
 
-
 #copy dll to bin folder
-file (GLOB_RECURSE dlls ${CMAKE_CURRENT_SOURCE_DIR}/${ConanFolder}/bin/*)
+file(GLOB_RECURSE dlls ${CMAKE_CURRENT_SOURCE_DIR}/${ConanFolder}/bin/*)
 
-foreach(dll ${dlls})
+foreach (dll ${dlls})
     get_filename_component(filename ${dll} NAME)
     configure_file(${dll} ${CMAKE_BINARY_DIR}/bin/${filename} COPYONLY)
-endforeach()
+endforeach ()
 
 #copy resource files in binary directory (folder with executable file). Save resource path.
-file (GLOB_RECURSE resources "modules/gui/resources/*.*")# collect all resources
-foreach(resource ${resources})
+file(GLOB_RECURSE resources "modules/gui/resources/*.*")# collect all resources
+foreach (resource ${resources})
     get_filename_component(filename ${resource} NAME)
     get_filename_component(dir ${resource} DIRECTORY)
     get_filename_component(dirname ${dir} NAME)
 
-    set (output "")
+    set(output "")
 
-    while(NOT ${dirname} STREQUAL resources)
+    while (NOT ${dirname} STREQUAL resources)
         get_filename_component(path_component ${dir} NAME)
-        set (output "${path_component}/${output}")
+        set(output "${path_component}/${output}")
         get_filename_component(dir ${dir} DIRECTORY)
         get_filename_component(dirname ${dir} NAME)
-    endwhile()
+    endwhile ()
 
     set(output "${CMAKE_CURRENT_BINARY_DIR}/bin/resources/${output}${filename}")
     configure_file(${resource} ${output} COPYONLY)
-endforeach()
+endforeach ()

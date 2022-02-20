@@ -3,8 +3,8 @@
 #include "gui/shapes/VehicleLogo.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 double xPosition = 0.2;
@@ -16,16 +16,7 @@ Screen center;
 
 
 void ClientThreadFunction(GameClient *gc) {
-    while (!gc->SendTurn()) {}
-    gc->InitIds();
-    while (!gc->GameIsFinished()) {
-        gc->UpdateGameState();
-        if (gc->IsPlayTime())// play only our turn
-            gc->SendAction();
-
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        gc->SendTurn();
-    }
+    gc->StartAI();
 }
 
 int main() {
@@ -42,19 +33,23 @@ int main() {
         std::cerr << "can't load Intro music" << '\n';
     music.play();
 
-    std::string game = "game2";
+    std::string game = "game1";
     GameClient gc;
     GameClient gc2;
     GameClient gc3;
     gc.InitGame("Den-Pig", "", game, 0, 3);
     gc2.InitGame("Den-Pig2", "", game, 0, 3);
     gc3.InitGame("Den-Pig3", "", game, 0, 3);
-    std::thread thread = std::thread(ClientThreadFunction, &gc);
-    std::thread thread2 = std::thread(ClientThreadFunction, &gc2);
-    std::thread thread3 = std::thread(ClientThreadFunction, &gc3);
+    sf::Thread thread(ClientThreadFunction, &gc);
+    sf::Thread thread2(ClientThreadFunction, &gc2);
+    sf::Thread thread3(ClientThreadFunction, &gc3);
+    thread.launch();
+    thread2.launch();
+    thread3.launch();
 
+    //ToDo wait really???
     std::this_thread::sleep_for(std::chrono::seconds(1));
-//    gc.InitIds();
+    //    gc.InitIds();
 
     sf::Texture texture;
     if (!texture.loadFromFile("resources/image/background.jpg")) {
@@ -80,7 +75,7 @@ int main() {
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(size * 0.6);
-    text.setOrigin(text.getLocalBounds().width/2, text.getLocalBounds().height/2);
+    text.setOrigin(text.getLocalBounds().width / 2, text.getLocalBounds().height / 2);
 
     while (window.isOpen()) {
         window.draw(sprite);
@@ -89,7 +84,7 @@ int main() {
             hex.setOutlineColor(sf::Color::Green);
             hex.setFillColor(sf::Color::Transparent);
             if (map->GetType(*point.second) == ConstructionsTypes::BASE) hex.setOutlineColor(sf::Color::Blue);
-            if (map->GetType(*point.second) == ConstructionsTypes::OBSTACLE){
+            if (map->GetType(*point.second) == ConstructionsTypes::OBSTACLE) {
                 hex.setOutlineColor(sf::Color::Red);
                 hex.setFillColor(sf::Color(255, 20, 20, 70));
             }
@@ -100,7 +95,7 @@ int main() {
         }
 
 
-        for (int i = 0; i < vehiclesVectors.size(); i++){
+        for (int i = 0; i < vehiclesVectors.size(); i++) {
             vehicleLogo.ChangeColorById(i);
             for (int j = 0; j < vehiclesVectors[i].size(); j++) {
                 auto logo = vehicleLogo.GetLogoByType(VehiclesTypes::Type(j));
@@ -116,7 +111,7 @@ int main() {
 
                 text.setString(std::to_string(vehiclesVectors[i][j]->GetHp()));
                 text.setFillColor(std::get<0>(logo).getOutlineColor());
-                text.setPosition(x,y+4);
+                text.setPosition(x, y + 4);
                 window.draw(text);
             }
         }
@@ -124,20 +119,15 @@ int main() {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-//                thread2.detach();
-//                thread3.detach();
+                thread.terminate();
+                thread2.terminate();
+                thread3.terminate();
                 window.close();
             }
         }
 
 
         window.display();
-//        if(gc.GameIsFinished() == false) {
-//            gc.UpdateGameState();
-//            if (gc.IsPlayTime())// play only our turn
-//                gc.SendAction();
-//            gc.SendTurn();
-//        }
     }
 
     return 0;

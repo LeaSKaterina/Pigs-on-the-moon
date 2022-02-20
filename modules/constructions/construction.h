@@ -1,8 +1,8 @@
 #pragma once
 
 #include "actors/vehicles/vehicle.h"
-#include "map/hex.h"
 #include "enums/types.h"
+#include "map/hex.h"
 
 #include <vector>
 
@@ -13,7 +13,6 @@ private:
     ConstructionsTypes::Type type;
 
 public:
-
     ~Construction() = default;
 
     [[nodiscard]] ConstructionsTypes::Type GetType() const {

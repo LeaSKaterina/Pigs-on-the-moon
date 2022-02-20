@@ -45,7 +45,7 @@ private:
 
     std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
     Map *map;
-//    ActionController actionController;
+    //    ActionController actionController;
 
     Player *player;
 
@@ -82,7 +82,7 @@ public:
     void UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
                             int capturePoints);
 
-    void UpdateAttackMatrix(int playerId, const std::vector<int>& attacked);
+    void UpdateAttackMatrix(int playerId, const std::vector<int> &attacked);
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
@@ -102,5 +102,4 @@ public:
     [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
 
     [[nodiscard]] bool IsFinished() const { return isFinished; }
-
 };

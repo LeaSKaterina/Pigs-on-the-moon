@@ -35,64 +35,13 @@ int Vehicle::GetHit(int damage) {
     if (health <= 0)
         return destructionPoints;
     return 0;
-
 }
 
-Hex * Vehicle::GetAvailableMovePoint(const std::vector<Hex *> &minPath) {
-    for (int i = std::min(this->speedPoints, (int)minPath.size() - 1); i > 0; --i) {
+Hex *Vehicle::GetAvailableMovePoint(const std::vector<Hex *> &minPath) {
+    for (int i = std::min(this->speedPoints, (int) minPath.size() - 1); i > 0; --i) {
         if (minPath[i]->IsEmpty())
             return minPath[i];
     }
     return nullptr;
 }
 
-std::vector<Point3D> Vehicle::PriorityMoveTriangle(const Point3D &&target) {
-    // 0 1 2
-    std::vector<int[3]> to_check(6);
-    Point3D current = this->currentPosition->GetCoordinates();
-    int next = 0;
-
-    // point of two triangles.
-    for (int const_coo = 0; const_coo < 3; const_coo++) {
-        to_check[next][const_coo] = target[const_coo];
-        for (int aim_coo = 0; aim_coo < 3; aim_coo++) {
-            if (aim_coo == const_coo)
-                continue;
-            to_check[next][aim_coo] = current[aim_coo];
-        }
-    }
-
-    // find two valid points.
-    std::vector<int> valid_ind; // len will be 2
-    for (int i = 0; i < 6; i++) {
-        int coo = 0;
-        for (; coo < 3; coo++) {
-            if (!IsBetweenCoo(
-                        to_check[i][coo],
-                        target[coo],
-                        current[coo]))
-                break;
-        }
-        if (coo < 3)
-            valid_ind.push_back(i);
-    }
-
-    std::vector<Point3D> triangleBasePoints(2);
-    for (int i = 0; i < 2; i++) {
-        Point3D checkPoint (to_check[valid_ind[i]][0], to_check[valid_ind[i]][1], to_check[valid_ind[i]][2]);
-        triangleBasePoints[i] = Hex::GetDiagonalVector(current, checkPoint, speedPoints);
-    }
-
-    return triangleBasePoints;
-}
-
-bool Vehicle::IsBetweenCoo(int coo, int first, int second) {
-    int l, r;
-    if (first < second) {
-        l = first; r = second;
-    }
-    else {
-        l = second; r = first;
-    }
-    return coo >= l && coo <= r;
-}

@@ -5,21 +5,20 @@
 class VehicleLogo {
 private:
     std::vector<sf::CircleShape> logos;
-    std::map<VehiclesTypes::Type, sf::RectangleShape*> details;
+    std::map<VehiclesTypes::Type, sf::RectangleShape *> details;
     float r;
 
     sf::CircleShape CreateFigure(int pointCount, float rotation, int separatorCount);
-    sf::RectangleShape* CreateDetail(int separatorCount) const;
+    sf::RectangleShape *CreateDetail(int separatorCount) const;
 
     void SetColor(const sf::Color &color);
 
 public:
-
     VehicleLogo(float radius);
 
-    std::tuple<sf::CircleShape, sf::RectangleShape*> GetLogoByType(VehiclesTypes::Type type);
+    std::tuple<sf::CircleShape, sf::RectangleShape *> GetLogoByType(VehiclesTypes::Type type);
 
-//    static sf::CircleShape *GetLogoOfType(VehiclesTypes::Type type, float rotation);
+    //    static sf::CircleShape *GetLogoOfType(VehiclesTypes::Type type, float rotation);
 
     void ChangeColorById(int playerId);
 };
