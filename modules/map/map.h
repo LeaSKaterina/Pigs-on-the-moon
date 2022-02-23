@@ -4,8 +4,8 @@
 #include "enums/types.h"
 #include "hex.h"
 #include <map>
-#include <queue>
 #include <unordered_map>
+#include <stack>
 
 class Map {
 private:
@@ -37,9 +37,12 @@ public:
     const std::vector<Construction *> &GetContent() const { return content; }
 
 
-    //function return shortest way between two hexes considering specific map and blockHexes as variable.
-    //blockHexes is a vector of hexes which we can't visit right now but can visit in general. For example we can add to this vector vehicles point because
-    //on the last run this function, we tried to go to the cell occupied by the tank. We can't stand on an occupied cell, but we can drive through it.
-    //Now function use breadth first search. It works fast for map with size 11. If size will become greater than 100 change BFS to A*(A star).
-    std::vector<Hex *> GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes = {}) const;
+//function return shortest way between two hexes considering specific map and blockHexes as variable.
+//blockHexes is a vector of hexes which we can't visit right now but can visit in general. For example we can add to this vector vehicles point because
+//on the last run this function, we tried to go to the cell occupied by the tank. We can't stand on an occupied cell, but we can drive through it.
+//Algo:
+//Algo is A*. We don't use priority queue. Instead of this we use 3 stacks. First zero length modification (+1 distance traveled -1 path to target),
+//then (+1 traveled +0 path to target), and (+1 traveled +1 to target). Enough considering first stack and if it is empty use next stack.
+//Heuristic function is the shortest path without obstacles.
+    std::vector<Hex *> GetShortestWay(Hex& startHex, Hex& endHex, const std::vector<Hex *> &blockHexes = {}) const;
 };

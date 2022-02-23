@@ -42,30 +42,48 @@ ConstructionsTypes::Type Map::GetType(const Hex &hex) const {
 }
 
 std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes) const {
-    struct QueueElement {
-        int pathLength;
-        Hex *hex;// path (start, hex)
-        QueueElement(int pathLength, Hex *hex) : pathLength(pathLength), hex(hex) {}
-    };
-
     std::unordered_map<Point3D, Hex *> visitedHexes;// first unique key (hex), second - previous hex on path
     for (const auto &blockHex : blockHexes) {
         visitedHexes[blockHex->GetCoordinates()] = nullptr;
     }
-    std::queue<QueueElement> queue;
-    queue.emplace(0, &startHex);
+    std::stack<Hex *> zeroPathChange;
+    std::stack<Hex *> onePathChange;
+    std::stack<Hex *> twoPathChange;
 
+    zeroPathChange.push(&startHex);
     // walk to endHex
-    while (!queue.empty() && visitedHexes.count(endHex.GetCoordinates()) != 1) {
-        QueueElement currentElement = queue.front();
-        queue.pop();
+    while (!zeroPathChange.empty() && visitedHexes.count(endHex.GetCoordinates()) != 1) {
+        Hex *currentElement = zeroPathChange.top();
+        zeroPathChange.pop();
         for (const auto &direction : Point3D::GetNeighborDirections()) {
-            Point3D neighbor = currentElement.hex->GetCoordinates() + direction;
+            Point3D neighbor = currentElement->GetCoordinates() + direction;
             //add to queue if not visited and not obstacle
-            if (visitedHexes.count(neighbor) == 0 && this->IsHexAreExistForPoint(neighbor) && this->GetType(*GetHexByPoint(neighbor)) != ConstructionsTypes::OBSTACLE) {
-                visitedHexes[neighbor] = currentElement.hex;
-                queue.emplace(currentElement.pathLength + 1, GetHexByPoint(neighbor));
+            if (visitedHexes.count(neighbor) == 0 && this->IsHexAreExistForPoint(neighbor)
+                && this->GetType(*GetHexByPoint(neighbor)) != ConstructionsTypes::OBSTACLE) {
+                visitedHexes[neighbor] = currentElement;
+                Hex *nextHex = GetHexByPoint(neighbor);
+
+                //calc weight modification
+                //1 - path traveled, others - heuristic function
+                int distChange = 1 + nextHex->GetCoordinates().Distance(endHex.GetCoordinates())
+                        - currentElement->GetCoordinates().Distance(endHex.GetCoordinates());
+
+                std::stack<Hex *> *targetStack = &zeroPathChange;
+                switch (distChange) {
+                    case 1:
+                        targetStack = &onePathChange;
+                        break;
+                    case 2:
+                        targetStack = &twoPathChange;
+                }
+                targetStack->emplace(nextHex);
             }
+        }
+
+        //check zero stack
+        while(zeroPathChange.empty() && (!onePathChange.empty() || !twoPathChange.empty())){
+            zeroPathChange = std::move(onePathChange);
+            onePathChange = std::move(twoPathChange);
         }
     }
     std::vector<Hex *> path;
