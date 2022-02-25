@@ -33,7 +33,7 @@ int main() {
         std::cerr << "can't load Intro music" << '\n';
     music.play();
 
-    std::string game = "game1";
+    std::string game = "game3";
     GameClient gc;
     GameClient gc2;
     GameClient gc3;
@@ -46,10 +46,6 @@ int main() {
     thread.launch();
     thread2.launch();
     thread3.launch();
-
-    //ToDo wait really???
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    //    gc.InitIds();
 
     sf::Texture texture;
     if (!texture.loadFromFile("resources/image/background.jpg")) {
@@ -65,8 +61,14 @@ int main() {
     hex.setRotation(30.f);
 
     VehicleLogo vehicleLogo(size * 0.4);
-    auto vehiclesVectors = std::move(gc.GetGame()->GetVehicles());
-    auto map = gc.GetGame()->GetMap();
+
+    GameClient guiClient;
+    guiClient.InitGame("Den-Pig", "", game, 0, 3);
+    guiClient.InitIds();
+    guiClient.UpdateGameState();
+
+    const auto &vehiclesVectors = guiClient.GetGame()->GetVehicles();
+    auto map = guiClient.GetGame()->GetMap();
 
     sf::Font font;
     if (!font.loadFromFile("resources/font/nimbusMono.ttf")) {
@@ -80,6 +82,7 @@ int main() {
     while (window.isOpen()) {
         window.draw(sprite);
         //draw grid
+        guiClient.UpdateGameState();
         for (const auto point : map->GetGrid()) {
             hex.setOutlineColor(sf::Color::Green);
             hex.setFillColor(sf::Color::Transparent);
@@ -127,8 +130,9 @@ int main() {
         }
 
 
+        guiClient.SendTurn();
         window.display();
-    }
+   }
 
     return 0;
 }

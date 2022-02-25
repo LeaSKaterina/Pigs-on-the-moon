@@ -72,6 +72,11 @@ void GameClient::SendAction() const {
 
 void GameClient::InitIds() {
     auto answer = client->GameState();
+    while (answer.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
+        client->Turn();
+        answer = client->GameState();
+    }
+    std::cout << answer.answer.value("players", nlohmann::ordered_json(""));//.size() << '\n';
 #ifdef _DEBUG
     cerr << "Attack Matrix: "
          << answer.answer.value("attack_matrix", nlohmann::ordered_json(""))
@@ -226,7 +231,6 @@ void GameClient::UpdateWinPoints(const nlohmann::ordered_json &winPoints) {
 }
 
 void GameClient::StartAI() {
-    while (!SendTurn()) {}// wait all players
     InitIds();
     while (!GameIsFinished()) {
         UpdateGameState();
@@ -236,7 +240,7 @@ void GameClient::StartAI() {
 #ifdef _DEBUG
         std::cerr << "\n---------------------------------------\n";
 #endif
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        //        std::this_thread::sleep_for(std::chrono::seconds(2));
         SendTurn();
     }
 }

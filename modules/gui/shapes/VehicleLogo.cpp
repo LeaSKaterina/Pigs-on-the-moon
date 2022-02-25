@@ -19,11 +19,16 @@ sf::CircleShape VehicleLogo::CreateFigure(int pointCount, float rotation, int se
 
 //ToDo order????
 VehicleLogo::VehicleLogo(float radius) : r(radius) {
-    logos.push_back(std::move(CreateFigure(3, 180.f, 0)));//at_spg
-    logos.push_back(std::move(CreateFigure(4, 0.f, 1)));  //medium
-    logos.push_back(std::move(CreateFigure(4, 0.f, 2)));  //hard
-    logos.push_back(std::move(CreateFigure(4, 0.f, 0)));  //light
-    logos.push_back(std::move(CreateFigure(4, 45.f, 0))); //spg
+//    SPG,
+//    LIGHT_TANK,
+//    HEAVY_TANK,
+//    MEDIUM_TANK,
+//    AT_SPG
+    logos.push_back(CreateFigure(4, 45.f, 0)); //spg
+    logos.push_back(CreateFigure(4, 0.f, 0));  //light
+    logos.push_back(CreateFigure(4, 0.f, 2));  //hard
+    logos.push_back(CreateFigure(4, 0.f, 1));  //medium
+    logos.push_back(CreateFigure(3, 180.f, 0));//at_spg
 }
 
 void VehicleLogo::SetColor(const sf::Color &color) {
@@ -54,6 +59,7 @@ void VehicleLogo::ChangeColorById(int playerId) {
         }
     }
 }
+
 std::tuple<sf::CircleShape, sf::RectangleShape *> VehicleLogo::GetLogoByType(VehiclesTypes::Type type) {
     if (details.find(type) == details.end()) {
         return std::make_tuple(logos[type], nullptr);

@@ -37,7 +37,6 @@ private:
     int numTurns;
     int currentTurn;
 
-private:
     int numPlayers;
     int currentPlayerId;
 
@@ -51,7 +50,7 @@ private:
 
     [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
 
-    void InitVariables(int playersNum = 3);
+    void InitVariables(int playersNum);
 
     // Strategy
     static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
