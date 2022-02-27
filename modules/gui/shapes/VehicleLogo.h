@@ -1,3 +1,5 @@
+#pragma once
+
 #include "enums/types.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>

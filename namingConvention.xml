@@ -18,8 +18,6 @@
                   style="CAMEL_CASE" suffix=""/>
             <rule entity="CLASS_MEMBER_FIELD,STRUCT_MEMBER_FIELD" visibility="ANY" specifier="ANY" prefix=""
                   style="CAMEL_CASE" suffix=""/>
-            <rule entity="CLASS_MEMBER_FIELD,STRUCT_MEMBER_FIELD" visibility="ANY" specifier="CONST" prefix=""
-                  style="SCREAMING_SNAKE_CASE" suffix=""/>
         </rules>
     </Objective-C-extensions>
 </code_scheme>
