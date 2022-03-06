@@ -32,10 +32,10 @@ VehicleLogo::VehicleLogo(float radius) : r(radius) {
 }
 
 void VehicleLogo::SetColor(const sf::Color &color) {
-    for (auto &logo : logos) {
+    for (auto &logo: logos) {
         logo.setFillColor(color);
     }
-    for (auto detail : details) {
+    for (auto detail: details) {
         detail.second->setFillColor(color);
     }
 }

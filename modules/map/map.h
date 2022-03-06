@@ -44,5 +44,5 @@ public:
 //Algo is A*. We don't use priority queue. Instead of this we use 3 stacks. First zero length modification (+1 distance traveled -1 path to target),
 //then (+1 traveled +0 path to target), and (+1 traveled +1 to target). Enough considering first stack and if it is empty use next stack.
 //Heuristic function is the shortest path without obstacles.
-    std::vector<Hex *> GetShortestWay(Hex& startHex, Hex& endHex, const std::vector<Hex *> &blockHexes = {}) const;
+    std::vector<Hex *> GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes = {}) const;
 };

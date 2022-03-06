@@ -9,6 +9,8 @@ public:
         gc.InitGame(name, password, gameName, numTurns, numPlayers, isObserver);
     }
 
+    Bot() {}
+
     void StartAI() { gc.StartAI(); }
 
     GameClient gc;

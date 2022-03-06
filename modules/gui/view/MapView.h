@@ -8,7 +8,7 @@
 
 class MapView {
 public:
-    MapView(Game *game, sf::Mutex &gameMutex) :game(game), gameMutex(gameMutex) {
+    MapView(Game *game, sf::Mutex &gameMutex) : game(game), gameMutex(gameMutex) {
         hex.setOutlineThickness(1.f);
         hex.setFillColor(sf::Color::Transparent);
         hex.setOrigin(hex.getLocalBounds().width / 2, hex.getLocalBounds().height / 2);
@@ -27,10 +27,14 @@ public:
     void Draw(sf::RenderWindow &window) {
         sf::Lock lock(gameMutex);
 
-        const auto &vehiclesVectors = game->GetVehicles();
-        auto map = game->GetMap();
+        vehiclesVectors = game->GetVehicles();
 
         Point2D center = (rightBottomPoint - leftTopPoint) / 2;
+//        size = 10;
+        hex.setRadius(size);
+        center.x *= window.getSize().x;
+        center.y *= window.getSize().y;
+        std::cout << center.x << " " << center.y << '\n';
         //draw grid
         for (const auto point: map->GetGrid()) {
             hex.setOutlineColor(sf::Color::Green);
@@ -41,7 +45,7 @@ public:
                 hex.setFillColor(sf::Color(255, 20, 20, 70));
             }
             int x = size * 3. / 2 * point.first.x + center.x;
-            int y = size * (sqrt(3) / 2 * point.first.x + std::sqrt(3) * point.first.y) + center.y;
+            int y = size * (sqrt(3) / 2 * point.first.x + std::sqrt(3) * point.first.z) + center.y;
             hex.setPosition(x, y);
             window.draw(hex);
         }
@@ -53,7 +57,7 @@ public:
                 auto logo = vehicleLogo.GetLogoByType(VehiclesTypes::Type(j));
                 auto point = vehiclesVectors[i][j]->GetCurrentPosition();
                 int x = size * 3. / 2 * point.x + center.x;
-                int y = size * (sqrt(3) / 2 * point.x + std::sqrt(3) * point.y) + center.y - 2;
+                int y = size * (sqrt(3) / 2 * point.x + std::sqrt(3) * point.z) + center.y - 2;
                 std::get<0>(logo).setPosition(x, y);
                 window.draw(std::get<0>(logo));
                 if (std::get<1>(logo)) {
@@ -69,12 +73,9 @@ public:
         }
     }
 
-    void SetLeftTopPoint(const Point2D &leftTopPoint) {
-        MapView::leftTopPoint = leftTopPoint;
-    }
-
-    void SetRightBottomPoint(const Point2D &rightBottomPoint) {
-        MapView::rightBottomPoint = rightBottomPoint;
+    void SetBorder(const Point2D &leftTopPoint, const Point2D &rightBottomPoint) {
+        this->leftTopPoint = leftTopPoint;
+        this->rightBottomPoint = rightBottomPoint;
     }
 
 
@@ -91,5 +92,8 @@ private:
 
     sf::Font font;
     sf::Text text;
+
+    std::vector<std::vector<Vehicle *>> vehiclesVectors = game->GetVehicles();
+    Map *map = game->GetMap();
 };
 

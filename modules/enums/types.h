@@ -19,6 +19,9 @@ namespace ConstructionsTypes {
     enum Type {
         BASE,
         OBSTACLE,
+        CATAPULT,
+        LIGHT_REPAIR,
+        HARD_REPAIR,
         EMPTY
     };
     extern const int typesNum;

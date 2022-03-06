@@ -33,11 +33,11 @@ ActionController::GetPointsForShoot(const vector<vector<bool>> &attackMatrix,
     const vector<Vehicle *> &playerVehicles = vehicles[playerId];
     vector<bool> canAttack = move(NeutralityRuleCheck(attackMatrix, playerId, playersNum));
     std::unordered_map<Vehicle *, vector<Vehicle *>> res;// key - enemy tank, value - who can attack
-    for (auto &our : playerVehicles) {
+    for (auto &our: playerVehicles) {
         for (int i = 0; i < vehicles.size(); i++) {
             if (vehicles[i][0]->GetPlayerId() == playerId || !canAttack[i])
                 continue;
-            for (auto enemy : vehicles[i]) {
+            for (auto enemy: vehicles[i]) {
                 if (our->IsAvailableForShoot(enemy))
                     res[enemy].push_back(our);
             }

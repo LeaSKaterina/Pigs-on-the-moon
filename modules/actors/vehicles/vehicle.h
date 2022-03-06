@@ -9,11 +9,11 @@
 class Vehicle {
 public:
     Vehicle(int ownerId, int hp, int speed, int damage = 1)
-        : playerId(ownerId),
-          damage(damage),
-          health(hp),
-          speedPoints(speed),
-          destructionPoints(hp) {}
+            : playerId(ownerId),
+              damage(damage),
+              health(hp),
+              speedPoints(speed),
+              destructionPoints(hp) {}
 
     void InitSpawn(Hex *p);
 
@@ -42,6 +42,9 @@ public:
     [[nodiscard]] bool IsAlive() const { return health > 0; }
 
     [[nodiscard]] virtual Action PriorityAction() const = 0;
+
+    [[nodiscard]] virtual VehiclesTypes::Type GetType() const = 0;
+
 
     // mods
 

@@ -7,7 +7,7 @@
 
 class Controller {
 private:
-    std::string game = "game3";
+    std::string game = "game";
     Bot bot1;
     Bot bot2;
     Bot bot3;
@@ -20,14 +20,13 @@ private:
     View view;
 
 
-
-    void ObserverThread(){
+    void ObserverThread() {
         observer.gc.InitIds();
-        while(!observer.gc.GameIsFinished()){
+        while (!observer.gc.GameIsFinished()) {
             sf::Lock lock(observerMutex);
             observer.gc.UpdateGameState();
             observerMutex.unlock();
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            std::this_thread::sleep_for(std::chrono::seconds(9));
             observer.gc.SendTurn();
         }
     }
@@ -41,7 +40,7 @@ public:
                    thread2(&Bot::StartAI, &bot2),
                    thread3(&Bot::StartAI, &bot3),
                    observerThread(&Controller::ObserverThread, this),
-                   view(observer.gc.GetGame(), observerMutex){
+                   view(observer.gc.GetGame(), observerMutex) {
         thread1.launch();
         thread2.launch();
         thread3.launch();

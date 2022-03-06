@@ -72,7 +72,9 @@ public:
 
     void AddVehicle(int playerId, VehiclesTypes::Type type, Point3D spawn);
 
-    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point3D> &points) { map->AddConstruction(type, points); }
+    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point3D> &points) {
+        map->AddConstruction(type, points);
+    }
 
 
     // get state
