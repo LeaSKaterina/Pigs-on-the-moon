@@ -25,7 +25,7 @@ public:
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 
-    virtual Point3D Shoot(Vehicle *enemy) { return enemy->GetCurrentPosition(); };
+    virtual Point3D Shoot(Vehicle *enemy);
 
     // getters
 
@@ -59,6 +59,8 @@ public:
 
     bool Move(Hex *newPos);
 
+    void GiveBonus(){ hasABonus = true;}
+
 private:
     const int playerId;
     int health;
@@ -70,4 +72,7 @@ private:
     Hex *currentPosition = nullptr;
 
     bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
+
+protected:
+    bool hasABonus = false;
 };

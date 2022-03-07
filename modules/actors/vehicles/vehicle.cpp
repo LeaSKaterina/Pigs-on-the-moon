@@ -44,4 +44,11 @@ Hex *Vehicle::GetAvailableMovePoint(const std::vector<Hex *> &minPath) {
     }
     return nullptr;
 }
-
+Point3D Vehicle::Shoot(Vehicle *enemy) {
+    if (hasABonus) {
+        if (currentPosition->GetType() != ConstructionsTypes::CATAPULT) {
+            hasABonus = false;
+        }
+    }
+    return enemy->GetCurrentPosition();
+}

@@ -5,7 +5,7 @@ using namespace std;
 
 bool AtSpg::IsAvailableForShoot(Vehicle *enemy) {
     int d = this->GetCurrentPosition().Distance(enemy->GetCurrentPosition());
-    if (d > 3)
+    if ((d > 4) || (d > 3 && !hasABonus))
         return false;
 
     return ((this->GetCurrentPosition().x == enemy->GetCurrentPosition().x) ||
