@@ -127,15 +127,15 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
 
     for (int i = 0; i < numPlayerVehicles; i++) {
         // TODO: There will be another check for danger
-        if (map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()) == false)
-            paths[i] = std::move(
-                    this->map->GetShortestWay(*playerVehicles[i]->GetCurrentHex(), *map->GetHexByPoint(targetPoint)));
+
+        if (!map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()))
+            paths[i] =this->map->GetShortestWay(*playerVehicles[i]->GetCurrentHex(), *map->GetHexByPoint(targetPoint));
+
     }
 
     unordered_map<Vehicle *, vector<Vehicle *>> priorityShootTargets =
-            move(ActionController::GetPointsForShoot(attackMatrix, vehicles,
-                                                     playersIdAdapter.at(player->GetId()),
-                                                     numPlayers));
+            move(ActionController::GetPointsForShoot(attackMatrix, vehicles, map,
+                                                     playersIdAdapter.at(player->GetId())));
 
     ProcessAttackPossibility(priorityShootTargets);// Check if it's ok
 
@@ -191,7 +191,8 @@ Map *Game::GetMap() const {
     return map;
 }
 
-std::vector<std::vector<Vehicle *>> Game::GetVehicles() const {
+
+std::vector<std::vector<Vehicle *>> Game::GetPlayerVehicles() const {
     std::vector<std::vector<Vehicle *>> playersVehicles;
     for (const auto &item: playersIdAdapter) {
         playersVehicles.push_back(this->vehicles[item.second]);

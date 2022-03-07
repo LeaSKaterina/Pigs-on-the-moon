@@ -21,7 +21,6 @@
 
 class Game {
 private:
-    std::vector<int> state;
     std::vector<std::vector<Vehicle *>> vehicles;
 
     // new: custom id start from 0 to numPlayers - 1
@@ -44,7 +43,6 @@ private:
 
     std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
     Map *map;
-    //    ActionController actionController;
 
     Player *player;
 
@@ -96,9 +94,11 @@ public:
 
     [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
 
-    std::vector<std::vector<Vehicle *>> GetVehicles() const;
+    [[nodiscard]] std::vector<std::vector<Vehicle *>> GetPlayerVehicles() const;
 
-    Map *GetMap() const;
+    [[nodiscard]] const std::vector<std::vector<Vehicle *>> &GetVehicles() const {return vehicles;}
+
+    [[nodiscard]] Map *GetMap() const;
 
     [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
 
