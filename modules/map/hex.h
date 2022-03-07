@@ -22,7 +22,7 @@ public:
 
     [[nodiscard]] const Point3D &GetCoordinates() const { return coordinates; }
 
-    [[nodiscard]] int GetOwnerId() const;
+    [[nodiscard]] ConstructionsTypes::Type GetType() const;
 
     bool Occupy();
 
