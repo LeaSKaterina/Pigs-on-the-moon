@@ -11,7 +11,6 @@ struct Hex {
 private:
     Point3D coordinates;
     bool isEmpty = true;
-    // TODO! remove. it's useless
     int ownerId = -1;
 
 public:
@@ -23,7 +22,7 @@ public:
 
     [[nodiscard]] const Point3D &GetCoordinates() const { return coordinates; }
 
-    int GetOwnerId() const;
+    [[nodiscard]] ConstructionsTypes::Type GetType() const;
 
     bool Occupy();
 

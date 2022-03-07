@@ -1,6 +1,7 @@
 [requires]
 nlohmann_json/3.10.5
 sfml/2.5.1
+ogg/1.3.5
 
 [options]
 sfml:shared=True

@@ -16,11 +16,11 @@ private:
     void InitGrid();
 
 public:
-    explicit Map(int size) : size(size) { InitGrid(); }
+    explicit Map(int size);
 
     void AddConstruction(ConstructionsTypes::Type type, std::vector<Point3D> &points);
 
-    bool IsHexAreExistForPoint(const Point3D &point) const { return grid.count(point) != 0; }
+    [[nodiscard]] bool IsHexAreExistForPoint(const Point3D &point) const { return grid.count(point) != 0; }
 
     [[nodiscard]] Hex *GetHexByPoint(const Point3D &p) const { return grid.at(p); }
 
@@ -28,13 +28,13 @@ public:
 
     [[nodiscard]] bool IsBasePoint(const Point3D &point) const;
 
-    ConstructionsTypes::Type GetType(const Hex &hex) const;
+    [[nodiscard]] static ConstructionsTypes::Type GetType(const Hex &hex) ;
 
     ~Map();
 
-    const std::map<Point3D, Hex *> &GetGrid() const { return grid; }
+    [[nodiscard]] const std::map<Point3D, Hex *> &GetGrid() const { return grid; }
 
-    const std::vector<Construction *> &GetContent() const { return content; }
+    [[nodiscard]] const std::vector<Construction *> &GetContent() const { return content; }
 
 
 //function return shortest way between two hexes considering specific map and blockHexes as variable.

@@ -8,16 +8,12 @@
 
 class Construction {
 private:
-    static int counter;
-    int id;
     ConstructionsTypes::Type type;
 
 public:
     ~Construction() = default;
 
-    [[nodiscard]] ConstructionsTypes::Type GetType() const {
-        return type;
-    }
+    [[nodiscard]] ConstructionsTypes::Type GetType() const {return type;}
 
     Construction(ConstructionsTypes::Type type, std::vector<Hex *> &basis);
 };

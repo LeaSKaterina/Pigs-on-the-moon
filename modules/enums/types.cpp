@@ -10,12 +10,12 @@ const std::string VehiclesTypes::sTypes[] = {
         "medium_tank",
         "at_spg"};
 
-const int ConstructionsTypes::typesNum = 2;
+const int ConstructionsTypes::typesNum = 5;
 
 
 const std::string ConstructionsTypes::sTypes[] = {
         "base",
         "obstacle",
-        "catapult",
         "light_repair",
-        "hard_repair"};
+        "hard_repair",
+        "catapult"};

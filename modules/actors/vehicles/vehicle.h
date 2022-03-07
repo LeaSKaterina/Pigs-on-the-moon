@@ -35,7 +35,7 @@ public:
 
     [[nodiscard]] const Point3D &GetCurrentPosition() const { return currentPosition->GetCoordinates(); }
 
-    Hex *GetCurrentHex() const { return currentPosition; }
+    [[nodiscard]] Hex *GetCurrentHex() const { return currentPosition; }
 
     [[nodiscard]] int GetHp() const { return health; }
 
@@ -44,7 +44,6 @@ public:
     [[nodiscard]] virtual Action PriorityAction() const = 0;
 
     [[nodiscard]] virtual VehiclesTypes::Type GetType() const = 0;
-
 
     // mods
 
