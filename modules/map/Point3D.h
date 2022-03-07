@@ -21,6 +21,10 @@ public:
         return (this->x == other.x) && (this->y == other.y) && (this->z == other.z);
     }
 
+    bool operator!=(const Point3D &other) const {
+        return (this->x != other.x) || (this->y != other.y) || (this->z != other.z);
+    }
+
     bool operator<(const Point3D &other) const {
         if (this->x != other.x) return this->x < other.x;
         if (this->y != other.y) return this->y < other.y;

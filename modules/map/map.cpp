@@ -103,6 +103,34 @@ std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::ve
     std::reverse(path.begin(), path.end());
     return path;
 }
-bool Map::HasObstacleBetween(const Hex *f, const Hex *s) {
+bool Map::HasObstacleBetween(const Hex &f, const Hex &s) const {
+
+    // Find diagonal :
+    int axis;
+    int count = 0;
+    Point3D checker;
+
+    for (int i = 0; i < 3; i++) {
+        if (f.GetCoordinates()[i] != s.GetCoordinates()[i]) {
+            axis = i;
+            count++;
+        }
+        else {
+            checker[i] = f.GetCoordinates()[i];
+        }
+    }
+
+    if (count != 1) return false;
+
+    pair<int, int> borders;
+    borders = f < s
+            ? make_pair(f.GetCoordinates()[axis], s.GetCoordinates()[axis])
+            : make_pair(s.GetCoordinates()[axis], s.GetCoordinates()[axis]);
+
+    for (checker[axis] = borders.first + 1; checker[axis] < borders.second; checker[axis]++) {
+        if (GetHexByPoint(checker)->GetType() == ConstructionsTypes::Type::OBSTACLE)
+            return true;
+    }
+
     return false;
 }

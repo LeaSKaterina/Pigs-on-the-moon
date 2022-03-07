@@ -30,7 +30,7 @@ public:
 
     [[nodiscard]] static ConstructionsTypes::Type GetType(const Hex &hex);
 
-    [[nodiscard]] static bool HasObstacleBetween(const Hex* f, const Hex* s);
+    [[nodiscard]] bool HasObstacleBetween(const Hex& f, const Hex& s) const;
 
     ~Map();
 
