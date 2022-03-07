@@ -28,7 +28,9 @@ public:
 
     [[nodiscard]] bool IsBasePoint(const Point3D &point) const;
 
-    [[nodiscard]] static ConstructionsTypes::Type GetType(const Hex &hex) ;
+    [[nodiscard]] static ConstructionsTypes::Type GetType(const Hex &hex);
+
+    [[nodiscard]] static bool HasObstacleBetween(const Hex* f, const Hex* s);
 
     ~Map();
 

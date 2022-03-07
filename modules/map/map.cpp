@@ -103,3 +103,6 @@ std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::ve
     std::reverse(path.begin(), path.end());
     return path;
 }
+bool Map::HasObstacleBetween(const Hex *f, const Hex *s) {
+    return false;
+}

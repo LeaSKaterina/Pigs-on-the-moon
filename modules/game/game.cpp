@@ -133,8 +133,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
 
     unordered_map<Vehicle *, vector<Vehicle *>> priorityShootTargets =
             move(ActionController::GetPointsForShoot(attackMatrix, vehicles,
-                                                     playersIdAdapter.at(player->GetId()),
-                                                     numPlayers));
+                                                     playersIdAdapter.at(player->GetId())));
 
     ProcessAttackPossibility(priorityShootTargets);// Check if it's ok
 
