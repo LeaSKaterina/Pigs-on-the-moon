@@ -10,12 +10,14 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+class Controller;
 
 class View {
 public:
-    View(Game *game, sf::Mutex &gameMutex) : screen(sf::VideoMode::getDesktopMode().width,
-                                                    sf::VideoMode::getDesktopMode().height),
-                                             mapView(game, gameMutex) {
+    View(Controller &controller, Game *game, sf::Mutex &gameMutex) : controller(controller),
+                                                                     screen(sf::VideoMode::getDesktopMode().width,
+                                                                            sf::VideoMode::getDesktopMode().height),
+                                                                     mapView(game, gameMutex) {
         std::ifstream config("resources/config/view.json");
         std::string str((std::istreambuf_iterator<char>(config)), std::istreambuf_iterator<char>());
         config.close();
@@ -34,51 +36,18 @@ public:
         mapView.SetBorder({0, 0}, {1, 1});
     }
 
-    void Show() {
-        sf::Music music;
-        this->PlayStartMusic(music);
-
-        sf::Texture texture;
-        if (!texture.loadFromFile("resources/image/background.jpg")) {
-            std::cerr << "can't load texture" << '\n';
-        }
-        sf::Sprite sprite;
-        sprite.setTexture(texture);
-
-        sf::View view = window.getDefaultView();
-
-        while (window.isOpen()) {
-            window.clear();
-            window.draw(sprite);
-
-            mapView.Draw(window);
-
-            sf::Event event;
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
-                    window.close();
-                }
-
-                if (event.type == sf::Event::Resized) {
-                    sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-                    window.setView(sf::View(visibleArea));
-                }
-            }
-
-            window.display();
-        }
-
-    }
+    void Show();
 
 private:
     const Screen screen;
     sf::RenderWindow window;
     MapView mapView;
+    Controller &controller;
 
     void PlayStartMusic(sf::Music &music) {
         if (!music.openFromFile("resources/music/Intro.ogg"))
             std::cerr << "can't load Intro music" << '\n';
-//        music.play();
+        music.play();
     }
 
 };

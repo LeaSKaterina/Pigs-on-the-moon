@@ -7,6 +7,9 @@ bool GameClient::Login(const string &name, const string &password, const string 
                        int numPlayers, bool isObserver) {
     // Login
     auto answer = client->Login(name, password, gameName, numTurns, numPlayers, isObserver);
+#ifdef _DEBUG
+        std::cerr << (int)answer.result << " " << answer.answer << std::endl;
+#endif
     if (answer.result != Result::OKEY)
         return false;
 
@@ -29,7 +32,9 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
 }
 
 GameClient::~GameClient() {
-    client->Logout();
+    //we don't use logout because, otherwise reconnection brings throw game is full
+    //but logically we should do this
+//    client->Logout();
     delete game;
     delete client;
 }
@@ -129,11 +134,6 @@ void GameClient::InitContent(const nlohmann::ordered_json &contentInfo) {
 }
 
 void GameClient::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
-#ifdef _DEBUG
-    cerr << "Spawn Info: "
-         << spawnInfo
-         << " :Spawn Info" << endl;
-#endif
     int index = 0;
     for (auto &player: spawnInfo.items()) {
         for (int i = 0; i < VehiclesTypes::typesNum; i++) {
@@ -141,12 +141,6 @@ void GameClient::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
             auto spawns = player.value().value(type, nlohmann::ordered_json(""));
             for (auto &spawn: spawns.items()) {
                 auto &point = spawn.value();
-#ifdef _DEBUG
-                cout << "SPAWNS:\n"
-                     << spawns << "\n:SPAWNS" << endl;
-                cout << "POINT:\n"
-                     << point << "\n:POINTS" << endl;
-#endif
                 game->AddVehicle(index,
                                  VehiclesTypes::Type(i),
                                  MakePosTuple(point));

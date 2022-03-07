@@ -23,5 +23,7 @@ public:
 
     //    static sf::CircleShape *GetLogoOfType(VehiclesTypes::Type type, float rotation);
 
+    void SetRadius(float radius);
+
     void ChangeColorById(int playerId);
 };

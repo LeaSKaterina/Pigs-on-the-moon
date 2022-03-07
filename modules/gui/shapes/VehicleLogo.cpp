@@ -77,14 +77,14 @@ sf::RectangleShape *VehicleLogo::CreateDetail(int separatorCount) const {
     return detail;
 }
 
-//void VehicleLogo::SetRadius(float radius) {
-//    r = radius;
-//    for (auto logo : logos){
-//        logo->setRadius(radius);
-//        logo->setOrigin(logo->getLocalBounds().width/2, logo->getLocalBounds().height/2);
-//    }
-//    for (auto detail : details){
-//        detail.second->setSize(sf::Vector2(2*r/std::sqrt(2.f),2*detail.second->getSize().y));
-//        detail.second->setOrigin(detail.second->getSize().x/2, detail.second->getSize().y/2);
-//    }
-//}
+void VehicleLogo::SetRadius(float radius) {
+    r = radius;
+    for (auto &logo : logos){
+        logo.setRadius(radius);
+//        logo.setOrigin(logo.getLocalBounds().width/2, logo.getLocalBounds().height/2);
+    }
+    for (auto detail : details){
+        detail.second->setSize(sf::Vector2(2*r/std::sqrt(2.f),2*detail.second->getSize().y));
+        detail.second->setOrigin(detail.second->getSize().x/2, detail.second->getSize().y/2);
+    }
+}

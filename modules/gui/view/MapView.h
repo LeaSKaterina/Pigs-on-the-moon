@@ -31,10 +31,11 @@ public:
 
         Point2D center = (rightBottomPoint - leftTopPoint) / 2;
 //        size = 10;
+//        vehicleLogo.SetRadius(5);
         hex.setRadius(size);
         center.x *= window.getSize().x;
         center.y *= window.getSize().y;
-        std::cout << center.x << " " << center.y << '\n';
+
         //draw grid
         for (const auto point: map->GetGrid()) {
             int x = size * 3. / 2 * point.first.x + center.x;
@@ -88,7 +89,6 @@ public:
             hex.setPosition(x, y);
             window.draw(hex);
         }
-
 
         for (int i = 0; i < vehiclesVectors.size(); i++) {
             vehicleLogo.ChangeColorById(i);
