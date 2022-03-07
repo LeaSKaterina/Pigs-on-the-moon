@@ -53,9 +53,9 @@ public:
 
         for (int i = 0; i < vehiclesVectors.size(); i++) {
             vehicleLogo.ChangeColorById(i);
-            for (int j = 0; j < vehiclesVectors[i].size(); j++) {
-                auto logo = vehicleLogo.GetLogoByType(VehiclesTypes::Type(j));
-                auto point = vehiclesVectors[i][j]->GetCurrentPosition();
+            for (auto &vehicle : vehiclesVectors[i]) {
+                auto logo = vehicleLogo.GetLogoByType(vehicle->GetType());
+                auto point = vehicle->GetCurrentPosition();
                 int x = size * 3. / 2 * point.x + center.x;
                 int y = size * (sqrt(3) / 2 * point.x + std::sqrt(3) * point.z) + center.y - 2;
                 std::get<0>(logo).setPosition(x, y);
@@ -65,7 +65,7 @@ public:
                     window.draw(*std::get<1>(logo));
                 }
 
-                text.setString(std::to_string(vehiclesVectors[i][j]->GetHp()));
+                text.setString(std::to_string(vehicle->GetHp()));
                 text.setFillColor(std::get<0>(logo).getOutlineColor());
                 text.setPosition(x, y + 4);
                 window.draw(text);
