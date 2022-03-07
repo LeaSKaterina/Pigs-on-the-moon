@@ -2,6 +2,11 @@
 
 using namespace std;
 
+Map::Map(int size)  : size(size) {
+    InitGrid();
+    content.resize(ConstructionsTypes::typesNum);
+}
+
 void Map::InitGrid() {
     for (int x = -size + 1; x < size; x++) {
         for (int y = -size + 1; y < size; y++) {
@@ -34,11 +39,11 @@ void Map::AddConstruction(ConstructionsTypes::Type type, vector<Point3D> &points
     for (int i = 0; i < points.size(); i++) {
         basis[i] = grid[points[i]];
     }
-    content.push_back(new Construction(type, basis));
+    content[type] = new Construction(type, basis);
 }
-ConstructionsTypes::Type Map::GetType(const Hex &hex) const {
-    if (hex.IsSpecial() == false) return ConstructionsTypes::EMPTY;
-    return this->content[hex.GetOwnerId() % 2]->GetType();
+ConstructionsTypes::Type Map::GetType(const Hex &hex) {
+    if (!hex.IsSpecial()) return ConstructionsTypes::EMPTY;
+    return ConstructionsTypes::Type(hex.GetOwnerId());
 }
 
 std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes) const {

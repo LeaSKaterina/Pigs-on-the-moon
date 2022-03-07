@@ -1,3 +1,5 @@
 .idea/
 cmake-build*/
 conanBuild/
+.env/
+test*

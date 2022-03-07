@@ -3,7 +3,7 @@
 #include <string>
 
 namespace VehiclesTypes {
-    enum Type {// turn order
+    enum Type { // turn order
         SPG,
         LIGHT_TANK,
         HEAVY_TANK,
@@ -19,6 +19,9 @@ namespace ConstructionsTypes {
     enum Type {
         BASE,
         OBSTACLE,
+        LIGHT_REPAIR,
+        HARD_REPAIR,
+        CATAPULT,
         EMPTY
     };
     extern const int typesNum;

@@ -8,7 +8,9 @@ public:
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
 
-    Action PriorityAction() const override { return Action::SHOOT; }
+    [[nodiscard]] Action PriorityAction() const override { return Action::SHOOT; }
+
+    [[nodiscard]] VehiclesTypes::Type GetType() const override {return VehiclesTypes::Type::SPG; }
 
     Point3D Shoot(Vehicle *enemy) override;
 };
