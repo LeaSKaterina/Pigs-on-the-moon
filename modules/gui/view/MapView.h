@@ -27,7 +27,7 @@ public:
     void Draw(sf::RenderWindow &window) {
         sf::Lock lock(gameMutex);
 
-        const auto &vehiclesVectors = game->GetVehicles();
+        const auto &vehiclesVectors = game->GetPlayerVehicles();
         auto map = game->GetMap();
 
         Point2D center = (rightBottomPoint - leftTopPoint) / 2;

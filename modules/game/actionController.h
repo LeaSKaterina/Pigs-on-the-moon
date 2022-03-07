@@ -7,17 +7,13 @@
 #include <unordered_map>
 
 class ActionController {
-private:
-    //    const Map &map;
-
 public:
-    //    ActionController(const Map &map) : map(map) {}
-
     static std::vector<bool>
     NeutralityRuleCheck(const std::vector<std::vector<bool>> &attackMatrix, int playerId);
 
     static std::unordered_map<Vehicle *, std::vector<Vehicle *>>
     GetPointsForShoot(const std::vector<std::vector<bool>> &attackMatrix,
                       const std::vector<std::vector<Vehicle *>> &vehicles,
+                      const Map* map,
                       int playerId);
 };
