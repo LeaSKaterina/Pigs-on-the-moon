@@ -63,8 +63,6 @@ public:
                         std::cerr << "can't load catapult texture" << '\n';
                     }
                     window.draw(GetSprite(texture,x,y));
-                    hex.setOutlineColor(sf::Color::White);
-                    hex.setFillColor(sf::Color(sf::Color(255, 255, 255, 70)));
                     break;
                 }
                 case ConstructionsTypes::LIGHT_REPAIR:{
@@ -74,8 +72,6 @@ public:
                         std::cerr << "can't load light repair texture" << '\n';
                     }
                     window.draw(GetSprite(texture,x,y));
-                    hex.setOutlineColor(sf::Color::White);
-                    hex.setFillColor(sf::Color(sf::Color(255, 255, 255, 70)));
                     break;
                 }
                 case ConstructionsTypes::HARD_REPAIR:{
@@ -85,8 +81,6 @@ public:
                         std::cerr << "can't load hard repair texture" << '\n';
                     }
                     window.draw(GetSprite(texture,x,y));
-                    hex.setOutlineColor(sf::Color::White);
-                    hex.setFillColor(sf::Color(sf::Color(255, 255, 255, 70)));
                     break;
                 }
 
@@ -146,7 +140,6 @@ private:
         sprite.setScale((float)(size + 2)/(float)(texture.getSize().x), (float)(size + 2)/(float)(texture.getSize().y));
         sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
         sprite.setPosition(x+0.2*size,y+0.2*size);
-        sprite.setColor(sf::Color::White);
         return sprite;
     }
 };
