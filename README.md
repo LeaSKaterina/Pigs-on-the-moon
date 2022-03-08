@@ -12,6 +12,7 @@
 
 + nlohmann_json/3.10.5 - static
 + sfml/2.5.1 - shared
++ ogg/1.3.5
 
 ## Instruction
 
@@ -41,18 +42,23 @@ Pigs_on_the_moon
 
 Conan profiles example:
 
-<!-- Help me please. What a long line!!! -->
-
+<!-- 400 rows in line((( table -->
 |                                                                                Linux                                                                                 |                                          Windows                                           |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------:|
 |[settings]<br/>arch=x86_64<br/>arch_build=x86_64<br/>build_type=Debug<br/>compiler=gcc<br/>compiler.libcxx=libstdc++11<br/>compiler.version=9<br/>os=Linux<br/>os_build=Linux | [settings]<br/>os=Windows<br/>os_build=Windows<br/>arch=x86_64<br/>arch_build=x86_64<br/>compiler=Visual Studio<br/> compiler.version=16<br/> build_type=Debug |
 
-## Stage 3
+## Stage 4
 
-#### What can our bot do?
+### What can our bot do?
 
-When the application starts, 3 identical bots enter the game and play there. They use breadth-first search to navigate.
-Bot can kill enemy tanks and analyze neutrality rule.\
-All configuration is contained in main.cpp.
+:white_check_mark: improved GUI architecture.\
+Gui try implement mvc pattern. The window is designed to easily add blocks of information.
 
+:white_check_mark: improved multithreading.\
+add mutex
+
+:white_check_mark: added drawing new cells.
+
+### A few words about the launch
+We have not encountered the problem of using auto_ptr, but we do not exclude the possibility of this event. Good luck :neutral_face:
 

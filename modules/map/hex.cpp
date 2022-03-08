@@ -53,5 +53,5 @@ Point3D Hex::GetDiagonalVector(const Point3D &from, const Point3D &to, int radiu
 }
 
 ConstructionsTypes::Type Hex::GetType() const {
-    return ownerId == -1 ? ConstructionsTypes::Type::EMPTY : (ConstructionsTypes::Type)ownerId;
+    return ownerId == -1 ? ConstructionsTypes::Type::EMPTY : (ConstructionsTypes::Type) ownerId;
 }

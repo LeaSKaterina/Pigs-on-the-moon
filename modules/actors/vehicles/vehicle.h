@@ -9,11 +9,11 @@
 class Vehicle {
 public:
     Vehicle(int ownerId, int hp, int speed, int damage = 1)
-            : playerId(ownerId),
-              damage(damage),
-              health(hp),
-              speedPoints(speed),
-              destructionPoints(hp) {}
+        : playerId(ownerId),
+          damage(damage),
+          health(hp),
+          speedPoints(speed),
+          destructionPoints(hp) {}
 
     void InitSpawn(Hex *p);
 
@@ -59,7 +59,7 @@ public:
 
     bool Move(Hex *newPos);
 
-    void GiveBonus(){ hasABonus = true;}
+    void GiveBonus() { hasABonus = true; }
 
 private:
     const int playerId;

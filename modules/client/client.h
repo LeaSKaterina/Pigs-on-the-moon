@@ -18,26 +18,6 @@ struct Response {
 };
 
 class Client {
-private:
-    const char address[26] = "wgforge-srv.wargaming.net";
-    const int port = 443;
-    sf::TcpSocket tcpSocket;
-    const int codeSize = 4;// action size in bytes
-
-    //send to server msg
-    void SendRequest(Action action, const std::string &msg);
-
-    //receive int from server
-    int GetIntFromServer();
-
-    //receive data from server. Guaranteed that all packages are received
-    std::vector<char> Receive(size_t size);
-
-    //gets response after request
-    Response GetAnswer();
-
-    bool debug;
-
 public:
     Client();
 
@@ -78,4 +58,24 @@ public:
     Response SendTankAction(Action action, int vehicleId, int x, int y, int z);
 
     static void PrintLogInfo(const std::string &info) { std::cout << info << '\n'; }
+
+private:
+    const char address[26] = "wgforge-srv.wargaming.net";
+    const int port = 443;
+    sf::TcpSocket tcpSocket;
+    const int codeSize = 4;// action size in bytes
+
+    //send to server msg
+    void SendRequest(Action action, const std::string &msg);
+
+    //receive int from server
+    int GetIntFromServer();
+
+    //receive data from server. Guaranteed that all packages are received
+    std::vector<char> Receive(size_t size);
+
+    //gets response after request
+    Response GetAnswer();
+
+    bool debug;
 };

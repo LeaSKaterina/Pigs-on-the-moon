@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Map::Map(int size)  : size(size) {
+Map::Map(int size) : size(size) {
     InitGrid();
     content.resize(ConstructionsTypes::typesNum);
 }
@@ -18,11 +18,11 @@ void Map::InitGrid() {
 }
 
 Map::~Map() {
-    for (auto &[k, h]: grid) {
+    for (auto &[k, h] : grid) {
         delete h;
     }
 
-    for (auto c: content)
+    for (auto c : content)
         delete c;
 }
 
@@ -50,7 +50,7 @@ ConstructionsTypes::Type Map::GetType(const Hex &hex) {
 
 std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes) const {
     std::unordered_map<Point3D, Hex *> visitedHexes;// first unique key (hex), second - previous hex on path
-    for (const auto &blockHex: blockHexes) {
+    for (const auto &blockHex : blockHexes) {
         visitedHexes[blockHex->GetCoordinates()] = nullptr;
     }
     std::stack<Hex *> zeroPathChange;
@@ -62,18 +62,16 @@ std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::ve
     while (!zeroPathChange.empty() && visitedHexes.count(endHex.GetCoordinates()) != 1) {
         Hex *currentElement = zeroPathChange.top();
         zeroPathChange.pop();
-        for (const auto &direction: Point3D::GetNeighborDirections()) {
+        for (const auto &direction : Point3D::GetNeighborDirections()) {
             Point3D neighbor = currentElement->GetCoordinates() + direction;
             //add to queue if not visited and not obstacle
-            if (visitedHexes.count(neighbor) == 0 && this->IsHexAreExistForPoint(neighbor)
-                && this->GetType(*GetHexByPoint(neighbor)) != ConstructionsTypes::OBSTACLE) {
+            if (visitedHexes.count(neighbor) == 0 && this->IsHexAreExistForPoint(neighbor) && this->GetType(*GetHexByPoint(neighbor)) != ConstructionsTypes::OBSTACLE) {
                 visitedHexes[neighbor] = currentElement;
                 Hex *nextHex = GetHexByPoint(neighbor);
 
                 //calc weight modification
                 //1 - path traveled, others - heuristic function
-                int distChange = 1 + nextHex->GetCoordinates().Distance(endHex.GetCoordinates())
-                                 - currentElement->GetCoordinates().Distance(endHex.GetCoordinates());
+                int distChange = 1 + nextHex->GetCoordinates().Distance(endHex.GetCoordinates()) - currentElement->GetCoordinates().Distance(endHex.GetCoordinates());
 
                 std::stack<Hex *> *targetStack = &zeroPathChange;
                 switch (distChange) {
@@ -105,6 +103,7 @@ std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::ve
     std::reverse(path.begin(), path.end());
     return path;
 }
+
 bool Map::HasObstacleBetween(const Hex &f, const Hex &s) const {
 
     // Find diagonal :
@@ -116,8 +115,7 @@ bool Map::HasObstacleBetween(const Hex &f, const Hex &s) const {
         if (f.GetCoordinates()[i] != s.GetCoordinates()[i]) {
             axis = i;
             count++;
-        }
-        else {
+        } else {
             checker[i] = f.GetCoordinates()[i];
         }
     }
@@ -126,8 +124,8 @@ bool Map::HasObstacleBetween(const Hex &f, const Hex &s) const {
 
     pair<int, int> borders;
     borders = f < s
-            ? make_pair(f.GetCoordinates()[axis], s.GetCoordinates()[axis])
-            : make_pair(s.GetCoordinates()[axis], s.GetCoordinates()[axis]);
+                      ? make_pair(f.GetCoordinates()[axis], s.GetCoordinates()[axis])
+                      : make_pair(s.GetCoordinates()[axis], s.GetCoordinates()[axis]);
 
     for (checker[axis] = borders.first + 1; checker[axis] < borders.second; checker[axis]++) {
         if (GetHexByPoint(checker)->GetType() == ConstructionsTypes::Type::OBSTACLE)

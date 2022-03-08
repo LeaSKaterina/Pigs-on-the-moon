@@ -1,10 +1,10 @@
 #pragma once
 
-#include "gui/screen.h"
-#include "gameClient.h"
-#include "gui/shapes/VehicleLogo.h"
-#include "gui/model/Bot.h"
 #include "MapView.h"
+#include "gameClient.h"
+#include "gui/model/Bot.h"
+#include "gui/screen.h"
+#include "gui/shapes/VehicleLogo.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <fstream>
@@ -17,7 +17,7 @@ public:
     View(Controller &controller, Game *game, sf::Mutex &gameMutex) : controller(controller),
                                                                      screen(sf::VideoMode::getDesktopMode().width,
                                                                             sf::VideoMode::getDesktopMode().height),
-                                                                     mapView(game, gameMutex) {
+                                                                     mapViewModel(game, gameMutex, {0, 0}, {1, 1}) {
         std::ifstream config("resources/config/view.json");
         std::string str((std::istreambuf_iterator<char>(config)), std::istreambuf_iterator<char>());
         config.close();
@@ -33,7 +33,7 @@ public:
         window.setFramerateLimit(30);
         window.setVerticalSyncEnabled(true);
 
-        mapView.SetBorder({0, 0}, {1, 1});
+        mapViewModel.Resize(window.getSize());
     }
 
     void Show();
@@ -41,7 +41,7 @@ public:
 private:
     const Screen screen;
     sf::RenderWindow window;
-    MapView mapView;
+    MapView mapViewModel;
     Controller &controller;
 
     void PlayStartMusic(sf::Music &music) {
@@ -49,5 +49,4 @@ private:
             std::cerr << "can't load Intro music" << '\n';
         music.play();
     }
-
 };

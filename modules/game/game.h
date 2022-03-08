@@ -20,39 +20,6 @@
 
 
 class Game {
-private:
-    std::vector<std::vector<Vehicle *>> vehicles;
-
-    // new: custom id start from 0 to numPlayers - 1
-    std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]
-    std::vector<int> tanksIdAdapter;    // save real id for server
-
-    std::vector<int> captures;
-    std::vector<int> kills;
-
-    const int numRounds = 15;
-    static constexpr int numPlayerVehicles = 5;
-
-    int numTurns;
-    int currentTurn;
-
-    int numPlayers;
-    int currentPlayerId;
-
-    bool isFinished = false;
-
-    std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
-    Map *map;
-
-    Player *player;
-
-    [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
-
-    void InitVariables(int playersNum);
-
-    // Strategy
-    static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
-
 public:
     Game(int playerId, std::string name, std::string password = "", int playersNum = 3);
 
@@ -96,11 +63,44 @@ public:
 
     [[nodiscard]] std::vector<std::vector<Vehicle *>> GetPlayerVehicles() const;
 
-    [[nodiscard]] const std::vector<std::vector<Vehicle *>> &GetVehicles() const {return vehicles;}
+    [[nodiscard]] const std::vector<std::vector<Vehicle *>> &GetVehicles() const { return vehicles; }
 
     [[nodiscard]] Map *GetMap() const;
 
     [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
 
     [[nodiscard]] bool IsFinished() const { return isFinished; }
+
+private:
+    std::vector<std::vector<Vehicle *>> vehicles;
+
+    // new: custom id start from 0 to numPlayers - 1
+    std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]
+    std::vector<int> tanksIdAdapter;    // save real id for server
+
+    std::vector<int> captures;
+    std::vector<int> kills;
+
+    const int numRounds = 15;
+    static constexpr int numPlayerVehicles = 5;
+
+    int numTurns;
+    int currentTurn;
+
+    int numPlayers;
+    int currentPlayerId;
+
+    bool isFinished = false;
+
+    std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
+    Map *map;
+
+    Player *player;
+
+    [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
+
+    void InitVariables(int playersNum);
+
+    // Strategy
+    static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
 };

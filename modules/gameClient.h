@@ -43,7 +43,7 @@ public:
     // requires connection to the game
     void StartAI();
 
-    [[nodiscard]] Game *GetGame() const {return game;}
+    [[nodiscard]] Game *GetGame() const { return game; }
 
 
 private:

@@ -19,11 +19,11 @@ sf::CircleShape VehicleLogo::CreateFigure(int pointCount, float rotation, int se
 
 //ToDo order????
 VehicleLogo::VehicleLogo(float radius) : r(radius) {
-//    SPG,
-//    LIGHT_TANK,
-//    HEAVY_TANK,
-//    MEDIUM_TANK,
-//    AT_SPG
+    //    SPG,
+    //    LIGHT_TANK,
+    //    HEAVY_TANK,
+    //    MEDIUM_TANK,
+    //    AT_SPG
     logos.push_back(CreateFigure(4, 45.f, 0)); //spg
     logos.push_back(CreateFigure(4, 0.f, 0));  //light
     logos.push_back(CreateFigure(4, 0.f, 2));  //hard
@@ -32,10 +32,10 @@ VehicleLogo::VehicleLogo(float radius) : r(radius) {
 }
 
 void VehicleLogo::SetColor(const sf::Color &color) {
-    for (auto &logo: logos) {
+    for (auto &logo : logos) {
         logo.setFillColor(color);
     }
-    for (auto detail: details) {
+    for (auto detail : details) {
         detail.second->setFillColor(color);
     }
 }
@@ -79,12 +79,19 @@ sf::RectangleShape *VehicleLogo::CreateDetail(int separatorCount) const {
 
 void VehicleLogo::SetRadius(float radius) {
     r = radius;
-    for (auto &logo : logos){
+    for (auto &logo : logos) {
         logo.setRadius(radius);
-//        logo.setOrigin(logo.getLocalBounds().width/2, logo.getLocalBounds().height/2);
+        logo.setOrigin(logo.getLocalBounds().width / 2, logo.getLocalBounds().height / 2);
     }
-    for (auto detail : details){
-        detail.second->setSize(sf::Vector2(2*r/std::sqrt(2.f),2*detail.second->getSize().y));
-        detail.second->setOrigin(detail.second->getSize().x/2, detail.second->getSize().y/2);
+    for (auto detail : details) {
+        detail.second->setSize(sf::Vector2(2 * r / std::sqrt(2.f), 2 * detail.second->getSize().y));
+        detail.second->setOrigin(detail.second->getSize().x / 2, detail.second->getSize().y / 2);
+    }
+}
+VehicleLogo::~VehicleLogo() {
+    for (auto &detail : details){
+        if(detail.second){
+            delete detail.second;
+        }
     }
 }

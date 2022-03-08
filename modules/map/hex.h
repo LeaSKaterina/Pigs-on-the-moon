@@ -7,12 +7,6 @@
 #include <vector>
 
 struct Hex {
-
-private:
-    Point3D coordinates;
-    bool isEmpty = true;
-    int ownerId = -1;
-
 public:
     Hex(int x, int y, int z) : coordinates(x, y, z) {}
 
@@ -36,6 +30,10 @@ public:
 
     static std::vector<Point3D> GetRing(Point3D center, int r);
 
-    //    static Point GetDiagonalVector(const Point& from, const Point& to, int radius);
     static Point3D GetDiagonalVector(const Point3D &from, const Point3D &to, int radius);// Point array : int[3]
+
+private:
+    Point3D coordinates;
+    bool isEmpty = true;
+    int ownerId = -1;
 };

@@ -7,13 +7,13 @@
 #include <vector>
 
 class Construction {
-private:
-    ConstructionsTypes::Type type;
-
 public:
     ~Construction() = default;
 
-    [[nodiscard]] ConstructionsTypes::Type GetType() const {return type;}
+    [[nodiscard]] ConstructionsTypes::Type GetType() const { return type; }
 
     Construction(ConstructionsTypes::Type type, std::vector<Hex *> &basis);
+
+private:
+    ConstructionsTypes::Type type;
 };

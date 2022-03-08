@@ -3,7 +3,7 @@
 
 void View::Show() {
     sf::Music music;
-//        this->PlayStartMusic(music);
+    this->PlayStartMusic(music);
 
     sf::Texture texture;
     if (!texture.loadFromFile("resources/image/background.jpg")) {
@@ -18,7 +18,7 @@ void View::Show() {
         window.clear();
         window.draw(sprite);
 
-        mapView.Draw(window);
+        mapViewModel.Draw(window);
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -30,10 +30,10 @@ void View::Show() {
             if (event.type == sf::Event::Resized) {
                 sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
                 window.setView(sf::View(visibleArea));
+                mapViewModel.Resize(window.getSize());
             }
         }
 
         window.display();
     }
-
 }

@@ -2,4 +2,5 @@
 cmake-build*/
 conanBuild/
 build/
-.gitignore
+.env/
+test*

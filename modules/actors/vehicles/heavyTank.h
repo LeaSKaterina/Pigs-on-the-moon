@@ -4,7 +4,7 @@
 
 class HeavyTank : public Vehicle {
 public:
-    explicit HeavyTank(int playerId) : Vehicle(playerId, 3, 1) {};
+    explicit HeavyTank(int playerId) : Vehicle(playerId, 3, 1){};
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
 

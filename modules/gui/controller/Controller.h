@@ -4,8 +4,25 @@
 #include "gui/view/View.h"
 
 class Controller {
+public:
+    Controller(const std::string &gameName, int waitTime);
+
+    virtual ~Controller();
+
+    bool GetIsWindowClose() {
+        sf::Lock lock(closeMutex);
+        return isWindowClose;
+    };
+
+    void CloseGame() {
+        sf::Lock lock(closeMutex);
+        isWindowClose = true;
+    }
+
+
 private:
-    std::string game = "game";
+    std::string game;
+    const int waitTime;
     Bot bot1;
     Bot bot2;
     Bot bot3;
@@ -20,54 +37,5 @@ private:
     sf::Mutex closeMutex;
 
 
-    void ObserverThread() {
-        observer.gc.InitIds();
-        while (!observer.gc.GameIsFinished() && !GetIsWindowClose()) {
-            sf::Lock lock(observerMutex);
-            observer.gc.UpdateGameState();
-            observerMutex.unlock();
-            std::this_thread::sleep_for(std::chrono::seconds(0));
-            observer.gc.SendTurn();
-        }
-    }
-
-public:
-    Controller() : bot1(*this, "Den-Pig1", "", game, 0, 3),
-                   bot2(*this, "Den-Pig2", "", game, 0, 3),
-                   bot3(*this, "Den-Pig3", "", game, 0, 3),
-                   observer(*this, "Den-obs", "", game, 0, 3, true),
-                   thread1(&Bot::StartAI, &bot1),
-                   thread2(&Bot::StartAI, &bot2),
-                   thread3(&Bot::StartAI, &bot3),
-                   observerThread(&Controller::ObserverThread, this),
-                   view(*this,  observer.gc.GetGame(), observerMutex) {
-        thread1.launch();
-        thread2.launch();
-        thread3.launch();
-
-        observerThread.launch();
-
-
-        view.Show();
-    }
-
-    virtual ~Controller() {
-        thread1.wait();
-        thread2.wait();
-        thread3.wait();
-        observerThread.wait();
-    }
-
-    bool GetIsWindowClose(){
-        sf::Lock lock(closeMutex);
-        return isWindowClose;
-    };
-
-    void CloseGame(){
-        sf::Lock lock(closeMutex);
-        isWindowClose = true;
-    }
-
-
+    void ObserverThread();
 };
-

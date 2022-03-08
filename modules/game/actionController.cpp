@@ -27,20 +27,19 @@ vector<bool> ActionController::NeutralityRuleCheck(const std::vector<std::vector
 std::unordered_map<Vehicle *, vector<Vehicle *>>
 ActionController::GetPointsForShoot(const vector<vector<bool>> &attackMatrix,
                                     const vector<vector<Vehicle *>> &vehicles,
-                                    const Map* map,
+                                    const Map *map,
                                     int playerId) {
     const vector<Vehicle *> &playerVehicles = vehicles[playerId];
 
     vector<bool> canAttack = move(NeutralityRuleCheck(attackMatrix, playerId));
-    std::unordered_map<Vehicle *, vector<Vehicle *>> res; // key - enemy tank, value - who can attack
+    std::unordered_map<Vehicle *, vector<Vehicle *>> res;// key - enemy tank, value - who can attack
     for (auto &our : playerVehicles) {
         for (int i = 0; i < vehicles.size(); i++) {
             if (vehicles[i][0]->GetPlayerId() == playerId || !canAttack[i])
                 continue;
             for (auto enemy : vehicles[i]) {
                 if (our->IsAvailableForShoot(enemy)) {
-                    if (our->GetType() != VehiclesTypes::Type::AT_SPG
-                        || !map->HasObstacleBetween(*(our->GetCurrentHex()), (*enemy->GetCurrentHex())))
+                    if (our->GetType() != VehiclesTypes::Type::AT_SPG || !map->HasObstacleBetween(*(our->GetCurrentHex()), (*enemy->GetCurrentHex())))
                         res[enemy].push_back(our);
                 }
             }

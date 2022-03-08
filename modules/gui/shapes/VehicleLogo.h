@@ -5,6 +5,17 @@
 #include <cmath>
 
 class VehicleLogo {
+public:
+    VehicleLogo(float radius);
+
+    std::tuple<sf::CircleShape, sf::RectangleShape *> GetLogoByType(VehiclesTypes::Type type);
+
+    void SetRadius(float radius);
+
+    void ChangeColorById(int playerId);
+
+    virtual ~VehicleLogo();
+
 private:
     std::vector<sf::CircleShape> logos;
     std::map<VehiclesTypes::Type, sf::RectangleShape *> details;
@@ -15,15 +26,4 @@ private:
     sf::RectangleShape *CreateDetail(int separatorCount) const;
 
     void SetColor(const sf::Color &color);
-
-public:
-    VehicleLogo(float radius);
-
-    std::tuple<sf::CircleShape, sf::RectangleShape *> GetLogoByType(VehiclesTypes::Type type);
-
-    //    static sf::CircleShape *GetLogoOfType(VehiclesTypes::Type type, float rotation);
-
-    void SetRadius(float radius);
-
-    void ChangeColorById(int playerId);
 };

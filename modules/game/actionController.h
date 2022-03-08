@@ -14,6 +14,6 @@ public:
     static std::unordered_map<Vehicle *, std::vector<Vehicle *>>
     GetPointsForShoot(const std::vector<std::vector<bool>> &attackMatrix,
                       const std::vector<std::vector<Vehicle *>> &vehicles,
-                      const Map* map,
+                      const Map *map,
                       int playerId);
 };
