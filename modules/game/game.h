@@ -61,11 +61,19 @@ public:
 
     [[nodiscard]] int GetNumPlayers() const { return numPlayers; }
 
-    [[nodiscard]] std::vector<std::vector<Vehicle *>> GetPlayerVehicles() const;
+    [[nodiscard]] int GetPlayerVehiclesNum() const { return numPlayerVehicles; }
 
-    [[nodiscard]] const std::vector<std::vector<Vehicle *>> &GetVehicles() const { return vehicles; }
+    [[nodiscard]] auto &GetVehicles() const { return vehicles; }
 
-    [[nodiscard]] Map *GetMap() const;
+    [[nodiscard]] const std::vector<Vehicle *> &GetVehicles(int playerId, bool adapted = true) const;
+
+    [[nodiscard]] Map *GetMap() const;// TODO! const Map*
+
+    [[nodiscard]] const Player *GetPlayer() const { return player; }
+
+    [[nodiscard]] int GetAdaptedPlayerId() const { return playersIdAdapter.at(player->GetId()); }
+
+    [[nodiscard]] auto &GetAttackMatrix() const { return attackMatrix; }
 
     [[nodiscard]] bool IsPlayerTurn() const { return currentPlayerId == player->GetId(); }
 
@@ -76,7 +84,6 @@ private:
 
     // new: custom id start from 0 to numPlayers - 1
     std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]
-    std::vector<int> tanksIdAdapter;    // save real id for server
 
     std::vector<int> captures;
     std::vector<int> kills;

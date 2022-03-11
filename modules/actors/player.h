@@ -11,8 +11,15 @@ public:
 
     [[nodiscard]] int GetId() const { return id; }
 
+    void SetIdAdapter(std::vector<int> idAdapter) {tanksIdAdapter = std::move(idAdapter);}
+
+    [[nodiscard]] int GetServerId(int index) const {return tanksIdAdapter[index];}
+
 private:
     const std::string name;
     const std::string password;
     int id;
+
+    // save real ids of tanks to interact with the server
+    std::vector<int> tanksIdAdapter;
 };

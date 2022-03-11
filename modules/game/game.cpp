@@ -37,7 +37,6 @@ void Game::InitVariables(int playersNum) {
         v.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
-    tanksIdAdapter.resize(numPlayerVehicles);
 }
 
 void Game::InitPlayersId(const vector<int> &realId) {
@@ -47,6 +46,7 @@ void Game::InitPlayersId(const vector<int> &realId) {
 }
 
 void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector<int>> &realId) {
+    std::vector<int> tanksIdAdapter(5);
     if (playerId != player->GetId())
         return;
     int next = 0;
@@ -56,6 +56,7 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
             tanksIdAdapter[next++] = id;
         }
     }
+    player->SetIdAdapter(std::move(tanksIdAdapter));
 }
 
 // Add
@@ -145,7 +146,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
         if (currentVehicle->PriorityAction() == Action::MOVE || round) {
             auto hex = currentVehicle->GetAvailableMovePoint(paths[i]);
             if (hex != nullptr) {
-                res.emplace_back(Action::MOVE, tanksIdAdapter[i], hex->GetCoordinates());
+                res.emplace_back(Action::MOVE, player->GetServerId(i), hex->GetCoordinates());
                 satisfied = true;
                 hex->Occupy();
             }
@@ -157,7 +158,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
-                        res.emplace_back(Action::SHOOT, tanksIdAdapter[i], playerVehicles[i]->Shoot(vToAttack));
+                        res.emplace_back(Action::SHOOT, player->GetServerId(i), playerVehicles[i]->Shoot(vToAttack));
 
                         break;
                     }
@@ -189,12 +190,6 @@ void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> 
 Map *Game::GetMap() const {
     return map;
 }
-
-
-std::vector<std::vector<Vehicle *>> Game::GetPlayerVehicles() const {
-    std::vector<std::vector<Vehicle *>> playersVehicles;
-    for (const auto &item : playersIdAdapter) {
-        playersVehicles.push_back(this->vehicles[item.second]);
-    }
-    return playersVehicles;
+const std::vector<Vehicle *> &Game::GetVehicles(int playerId, bool adapted) const {
+    return vehicles[(adapted ? playerId : playersIdAdapter.at(playerId))];
 }
