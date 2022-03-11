@@ -4,3 +4,4 @@ conanBuild/
 build/
 .env/
 test*
+todo.txt

@@ -63,11 +63,13 @@ bool GameClient::SendTurn() const {
 }
 
 void GameClient::SendAction() const {
-    auto actions = game->Play();
+   SendAction(game->Play());
+}
+
+void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>>& actions) const {
     for (auto &act : actions) {
         auto &[actionType, vehicleId, coordinate] = act;
         auto &[x, y, z] = coordinate;
-        // TODO? Is there any check needed? as Hex* == nullptr
         Response resp = client->SendTankAction(actionType, vehicleId, x, y, z);
 #ifdef _DEBUG
         std::cerr << (int) resp.result << " " << resp.answer << std::endl;

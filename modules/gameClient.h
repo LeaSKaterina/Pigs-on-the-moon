@@ -20,7 +20,7 @@ public:
     // Inits
 
     // must be called once and first.
-    bool InitGame(const std::string &name, const std::string &password = "",
+    virtual bool InitGame(const std::string &name, const std::string &password = "",
                   const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
                   bool isObserver = false);
 
@@ -37,16 +37,16 @@ public:
 
     bool SendTurn() const;
 
-    void SendAction() const;
+    virtual void SendAction() const;
 
     // starts magit in cycle
     // requires connection to the game
     void StartAI();
 
-    [[nodiscard]] Game *GetGame() const { return game; }
+    [[nodiscard]] Game *GetGame() const { return game; } // TODO! const Game*
 
 
-private:
+protected:
     // entities
     Game *game;
     Client *client;
@@ -74,4 +74,6 @@ private:
     void UpdateAttackMatrix(const nlohmann::ordered_json &am);
 
     void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
+
+    void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gameClient.h"
+#include "AI/AIClient.h"
 
 class Controller;
 
@@ -13,7 +13,7 @@ public:
 
     void StartAI();
 
-    GameClient gc;
+    AIClient gc;
 
 private:
     Controller &controller;
