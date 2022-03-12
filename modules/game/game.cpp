@@ -26,6 +26,7 @@ Game::Game(int playerId, std::string name, std::string password, int playersNum,
            const nlohmann::ordered_json &gameState) {
     player = new Player(playerId, std::move(name), std::move(password));
     InitVariables(playersNum);
+    _InitMap(mapInfo);
 }
 
 void Game::InitVariables(int playersNum) {
@@ -183,4 +184,50 @@ Point3D Game::MakePosTuple(const nlohmann::json &coordinate) {
     return {coordinate.value("x", -1),
             coordinate.value("y", -1),
             coordinate.value("z", -1)};
+}
+
+void Game::_InitMap(const nlohmann::json &mapInfo) {
+    // Map
+    int size = mapInfo.value("size", -1);
+    InitMap(size);
+
+#ifdef _DEBUG
+    cout << "Map request:\n"
+         << mapInfo << "\n:Map request" << endl;
+#endif
+
+    InitSpawns(mapInfo.value("spawn_points", nlohmann::ordered_json("")));
+
+    InitContent(mapInfo.value("content", nlohmann::ordered_json("")));
+}
+
+void Game::InitContent(const nlohmann::ordered_json &contentInfo) {
+    for (int i = 0; i < ConstructionsTypes::typesNum; i++) {
+        auto cInfo = contentInfo
+                             .value(
+                                     ConstructionsTypes::sTypes[i],
+                                     nlohmann::ordered_json(""));
+        vector<Point3D> basePoints;
+        for (auto &point : cInfo) {
+            basePoints.push_back(MakePosTuple(point));
+        }
+        AddConstruct(ConstructionsTypes::Type(i), basePoints);
+    }
+}
+
+void Game::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
+    int index = 0;
+    for (auto &player : spawnInfo.items()) {
+        for (int i = 0; i < VehiclesTypes::typesNum; i++) {
+            const auto &type = VehiclesTypes::sTypes[i];
+            auto spawns = player.value().value(type, nlohmann::ordered_json(""));
+            for (auto &spawn : spawns.items()) {
+                auto &point = spawn.value();
+                AddVehicle(index,
+                                 VehiclesTypes::Type(i),
+                                 MakePosTuple(point));
+            }
+        }
+        index++;
+    }
 }

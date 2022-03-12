@@ -116,4 +116,7 @@ private:
     void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
     void UpdateAttackMatrix(const nlohmann::ordered_json &am);
     void UpdateVehicles(const nlohmann::ordered_json &vehicles);
+    void _InitMap(const nlohmann::json &mapInfo);
+    void InitContent(const nlohmann::ordered_json &contentInfo);
+    void InitSpawns(const nlohmann::ordered_json &spawnInfo);
 };

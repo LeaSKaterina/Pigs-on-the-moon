@@ -55,14 +55,6 @@ protected:
     bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
                int numPlayers, bool isObserver);
 
-    void InitMap();
-
-    static Point3D MakePosTuple(const nlohmann::json &coordinate);
-
-    void InitSpawns(const nlohmann::ordered_json &spawnInfo);
-
-    void InitContent(const nlohmann::ordered_json &contentInfo);
-
     void InitPlayersIds(const nlohmann::ordered_json &am);
 
     void InitVehiclesIds(const nlohmann::ordered_json &vehicles);

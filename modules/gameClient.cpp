@@ -27,7 +27,6 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
                           int numPlayers, bool isObserver) {
     if (!Login(name, password, gameName, numTurns, numPlayers, isObserver))
         return false;
-    InitMap();
 
     return true;
 }
@@ -81,59 +80,6 @@ void GameClient::InitIds() {
 
     // vehicle id
     InitVehiclesIds(answer.answer.value("vehicles", nlohmann::ordered_json("")));
-}
-
-void GameClient::InitMap() {
-    // Map
-    nlohmann::ordered_json mapInfo = client->Map().answer;
-    int size = mapInfo.value("size", -1);
-    game->InitMap(size);
-
-#ifdef _DEBUG
-    cout << "Map request:\n"
-         << mapInfo << "\n:Map request" << endl;
-#endif
-
-    InitSpawns(mapInfo.value("spawn_points", nlohmann::ordered_json("")));
-
-    InitContent(mapInfo.value("content", nlohmann::ordered_json("")));
-}
-
-Point3D GameClient::MakePosTuple(const nlohmann::json &coordinate) {
-    return {coordinate.value("x", -1),
-            coordinate.value("y", -1),
-            coordinate.value("z", -1)};
-}
-
-void GameClient::InitContent(const nlohmann::ordered_json &contentInfo) {
-    for (int i = 0; i < ConstructionsTypes::typesNum; i++) {
-        auto cInfo = contentInfo
-                             .value(
-                                     ConstructionsTypes::sTypes[i],
-                                     nlohmann::ordered_json(""));
-        vector<Point3D> basePoints;
-        for (auto &point : cInfo) {
-            basePoints.push_back(MakePosTuple(point));
-        }
-        game->AddConstruct(ConstructionsTypes::Type(i), basePoints);
-    }
-}
-
-void GameClient::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
-    int index = 0;
-    for (auto &player : spawnInfo.items()) {
-        for (int i = 0; i < VehiclesTypes::typesNum; i++) {
-            const auto &type = VehiclesTypes::sTypes[i];
-            auto spawns = player.value().value(type, nlohmann::ordered_json(""));
-            for (auto &spawn : spawns.items()) {
-                auto &point = spawn.value();
-                game->AddVehicle(index,
-                                 VehiclesTypes::Type(i),
-                                 MakePosTuple(point));
-            }
-        }
-        index++;
-    }
 }
 
 void GameClient::InitPlayersIds(const nlohmann::ordered_json &am) {
