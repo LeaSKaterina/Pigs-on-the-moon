@@ -3,7 +3,7 @@
 
 
 void Bot::StartAI() {
-//    gc->InitIds();
+    gc->InitIds();
     while (!gc->GameIsFinished() && !controller.GetIsWindowClose()) {
         std::cout << "Bot\n";
         gc->UpdateGameState();

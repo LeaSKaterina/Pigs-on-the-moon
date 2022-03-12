@@ -63,10 +63,10 @@ void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>> 
 
 void GameClient::InitIds() {
     auto answer = client->GameState();
-    //    while (answer.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
-    //        client->Turn();
-    //        answer = client->GameState();
-    //    }
+    while (answer.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
+        client->Turn();
+        answer = client->GameState();
+    }
     std::cout << answer.answer.value("players", nlohmann::ordered_json(""));
 #ifdef _DEBUG
     cerr << "Attack Matrix: "
@@ -168,50 +168,6 @@ void GameClient::InitVehiclesIds(const nlohmann::ordered_json &vehicles) {
 }
 
 
-void GameClient::UpdateVehicles(const nlohmann::ordered_json &vehicles) {
-    for (auto &v : vehicles.items()) {
-        auto &vehicleInfo = v.value();
-
-        auto pos = MakePosTuple(
-                vehicleInfo.value("position", nlohmann::ordered_json("")));
-        auto spawnPos = MakePosTuple(
-                vehicleInfo.value("spawn_position", nlohmann::ordered_json("")));
-        game->UpdateVehicleState(
-                vehicleInfo.value("player_id", -1),
-                spawnPos,
-                pos,
-                vehicleInfo.value("health", -1),
-                vehicleInfo.value("capture_points", -1));
-        // TODO? mb ref in uvs;
-    }
-}
-
-void GameClient::UpdateAttackMatrix(const nlohmann::ordered_json &am) {
-    //    const int vector_size = game->GetNumPlayers();
-    for (auto &pm : am.items()) {
-        // player id = pm.key, vector of attacks = pm.value
-        // to upd : is there a way to do vector without a loop ?
-
-        vector<int> vAttacked;
-        //        auto& arr_attacked = pm.value();
-        for (int i : pm.value()) {
-            vAttacked.push_back(i);
-        }
-        game->UpdateAttackMatrix(stoi(pm.key()), vAttacked);
-    }
-}
-
-void GameClient::UpdateWinPoints(const nlohmann::ordered_json &winPoints) {
-    cerr << "DEBUG: " << winPoints << endl;
-    for (auto &player : winPoints.items()) {
-        auto &winPointsInfo = player.value();
-        game->UpdateWinPoints(
-                stoi(player.key()),
-                winPointsInfo.value("capture", 0),
-                winPointsInfo.value("kill", 0));
-    }
-}
-
 void GameClient::StartAI() {
     InitIds();
     while (!GameIsFinished()) {
@@ -230,5 +186,5 @@ GameClient::GameClient(const string &name, const string &password, const string 
                        int numTurns, int numPlayers, bool isObserver) {
     client = new Client();
     InitGame(name, password, gameName, numTurns, numPlayers, isObserver);
-    InitIds();
+//    InitIds();
 }

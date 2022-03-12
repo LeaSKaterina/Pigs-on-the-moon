@@ -67,13 +67,5 @@ protected:
 
     void InitVehiclesIds(const nlohmann::ordered_json &vehicles);
 
-    // update methods
-
-    void UpdateVehicles(const nlohmann::ordered_json &vehicles);
-
-    void UpdateAttackMatrix(const nlohmann::ordered_json &am);
-
-    void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
-
     void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
 };
