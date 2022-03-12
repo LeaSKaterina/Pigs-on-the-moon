@@ -29,7 +29,7 @@ public:
     ~Game();
 
     // update methods
-    void UpdateGameState();
+    void UpdateGameState(const nlohmann::ordered_json &state);
 
     // init methods
     // all inits must be called firstly!
@@ -83,6 +83,8 @@ public:
 
     [[nodiscard]] bool IsFinished() const { return isFinished; }
 
+    static Point3D MakePosTuple(const nlohmann::json &coordinate);
+
 private:
     std::vector<std::vector<Vehicle *>> vehicles;
 
@@ -111,4 +113,7 @@ private:
     [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
 
     void InitVariables(int playersNum);
+    void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
+    void UpdateAttackMatrix(const nlohmann::ordered_json &am);
+    void UpdateVehicles(const nlohmann::ordered_json &vehicles);
 };

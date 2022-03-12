@@ -122,3 +122,65 @@ Map *Game::GetMap() const {
 const std::vector<Vehicle *> &Game::GetVehicles(int playerId, bool adapted) const {
     return vehicles[(adapted ? playerId : playersIdAdapter.at(playerId))];
 }
+
+void Game::UpdateGameState(const nlohmann::ordered_json &state) {
+    // attack matrix
+    UpdateAttackMatrix(state.value("attack_matrix", nlohmann::ordered_json("")));
+
+    // current turn | player | finished
+    UpdateState(
+            state.value("current_turn", -1),
+            state.value("current_player_idx", -1),
+            state.value("finished", 0));
+
+    // vehicles
+    UpdateVehicles(state.value("vehicles", nlohmann::ordered_json("")));
+
+    // win_points
+    UpdateWinPoints(state.value("win_points", nlohmann::ordered_json("")));
+}
+
+void Game::UpdateWinPoints(const nlohmann::ordered_json &winPoints) {
+    cerr << "DEBUG: " << winPoints << endl;
+    for (auto &p : winPoints.items()) {
+        auto &winPointsInfo = p.value();
+        UpdateWinPoints(
+                stoi(p.key()),
+                winPointsInfo.value("capture", 0),
+                winPointsInfo.value("kill", 0));
+    }
+}
+
+void Game::UpdateAttackMatrix(const nlohmann::ordered_json &am) {
+    for (auto &pm : am.items()) {
+        vector<int> vAttacked;
+        for (int i : pm.value()) {
+            vAttacked.push_back(i);
+        }
+        UpdateAttackMatrix(stoi(pm.key()), vAttacked);
+    }
+}
+
+void Game::UpdateVehicles(const nlohmann::ordered_json &vehicles) {
+    for (auto &v : vehicles.items()) {
+        auto &vehicleInfo = v.value();
+
+        auto pos = MakePosTuple(
+                vehicleInfo.value("position", nlohmann::ordered_json("")));
+        auto spawnPos = MakePosTuple(
+                vehicleInfo.value("spawn_position", nlohmann::ordered_json("")));
+        UpdateVehicleState(
+                vehicleInfo.value("player_id", -1),
+                spawnPos,
+                pos,
+                vehicleInfo.value("health", -1),
+                vehicleInfo.value("capture_points", -1));
+        // TODO? mb ref in uvs;
+    }
+}
+
+Point3D Game::MakePosTuple(const nlohmann::json &coordinate) {
+    return {coordinate.value("x", -1),
+            coordinate.value("y", -1),
+            coordinate.value("z", -1)};
+}

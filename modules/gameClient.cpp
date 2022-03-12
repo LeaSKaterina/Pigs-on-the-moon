@@ -41,21 +41,8 @@ GameClient::~GameClient() {
 }
 
 void GameClient::UpdateGameState() {
-    auto answer = client->GameState();
-    // attack matrix
-    UpdateAttackMatrix(answer.answer.value("attack_matrix", nlohmann::ordered_json("")));
-
-    // current turn | player | finished
-    game->UpdateState(
-            answer.answer.value("current_turn", -1),
-            answer.answer.value("current_player_idx", -1),
-            answer.answer.value("finished", 0));
-
-    // vehicles
-    UpdateVehicles(answer.answer.value("vehicles", nlohmann::ordered_json("")));
-
-    // win_points
-    UpdateWinPoints(answer.answer.value("win_points", nlohmann::ordered_json("")));
+    auto state = client->GameState();
+    game->UpdateGameState(state.answer);
 }
 
 bool GameClient::SendTurn() const {
