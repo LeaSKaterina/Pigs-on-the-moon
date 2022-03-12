@@ -16,7 +16,8 @@ bool GameClient::Login(const string &name, const string &password, const string 
     int id = answer.answer.value("idx", -1);
 
     // Always init game for _3_ players
-    game = new Game(id, name, password);
+    game = new Game(id, name, password, numPlayers,
+                    client->Map().answer, client->GameState().answer);
 
     return true;
 }
@@ -62,11 +63,7 @@ bool GameClient::SendTurn() const {
     return answer.result == Result::OKEY;
 }
 
-void GameClient::SendAction() const {
-   SendAction(game->Play());
-}
-
-void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>>& actions) const {
+void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const {
     for (auto &act : actions) {
         auto &[actionType, vehicleId, coordinate] = act;
         auto &[x, y, z] = coordinate;
@@ -79,10 +76,10 @@ void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>>&
 
 void GameClient::InitIds() {
     auto answer = client->GameState();
-    while (answer.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
-        client->Turn();
-        answer = client->GameState();
-    }
+    //    while (answer.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
+    //        client->Turn();
+    //        answer = client->GameState();
+    //    }
     std::cout << answer.answer.value("players", nlohmann::ordered_json(""));
 #ifdef _DEBUG
     cerr << "Attack Matrix: "
@@ -233,11 +230,18 @@ void GameClient::StartAI() {
     while (!GameIsFinished()) {
         UpdateGameState();
         if (IsPlayTime())// play only our turn
-        //             SendAction();
+                         //             SendAction();
 
 #ifdef _DEBUG
             std::cerr << "\n---------------------------------------\n";
 #endif
         SendTurn();
     }
+}
+
+GameClient::GameClient(const string &name, const string &password, const string &gameName,
+                       int numTurns, int numPlayers, bool isObserver) {
+    client = new Client();
+    InitGame(name, password, gameName, numTurns, numPlayers, isObserver);
+    InitIds();
 }

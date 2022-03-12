@@ -8,7 +8,7 @@ Controller::Controller(const std::string &gameName, int waitTime) : bot1(*this, 
                                                                     thread2(&Bot::StartAI, &bot2),
                                                                     thread3(&Bot::StartAI, &bot3),
                                                                     observerThread(&Controller::ObserverThread, this),
-                                                                    view(*this, observer.gc.GetGame(), observerMutex),
+                                                                    view(*this, observer.gc->GetGame(), observerMutex),
                                                                     waitTime(waitTime), game(gameName) {
     thread1.launch();
     thread2.launch();
@@ -28,12 +28,12 @@ Controller::~Controller() {
 }
 
 void Controller::ObserverThread() {
-    observer.gc.InitIds();
-    while (!observer.gc.GameIsFinished() && !GetIsWindowClose()) {
+//    observer.gc->InitIds();
+    while (!observer.gc->GameIsFinished() && !GetIsWindowClose()) {
         sf::Lock lock(observerMutex);
-        observer.gc.UpdateGameState();
+        observer.gc->UpdateGameState();
         observerMutex.unlock();
         std::this_thread::sleep_for(std::chrono::seconds(this->waitTime));
-        observer.gc.SendTurn();
+        observer.gc->SendTurn();
     }
 }

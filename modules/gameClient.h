@@ -13,15 +13,17 @@
 
 class GameClient {
 public:
-    explicit GameClient() : game(nullptr), client(new Client()) {}
+    explicit GameClient(const std::string &name, const std::string &password = "",
+                        const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
+                        bool isObserver = false);
 
     ~GameClient();
 
     // Inits
 
     // must be called once and first.
-    virtual bool InitGame(const std::string &name, const std::string &password = "",
-                  const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
+    bool InitGame(const std::string &name, const std::string &password = "",
+                  const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
                   bool isObserver = false);
 
     // must be called once and only when all players are connected
@@ -36,8 +38,6 @@ public:
     void UpdateGameState();
 
     bool SendTurn() const;
-
-    virtual void SendAction() const;
 
     // starts magit in cycle
     // requires connection to the game
@@ -55,8 +55,6 @@ protected:
     bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
                int numPlayers, bool isObserver);
 
-    // init methods
-
     void InitMap();
 
     static Point3D MakePosTuple(const nlohmann::json &coordinate);
@@ -68,6 +66,8 @@ protected:
     void InitPlayersIds(const nlohmann::ordered_json &am);
 
     void InitVehiclesIds(const nlohmann::ordered_json &vehicles);
+
+    // update methods
 
     void UpdateVehicles(const nlohmann::ordered_json &vehicles);
 

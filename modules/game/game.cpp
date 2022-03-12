@@ -21,7 +21,9 @@ Game::~Game() {
     }
 }
 
-Game::Game(int playerId, std::string name, std::string password, int playersNum) {
+Game::Game(int playerId, std::string name, std::string password, int playersNum,
+           const nlohmann::ordered_json &mapInfo,
+           const nlohmann::ordered_json &gameState) {
     player = new Player(playerId, std::move(name), std::move(password));
     InitVariables(playersNum);
 }
@@ -111,79 +113,6 @@ void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
 
     for (const int &i : attacked) {
         attackMatrix[customId][playersIdAdapter.at(i)] = true;
-    }
-}
-
-bool TargetIsAvailable(const Point3D *target) {
-    auto [x, y, z] = *target;
-    return !(x == -1 && y == -1 && z == -1);
-}
-
-vector<tuple<Action, int, Point3D>> Game::Play() const {
-    Point3D targetPoint{0, 0, 0};
-    vector<tuple<Action, int, Point3D>> res;
-    const auto &playerVehicles = vehicles[playersIdAdapter.at(player->GetId())];
-
-    std::vector<std::vector<Hex *>> paths(numPlayerVehicles);
-
-    for (int i = 0; i < numPlayerVehicles; i++) {
-        // TODO: There will be another check for danger
-
-        if (!map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()))
-            paths[i] = this->map->GetShortestWay(*playerVehicles[i]->GetCurrentHex(), *map->GetHexByPoint(targetPoint));
-    }
-
-    unordered_map<Vehicle *, vector<Vehicle *>> priorityShootTargets =
-            move(ActionController::GetPointsForShoot(attackMatrix, vehicles, map,
-                                                     playersIdAdapter.at(player->GetId())));
-
-    ProcessAttackPossibility(priorityShootTargets);// Check if it's ok
-
-    bool round = false;
-    for (int i = 0; i < numPlayerVehicles;) {
-        auto *currentVehicle = playerVehicles[i];
-        bool satisfied = false;
-        if (currentVehicle->PriorityAction() == Action::MOVE || round) {
-            auto hex = currentVehicle->GetAvailableMovePoint(paths[i]);
-            if (hex != nullptr) {
-                res.emplace_back(Action::MOVE, player->GetServerId(i), hex->GetCoordinates());
-                satisfied = true;
-                hex->Occupy();
-            }
-        }
-        if (!satisfied && !priorityShootTargets.empty() && currentVehicle->PriorityAction() == Action::SHOOT) {
-            if (!priorityShootTargets[currentVehicle].empty()) {
-                // TODO: priority.
-                for (auto *vToAttack : priorityShootTargets.at(currentVehicle)) {
-                    if (vToAttack->IsAlive()) {
-                        vToAttack->GetHit();
-                        satisfied = true;
-                        res.emplace_back(Action::SHOOT, player->GetServerId(i), playerVehicles[i]->Shoot(vToAttack));
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (satisfied || round) {
-            i++;
-            round = false;
-        } else {
-            round = true;
-        }
-    }
-    return res;
-}
-
-// TODO! priority
-void Game::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> &priorityShootTargets) {
-    for (auto &[attackedV, playerV] : priorityShootTargets) {
-        if (attackedV->GetHp() > playerV.size())
-            continue;
-        for (auto *v : playerV) {
-            priorityShootTargets[v].push_back(attackedV);
-        }
     }
 }
 

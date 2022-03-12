@@ -11,19 +11,25 @@
 #include "enums/action.h"
 #include "enums/types.h"
 #include "map/map.h"
+
 #include <map>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 
-
 class Game {
 public:
-    Game(int playerId, std::string name, std::string password = "", int playersNum = 3);
+    Game(int playerId, std::string name, std::string password, int playersNum,
+         const nlohmann::ordered_json &mapInfo,
+         const nlohmann::ordered_json &gameState);
 
     ~Game();
+
+    // update methods
+    void UpdateGameState();
 
     // init methods
     // all inits must be called firstly!
@@ -42,7 +48,7 @@ public:
     }
 
 
-    // get state
+    // game state
     void UpdateState(int currTurn, int currPlayer, bool finished = false);
 
     void UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
@@ -52,9 +58,7 @@ public:
 
     void UpdateWinPoints(int playerId, int capture, int kill);
 
-    [[nodiscard]] std::vector<std::tuple<Action, int, Point3D>> Play() const;
-
-    // get action
+    // game action
     // ...
 
     // Getters
@@ -91,23 +95,20 @@ private:
     const int numRounds = 15;
     static constexpr int numPlayerVehicles = 5;
 
-    int numTurns;
-    int currentTurn;
+    int numTurns{};
+    int currentTurn{};
 
-    int numPlayers;
-    int currentPlayerId;
+    int numPlayers{};
+    int currentPlayerId{};
 
     bool isFinished = false;
 
     std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
-    Map *map;
+    Map *map{};
 
     Player *player;
 
     [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
 
     void InitVariables(int playersNum);
-
-    // Strategy
-    static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
 };
