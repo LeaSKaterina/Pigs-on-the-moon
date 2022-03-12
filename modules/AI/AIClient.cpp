@@ -5,6 +5,7 @@ bool AIClient::InitGame(const std::string &name, const std::string &password, co
         ai = new AIPlayer(GetGame());
     return ai;
 }
+
 void AIClient::SendAction() const {
     GameClient::SendAction(ai->Play());
 }

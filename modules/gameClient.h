@@ -39,6 +39,8 @@ public:
 
     virtual void SendAction() const;
 
+    virtual void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
+
     // starts magit in cycle
     // requires connection to the game
     void StartAI();
@@ -75,5 +77,4 @@ protected:
 
     void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
 
-    void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
 };

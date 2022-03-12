@@ -16,7 +16,6 @@ Controller::Controller(const std::string &gameName, int waitTime) : bot1(*this, 
 
     observerThread.launch();
 
-
     view.Show();
 }
 

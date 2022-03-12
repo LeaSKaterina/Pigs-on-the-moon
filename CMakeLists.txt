@@ -28,6 +28,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/m
 #copy dll to bin folder
 file(GLOB_RECURSE dlls ${CMAKE_CURRENT_SOURCE_DIR}/${ConanFolder}/bin/*)
 
+configure_file(modules/AIBehaviorTree/tree.xml ${CMAKE_BINARY_DIR}/bin/ COPYONLY)
+
 foreach (dll ${dlls})
     get_filename_component(filename ${dll} NAME)
     configure_file(${dll} ${CMAKE_BINARY_DIR}/bin/${filename} COPYONLY)

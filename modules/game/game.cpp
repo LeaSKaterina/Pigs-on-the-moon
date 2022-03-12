@@ -146,7 +146,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
         if (currentVehicle->PriorityAction() == Action::MOVE || round) {
             auto hex = currentVehicle->GetAvailableMovePoint(paths[i]);
             if (hex != nullptr) {
-                res.emplace_back(Action::MOVE, player->GetServerId(i), hex->GetCoordinates());
+                res.emplace_back(Action::MOVE, player->GetServerIdForTank(i), hex->GetCoordinates());
                 satisfied = true;
                 hex->Occupy();
             }
@@ -158,7 +158,7 @@ vector<tuple<Action, int, Point3D>> Game::Play() const {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
-                        res.emplace_back(Action::SHOOT, player->GetServerId(i), playerVehicles[i]->Shoot(vToAttack));
+                        res.emplace_back(Action::SHOOT, player->GetServerIdForTank(i), playerVehicles[i]->Shoot(vToAttack));
 
                         break;
                     }

@@ -31,7 +31,7 @@ vector<tuple<Action, int, Point3D>> AIPlayer::Play() const {
         if (currentVehicle->PriorityAction() == Action::MOVE || round) {
             auto hex = currentVehicle->GetAvailableMovePoint(paths[i]);
             if (hex != nullptr) {
-                res.emplace_back(Action::MOVE, game->GetPlayer()->GetServerId(i), hex->GetCoordinates());
+                res.emplace_back(Action::MOVE, game->GetPlayer()->GetServerIdForTank(i), hex->GetCoordinates());
                 satisfied = true;
                 hex->Occupy();
             }
@@ -43,7 +43,7 @@ vector<tuple<Action, int, Point3D>> AIPlayer::Play() const {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
-                        res.emplace_back(Action::SHOOT, game->GetPlayer()->GetServerId(i), playerVehicles[i]->Shoot(vToAttack));
+                        res.emplace_back(Action::SHOOT, game->GetPlayer()->GetServerIdForTank(i), playerVehicles[i]->Shoot(vToAttack));
 
                         break;
                     }

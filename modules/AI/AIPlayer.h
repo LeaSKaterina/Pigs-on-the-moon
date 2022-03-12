@@ -1,7 +1,7 @@
 #ifndef PIGS_ON_THE_MOON_AIPLAYER_H
 #define PIGS_ON_THE_MOON_AIPLAYER_H
 
-#include "../game/game.h"
+#include "game/game.h"
 
 class AIPlayer {
 public:
