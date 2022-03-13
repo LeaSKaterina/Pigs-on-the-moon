@@ -11,11 +11,13 @@ public:
         BT::BehaviorTreeFactory factory;
 
 
-        factory.registerSimpleAction("ConditionNodeDoNotNeedToRun", std::bind (&AIBehaviorTree::DoNotNeedToRun, this));
+        factory.registerSimpleAction("ConditionNodeNeedToRun", std::bind (&AIBehaviorTree::NeedToRun, this));
 
         factory.registerSimpleAction("SimpleShootGripper", std::bind (&AIBehaviorTree::SimpleShoot, this));
 
-        factory.registerSimpleAction("SimpleMoveGripper", std::bind(&AIBehaviorTree::SimpleMove, this));
+        factory.registerSimpleAction("SimpleMoveToBaseGripper", std::bind(&AIBehaviorTree::SimpleMoveToBase, this));
+
+        factory.registerSimpleAction("SimpleMoveFromDangerGripper", std::bind(&AIBehaviorTree::SimpleMoveFromDanger, this));
 
         tree = factory.createTreeFromFile("./tree.xml");
     }
@@ -31,33 +33,27 @@ public:
         return BT::NodeStatus::SUCCESS;
     }
 
-    BT::NodeStatus SimpleMove() {
-        Point3D targetPoint{0, 0, 0};
+    BT::NodeStatus SimpleMoveToTarget(const Point3D& targetPoint){
         std::vector<Hex *> oldPath;
         std::vector<Hex *> path;
         std::vector<Hex *> occupiedHexes;
-        int minLength = 0;
         int maxAvailableHexIndex;
 
-            path = game->GetMap()->GetShortestWay(*currentVehicle->GetCurrentHex(), *game->GetMap()->GetHexByPoint(targetPoint));
-            maxAvailableHexIndex = currentVehicle->GetAvailableMovePoints(path);
+        path = game->GetMap()->GetShortestWay(*currentVehicle->GetCurrentHex(), *game->GetMap()->GetHexByPoint(targetPoint));
+        maxAvailableHexIndex = currentVehicle->GetAvailableMovePoints(path);
 
-            int nextHexIndex = 0;
-            for (int i = maxAvailableHexIndex; i > 0; --i) {
-                if (path[i]->IsEmpty()) {
-                    nextHexIndex = i;
-                    break;
-                } else {
-                    occupiedHexes.push_back(path[i]);
-                }
+        int nextHexIndex = 0;
+        for (int i = maxAvailableHexIndex; i > 0; --i) {
+            if (path[i]->IsEmpty()) {
+                nextHexIndex = i;
+                break;
+            } else {
+                occupiedHexes.push_back(path[i]);
             }
+        }
 
-
-
-        //        if(!occupiedHexes.empty()){
         oldPath = game->GetMap()->GetShortestWay(*currentVehicle->GetCurrentHex(),
                                                  *game->GetMap()->GetHexByPoint(targetPoint), occupiedHexes);
-        //        }
 
         int availablePathLength2 = currentVehicle->GetAvailableMovePoints(oldPath);
         int nextHexIndex2 = 0;
@@ -85,6 +81,41 @@ public:
         return BT::NodeStatus::FAILURE;
     }
 
+    BT::NodeStatus SimpleMoveToBase() {
+        if (!game->GetMap()->BaseIsOccupy())
+            return SimpleMoveToTarget(Point3D(0,0,0));
+//            return SimpleMoveToTarget(game->GetMap()->GetFreePointsOfBase()[0]);
+        return BT::NodeStatus::FAILURE;
+    }
+
+
+    std::vector<Point3D> GetPointsToRun(){
+        auto ring = Hex::GetRing(currentVehicle->GetCurrentPosition(),1);
+        std::vector<Point3D> res;
+        for (auto point : ring) {
+            if (!game->GetMap()->IsHexAreExistForPoint(point)) {
+                Hex *hex = game->GetMap()->GetHexByPoint(point);
+                if (hex->IsEmpty() && hex->GetType() != ConstructionsTypes::OBSTACLE) {
+                    res.push_back(point);
+                }
+            }
+        }
+        std::sort(res.begin(), res.end(), [this](Point3D left, Point3D right){
+            auto baseHex = game->GetMap()->GetFreePointsOfBase()[0];
+            int lengthLeft = game->GetMap()->GetShortestWay(*game->GetMap()->GetHexByPoint(left),*baseHex).size();
+            int lengthRight = game->GetMap()->GetShortestWay(*game->GetMap()->GetHexByPoint(right),*baseHex).size();
+            return lengthLeft < lengthRight;
+        });
+        return res;
+    }
+
+    BT::NodeStatus SimpleMoveFromDanger(){
+        for (auto point : GetPointsToRun()){
+            return SimpleMoveToTarget(point);
+        }
+        return BT::NodeStatus::FAILURE;
+    };
+
     BT::NodeStatus SimpleShoot() {
         std::unordered_map<Vehicle *, std::vector<Vehicle *>> priorityShootTargets =
                 aiClient->GetAIPlayer()->GetPointsForShoot(game->GetAdaptedPlayerId());
@@ -102,10 +133,10 @@ public:
         return BT::NodeStatus::FAILURE;
     }
 
-    BT::NodeStatus DoNotNeedToRun(){
+    BT::NodeStatus NeedToRun(){
         if (aiClient->GetAIPlayer()->CanDieOnPoint(*currentVehicle, currentVehicle->GetCurrentPosition()))
-            return BT::NodeStatus::FAILURE;
-        return BT::NodeStatus::SUCCESS;
+            return BT::NodeStatus::SUCCESS;
+        return BT::NodeStatus::FAILURE;
     }
 
     void ProcessAllTanks() {

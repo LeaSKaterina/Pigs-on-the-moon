@@ -5,11 +5,12 @@
         if we can't get to the base, then we check whether should we run away.
         if we shouldn't, we shoot. if we should, we go to another hex, preferably without moving out of the base-->
         <Fallback name="root_fallback">
-            <Sequence name="do_not_need_to_run_then_shoot">
-<!--                <ConditionNodeDoNotNeedToRun name="do_not_need_to_run"/>-->
-                <SimpleShootGripper    name="shoot_gripper"/>
+            <Sequence name="need_to_run_then_shoot">
+                <ConditionNodeNeedToRun name="need_to_run"/>
+                <SimpleMoveFromDangerGripper name = "run"/>
             </Sequence>
-            <SimpleMoveGripper name="move_gripper"/> <!-- move to the base -->
+            <SimpleShootGripper    name="shoot_gripper"/>
+            <SimpleMoveToBaseGripper name="move_to_base_gripper"/> 
 
         </Fallback>
     </BehaviorTree>

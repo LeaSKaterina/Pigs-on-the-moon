@@ -19,6 +19,10 @@ public:
 
     [[nodiscard]] bool IsBasePoint(const Point3D &point) const;
 
+    [[nodiscard]] std::vector<Hex*> GetFreePointsOfBase() const;
+
+    [[nodiscard]] bool BaseIsOccupy() const { return GetFreePointsOfBase().empty();}
+
     [[nodiscard]] static ConstructionsTypes::Type GetType(const Hex &hex);
 
     [[nodiscard]] bool HasObstacleBetween(const Hex &f, const Hex &s) const;
@@ -42,4 +46,7 @@ private:
     std::map<Point3D, Hex *> grid;
 
     void InitGrid();
+
+    std::vector<Point3D> pointsOfBase;
+
 };
