@@ -13,6 +13,7 @@
 + nlohmann_json/3.10.5 - static
 + sfml/2.5.1 - shared
 + ogg/1.3.5
++ behaviortree.cpp/3.5.6
 
 ## Instruction
 
@@ -40,25 +41,36 @@ cd bin
 Pigs_on_the_moon
 ```
 
-Conan profiles example:
+Conan profiles example from our team:
 
-<!-- 400 rows in line((( table -->
+
 |                                                                                Linux                                                                                 |                                          Windows                                           |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------:|
 |[settings]<br/>arch=x86_64<br/>arch_build=x86_64<br/>build_type=Debug<br/>compiler=gcc<br/>compiler.libcxx=libstdc++11<br/>compiler.version=9<br/>os=Linux<br/>os_build=Linux | [settings]<br/>os=Windows<br/>os_build=Windows<br/>arch=x86_64<br/>arch_build=x86_64<br/>compiler=Visual Studio<br/> compiler.version=16<br/> build_type=Debug |
 
-## Stage 4
+## Final
 
 ### What can our bot do?
 
-:white_check_mark: improved GUI architecture.\
-Gui try implement mvc pattern. The window is designed to easily add blocks of information.
+:white_check_mark: We have a graphical view that is currently off. We use sfml.\
+:white_check_mark: Our bot connects to the game and plays it to the end.
+He makes decisions based on behavior tree.
 
-:white_check_mark: improved multithreading.\
-add mutex
+## Usage
 
-:white_check_mark: added drawing new cells.
+Just run Pigs_on_the_moon application in the build\bin folder.\
+Use key -n (name) -pa (password) -g (game name) -t (number turns) -pl (players number) -o (is observer 0/1)
+```
+Pigs_on_the_moon.exe -t 31 -n bot
+```
+or
+```
+Pigs_on_the_moon.exe -n bot -g finalBattle -t 45 -pl 3
+```
+##### Please build release version
 
-### A few words about the launch
-We have not encountered the problem of using auto_ptr, but we do not exclude the possibility of this event. Good luck :neutral_face:
+### A few words about build
+
+We have not encountered the problem of using auto_ptr, but we do not exclude the possibility of this event. Good luck :
+neutral_face:
 

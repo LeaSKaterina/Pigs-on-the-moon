@@ -5,9 +5,6 @@
 class AIPlayer {
 public:
     explicit AIPlayer(const Game *game) : game(game) {}
-    [[nodiscard]] std::vector<std::tuple<Action, int, Point3D>> Play() const;
-
-    // methods
 
     //private
     [[nodiscard]] std::vector<bool> NeutralityRuleCheck(int playerId) const;
@@ -16,11 +13,10 @@ public:
 
     static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
 
-    int GetPossibleDamageForPoint(const Point3D& point3D);
+    int GetPossibleDamageForPoint(const Point3D &point3D);
 
-    bool CanDieOnPoint(const Vehicle& vehicle, const Point3D& point3D);
+    bool CanDieOnPoint(const Vehicle &vehicle, const Point3D &point3D);
 
 private:
     const Game *game;
-
 };

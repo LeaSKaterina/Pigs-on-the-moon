@@ -21,5 +21,4 @@ public:
 private:
     Controller &controller;
     AIBehaviorTree tree;
-
 };

@@ -19,9 +19,9 @@ public:
 
     [[nodiscard]] bool IsBasePoint(const Point3D &point) const;
 
-    [[nodiscard]] std::vector<Hex*> GetFreePointsOfBase() const;
+    [[nodiscard]] std::vector<Hex *> GetFreePointsOfBase() const;
 
-    [[nodiscard]] bool BaseIsOccupy() const { return GetFreePointsOfBase().empty();}
+    [[nodiscard]] bool BaseIsOccupy() const { return GetFreePointsOfBase().empty(); }
 
     [[nodiscard]] static ConstructionsTypes::Type GetType(const Hex &hex);
 
@@ -48,5 +48,4 @@ private:
     void InitGrid();
 
     std::vector<Point3D> pointsOfBase;
-
 };

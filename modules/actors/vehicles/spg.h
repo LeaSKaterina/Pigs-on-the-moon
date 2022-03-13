@@ -4,7 +4,7 @@
 
 class Spg : public Vehicle {
 public:
-    explicit Spg(Hex* spawn, int playerId) : Vehicle(spawn, playerId, 1, 1){};
+    explicit Spg(Hex *spawn, int playerId) : Vehicle(spawn, playerId, 1, 1){};
 
     bool IsAvailableToShoot(const Point3D &point3D) override;
 

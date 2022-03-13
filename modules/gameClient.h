@@ -20,7 +20,7 @@ public:
     ~GameClient();
 
     // Inits
-    
+
 
     // must be called once and only when all players are connected
     void ConnectPlayer();
@@ -51,9 +51,9 @@ private:
 
     // must be called once and first.
     bool CreateConnection(const std::string &name, const std::string &password = "",
-                  const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
-                  bool isObserver = false);
+                          const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
+                          bool isObserver = false);
 
     int Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
-               int numPlayers, bool isObserver);
+              int numPlayers, bool isObserver);
 };

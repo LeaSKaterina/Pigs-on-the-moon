@@ -3,10 +3,10 @@
 using namespace std;
 
 void AIPlayer::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> &priorityShootTargets) {
-    for (auto &[attackedV, playerV]: priorityShootTargets) {
+    for (auto &[attackedV, playerV] : priorityShootTargets) {
         if (attackedV->GetHp() > playerV.size())
             continue;
-        for (auto *v: playerV) {
+        for (auto *v : playerV) {
             priorityShootTargets[v].push_back(attackedV);
         }
     }
@@ -40,11 +40,11 @@ AIPlayer::GetPointsForShoot(int playerId) const {
 
     vector<bool> canAttack = NeutralityRuleCheck(playerId);
     std::unordered_map<Vehicle *, vector<Vehicle *>> res;// key - enemy tank, value - who can attack
-    for (auto &our: playerVehicles) {
+    for (auto &our : playerVehicles) {
         for (int i = 0; i < v.size(); i++) {
             if (v[i][0]->GetPlayerId() == playerId || !canAttack[i])
                 continue;
-            for (auto enemy: v[i]) {
+            for (auto enemy : v[i]) {
                 if (our->IsAvailableToShoot(enemy->GetCurrentPosition())) {
                     if (our->GetType() != VehiclesTypes::Type::AT_SPG ||
                         !game->GetMap()->HasObstacleBetween(*(our->GetCurrentHex()), (*enemy->GetCurrentHex())))
@@ -63,13 +63,12 @@ int AIPlayer::GetPossibleDamageForPoint(const Point3D &point3D) {
     vector<bool> canAttack = NeutralityRuleCheck(game->GetAdaptedPlayerId());
     for (int i = 0; i < game->GetNumPlayers(); i++) {
         if (canAttack[i]) {
-            for (auto vehicle: game->GetVehicles(i, true)) {
+            for (auto vehicle : game->GetVehicles(i, true)) {
                 if (vehicle->IsAvailableToShoot(point3D)) {
                     if (vehicle->GetType() != VehiclesTypes::Type::AT_SPG ||
                         !game->GetMap()->HasObstacleBetween(*(vehicle->GetCurrentHex()),
                                                             *(game->GetMap()->GetHexByPoint(point3D))))
                         res++;
-
                 }
             }
         }
@@ -77,9 +76,6 @@ int AIPlayer::GetPossibleDamageForPoint(const Point3D &point3D) {
     return res;
 }
 
-bool AIPlayer::CanDieOnPoint(const Vehicle &vehicle, const Point3D& point3D) {
+bool AIPlayer::CanDieOnPoint(const Vehicle &vehicle, const Point3D &point3D) {
     return vehicle.GetHp() <= GetPossibleDamageForPoint(point3D);
-}
-std::vector<std::tuple<Action, int, Point3D>> AIPlayer::Play() const {
-    return std::vector<std::tuple<Action, int, Point3D>>();
 }

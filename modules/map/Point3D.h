@@ -68,8 +68,7 @@ public:
     }
 
 
-
-    [[nodiscard]] std::string ToString() const{
+    [[nodiscard]] std::string ToString() const {
         return std::to_string(x) + std::to_string(y) + std::to_string(z);
     }
 };

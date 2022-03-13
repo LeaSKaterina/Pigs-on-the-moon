@@ -19,7 +19,7 @@ GameClient::~GameClient() {
 // Init methods
 
 int GameClient::Login(const string &name, const string &password, const string &gameName, int numTurns,
-                       int numPlayers, bool isObserver) {
+                      int numPlayers, bool isObserver) {
     // Login
     auto answer = client->Login(name, password, gameName, numTurns, numPlayers, isObserver);
 #ifdef _DEBUG
@@ -33,7 +33,7 @@ int GameClient::Login(const string &name, const string &password, const string &
 
 
 bool GameClient::CreateConnection(const string &name, const string &password, const string &gameName, int numTurns,
-                          int numPlayers, bool isObserver) {
+                                  int numPlayers, bool isObserver) {
     int id = Login(name, password, gameName, numTurns, numPlayers, isObserver);
     if (id == -1)
         return false;
@@ -48,7 +48,7 @@ void GameClient::ConnectPlayer() {
         client->Turn();
         state = client->GameState();
     }
-    std::cout << state.answer.value("players", nlohmann::ordered_json(""));
+    std::cout << state.answer.value("players", nlohmann::ordered_json("")) << '\n';
 #ifdef _DEBUG
     cerr << "Attack Matrix: "
          << state.answer.value("attack_matrix", nlohmann::ordered_json(""))
@@ -82,6 +82,3 @@ void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>> 
 #endif
     }
 }
-
-
-

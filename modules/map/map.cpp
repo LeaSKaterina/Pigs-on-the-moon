@@ -24,11 +24,11 @@ bool Map::IsBasePoint(const Point3D &point) const {
 }
 
 void Map::AddConstruction(ConstructionsTypes::Type type, vector<Point3D> &points) {
-    for (auto & point : points) {
-        auto* hex = grid[point];
+    for (auto &point : points) {
+        auto *hex = grid[point];
         hex->SetOwnerId(type);
     }
-    if (type == ConstructionsTypes::BASE){
+    if (type == ConstructionsTypes::BASE) {
         pointsOfBase = points;
     }
 }
@@ -125,9 +125,9 @@ bool Map::HasObstacleBetween(const Hex &f, const Hex &s) const {
     return false;
 }
 
-vector<Hex*> Map::GetFreePointsOfBase() const {
-    vector<Hex*> res;
-    for (auto point : pointsOfBase){
+vector<Hex *> Map::GetFreePointsOfBase() const {
+    vector<Hex *> res;
+    for (auto point : pointsOfBase) {
         if (GetHexByPoint(point)->IsEmpty())
             res.push_back(GetHexByPoint(point));
     }

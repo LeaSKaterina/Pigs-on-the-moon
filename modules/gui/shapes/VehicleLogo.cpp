@@ -83,7 +83,7 @@ void VehicleLogo::SetRadius(float radius) {
     }
 }
 VehicleLogo::~VehicleLogo() {
-    for (auto &detail : details){
+    for (auto &detail : details) {
         delete detail.second;
     }
 }

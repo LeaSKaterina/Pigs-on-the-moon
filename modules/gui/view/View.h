@@ -46,6 +46,6 @@ private:
     void PlayStartMusic(sf::Music &music) {
         if (!music.openFromFile("resources/music/Intro.ogg"))
             std::cerr << "can't load Intro music" << '\n';
-//        music.play();
+                music.play();
     }
 };
