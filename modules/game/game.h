@@ -1,6 +1,5 @@
 #pragma once
 
-#include "actionController.h"
 #include "actors/player.h"
 #include "actors/vehicles/atSpg.h"
 #include "actors/vehicles/heavyTank.h"
