@@ -26,26 +26,21 @@ public:
 
     // Game process
 
-    [[nodiscard]] bool IsPlayTime() const { return game->IsPlayerTurn(); }
-
-    [[nodiscard]] bool GameIsFinished() const { return game->IsFinished(); }
-
     void UpdateGameState();
 
     bool SendTurn() const;
 
-    // starts magit in cycle
-    // requires connection to the game
-    void StartAI(); // TODO!
-
-    [[nodiscard]] Game *GetGame() const { return game; } // TODO! const Game*
-
-protected:
-
     void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
 
-private:
+    // Getters
 
+    [[nodiscard]] bool IsPlayTime() const { return game->IsPlayerTurn(); }
+
+    [[nodiscard]] bool GameIsFinished() const { return game->IsFinished(); }
+
+    [[nodiscard]] const Game *GetGame() const { return game; }
+
+private:
     // entities
 
     Game *game;

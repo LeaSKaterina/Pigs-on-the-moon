@@ -5,11 +5,11 @@
 
 class AIPlayer {
 public:
-    explicit AIPlayer(Game *game) : game(game) {}
+    explicit AIPlayer(const Game *game) : game(game) {}
     [[nodiscard]] std::vector<std::tuple<Action, int, Point3D>> Play() const;
 
 private:
-    Game *game;
+    const Game *game;
 
     // methods
 

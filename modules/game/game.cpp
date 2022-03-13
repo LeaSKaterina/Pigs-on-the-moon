@@ -14,8 +14,7 @@ Game::~Game() {
 }
 
 Game::Game(int playerId, std::string name, std::string password, bool isObserver, int playersNum,
-           const nlohmann::ordered_json &mapInfo,
-           const nlohmann::ordered_json &gameState) {
+           const nlohmann::ordered_json &mapInfo) {
     player = new Player(playerId, std::move(name), std::move(password), isObserver);
     InitVariables(playersNum);
     InitMap(mapInfo);
@@ -60,7 +59,7 @@ void Game::InitContent(const nlohmann::ordered_json &contentInfo) {
         for (auto &point : cInfo) {
             basePoints.push_back(MakePosTuple(point));
         }
-        AddConstruct(ConstructionsTypes::Type(i), basePoints);
+        map->AddConstruction(ConstructionsTypes::Type(i), basePoints);
     }
 }
 

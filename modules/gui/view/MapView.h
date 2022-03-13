@@ -8,7 +8,7 @@
 
 class MapView {
 public:
-    MapView(Game *game, sf::Mutex &gameMutex, const Point2D &leftTopPoint, const Point2D &rightBottomPoint);
+    MapView(const Game *game, sf::Mutex &gameMutex, const Point2D &leftTopPoint, const Point2D &rightBottomPoint);
 
     void Draw(sf::RenderWindow &window);
 
@@ -31,11 +31,11 @@ private:
     sf::Texture hardRepairTexture;
 
     //game info
-    Game *game;
+    const Game *game;
     sf::Mutex &gameMutex;
     //ToDo: thread problem chance.
     std::vector<std::vector<Vehicle *>> vehiclesVectors = game->GetVehicles();
-    Map *map = game->GetMap();
+    const Map *map = game->GetMap();
 
     //health
     sf::Font font;

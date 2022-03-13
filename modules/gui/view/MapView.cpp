@@ -1,8 +1,8 @@
 #include "MapView.h"
 
-MapView::MapView(Game *game, sf::Mutex &gameMutex, const Point2D &leftTopPoint, const Point2D &rightBottomPoint) : game(game), gameMutex(gameMutex),
-                                                                                                                   leftTopPointRelative(leftTopPoint),
-                                                                                                                   rightBottomPointRelative(rightBottomPoint) {
+MapView::MapView(const Game *game, sf::Mutex &gameMutex, const Point2D &leftTopPoint, const Point2D &rightBottomPoint) : game(game), gameMutex(gameMutex),
+                                                                                                                         leftTopPointRelative(leftTopPoint),
+                                                                                                                         rightBottomPointRelative(rightBottomPoint) {
     hex.setOutlineThickness(1.f);
     hex.setOrigin(hex.getLocalBounds().width / 2, hex.getLocalBounds().height / 2);
     hex.setRotation(30.f);
@@ -19,7 +19,6 @@ MapView::MapView(Game *game, sf::Mutex &gameMutex, const Point2D &leftTopPoint, 
     }
 
     text.setFont(font);
-
 }
 
 void MapView::DrawGrid(sf::RenderWindow &window) {
@@ -111,4 +110,3 @@ void MapView::Draw(sf::RenderWindow &window) {
     this->DrawGrid(window);
     this->DrawVehicles(window);
 }
-

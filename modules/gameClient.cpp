@@ -2,6 +2,21 @@
 
 using namespace std;
 
+GameClient::GameClient(const string &name, const string &password, const string &gameName,
+                       int numTurns, int numPlayers, bool isObserver) {
+    client = new Client();
+    InitGame(name, password, gameName, numTurns, numPlayers, isObserver);
+}
+
+GameClient::~GameClient() {
+    //we don't use logout because, otherwise reconnection brings throw game is full,
+    //but logically we should do this
+    //    client->Logout();
+    delete game;
+    delete client;
+}
+
+// Init methods
 
 bool GameClient::Login(const string &name, const string &password, const string &gameName, int numTurns,
                        int numPlayers, bool isObserver) {
@@ -15,9 +30,7 @@ bool GameClient::Login(const string &name, const string &password, const string 
 
     int id = answer.answer.value("idx", -1);
 
-    // Always init game for _3_ players
-    game = new Game(id, name, password, isObserver, numPlayers,
-                    client->Map().answer, client->GameState().answer);
+    game = new Game(id, name, password, isObserver, numPlayers, client->Map().answer);
 
     return true;
 }
@@ -29,35 +42,6 @@ bool GameClient::InitGame(const string &name, const string &password, const stri
         return false;
 
     return true;
-}
-
-GameClient::~GameClient() {
-    //we don't use logout because, otherwise reconnection brings throw game is full
-    //but logically we should do this
-    //    client->Logout();
-    delete game;
-    delete client;
-}
-
-void GameClient::UpdateGameState() {
-    auto state = client->GameState();
-    game->UpdateGameState(state.answer);
-}
-
-bool GameClient::SendTurn() const {
-    auto answer = client->Turn();
-    return answer.result == Result::OKEY;
-}
-
-void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const {
-    for (auto &act : actions) {
-        auto &[actionType, vehicleId, coordinate] = act;
-        auto &[x, y, z] = coordinate;
-        Response resp = client->SendTankAction(actionType, vehicleId, x, y, z);
-#ifdef _DEBUG
-        std::cerr << (int) resp.result << " " << resp.answer << std::endl;
-#endif
-    }
 }
 
 void GameClient::InitIds() {
@@ -78,23 +62,25 @@ void GameClient::InitIds() {
     game->InitIds(state.answer);
 }
 
-void GameClient::StartAI() {
-    InitIds();
-    while (!GameIsFinished()) {
-        UpdateGameState();
-        if (IsPlayTime())// play only our turn
-                         //             SendAction();
+// Game process methods
 
-#ifdef _DEBUG
-            std::cerr << "\n---------------------------------------\n";
-#endif
-        SendTurn();
-    }
+void GameClient::UpdateGameState() {
+    auto state = client->GameState();
+    game->UpdateGameState(state.answer);
 }
 
-GameClient::GameClient(const string &name, const string &password, const string &gameName,
-                       int numTurns, int numPlayers, bool isObserver) {
-    client = new Client();
-    InitGame(name, password, gameName, numTurns, numPlayers, isObserver);
-    //    InitIds();
+bool GameClient::SendTurn() const {
+    auto answer = client->Turn();
+    return answer.result == Result::OKEY;
+}
+
+void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const {
+    for (auto &act : actions) {
+        auto &[actionType, vehicleId, coordinate] = act;
+        auto &[x, y, z] = coordinate;
+        Response resp = client->SendTankAction(actionType, vehicleId, x, y, z);
+#ifdef _DEBUG
+        std::cerr << (int) resp.result << " " << resp.answer << std::endl;
+#endif
+    }
 }

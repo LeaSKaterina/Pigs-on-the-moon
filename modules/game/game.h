@@ -23,8 +23,7 @@
 class Game {
 public:
     Game(int playerId, std::string name, std::string password, bool isObserver, int playersNum,
-         const nlohmann::ordered_json &mapInfo,
-         const nlohmann::ordered_json &gameState);
+         const nlohmann::ordered_json &mapInfo);
 
     ~Game();
 
@@ -46,7 +45,7 @@ public:
 
     [[nodiscard]] const std::vector<Vehicle *> &GetVehicles(int playerId, bool adapted = true) const;
 
-    [[nodiscard]] Map *GetMap() const { return map; }// TODO! const Map*
+    [[nodiscard]] const Map *GetMap() const { return map; }
 
     [[nodiscard]] const Player *GetPlayer() const { return player; }
 
@@ -117,8 +116,6 @@ private:
     // add methods
 
     void AddVehicle(int playerId, VehiclesTypes::Type type, Point3D spawn);
-
-    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point3D> &points) { map->AddConstruction(type, points); }
 
     // update methods
     // game state

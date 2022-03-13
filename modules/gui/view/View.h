@@ -14,10 +14,10 @@ class Controller;
 
 class View {
 public:
-    View(Controller &controller, Game *game, sf::Mutex &gameMutex) : controller(controller),
-                                                                     screen(sf::VideoMode::getDesktopMode().width,
-                                                                            sf::VideoMode::getDesktopMode().height),
-                                                                     mapViewModel(game, gameMutex, {0, 0}, {1, 1}) {
+    View(Controller &controller, const Game *game, sf::Mutex &gameMutex) : controller(controller),
+                                                                           screen(sf::VideoMode::getDesktopMode().width,
+                                                                                  sf::VideoMode::getDesktopMode().height),
+                                                                           mapViewModel(game, gameMutex, {0, 0}, {1, 1}) {
         std::ifstream config("resources/config/view.json");
         std::string str((std::istreambuf_iterator<char>(config)), std::istreambuf_iterator<char>());
         config.close();
