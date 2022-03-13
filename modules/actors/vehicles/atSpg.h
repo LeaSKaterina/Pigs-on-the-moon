@@ -4,7 +4,7 @@
 
 class AtSpg : public Vehicle {
 public:
-    explicit AtSpg(int playerId) : Vehicle(playerId, 2, 1){};
+    explicit AtSpg(Hex *spawn, int playerId) : Vehicle(spawn, playerId, 2, 1){};
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
 

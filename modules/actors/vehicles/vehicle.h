@@ -8,14 +8,14 @@
 
 class Vehicle {
 public:
-    Vehicle(int ownerId, int hp, int speed, int damage = 1)
+    Vehicle(Hex *spawn, int ownerId, int hp, int speed, int damage = 1)
         : playerId(ownerId),
           damage(damage),
           health(hp),
           speedPoints(speed),
-          destructionPoints(hp) {}
-
-    void InitSpawn(Hex *p);
+          destructionPoints(hp),
+          spawnPosition(spawn),
+          currentPosition(spawn) {}
 
     virtual ~Vehicle() = default;
 
@@ -49,13 +49,13 @@ public:
 
     void Respawn();
 
-    int GetHit(int damage = 1);
+    int GetHit(int hp = 1);
 
     void IncCapture() { capturePoints++; }
 
     void DropCapture() { capturePoints = 0; }
 
-    void Update(int health, Hex *newPos, int capture);
+    void Update(int hp, Hex *newPos, int capture);
 
     bool Move(Hex *newPos);
 
@@ -68,8 +68,8 @@ private:
     const int speedPoints;
     const int damage;
     int capturePoints = 0;
-    Hex *spawnPosition = nullptr;
-    Hex *currentPosition = nullptr;
+    Hex *spawnPosition;
+    Hex *currentPosition;
 
     bool IsEnemy(Vehicle *v) const { return this->playerId != v->playerId; }
 

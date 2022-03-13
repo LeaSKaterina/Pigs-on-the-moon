@@ -10,18 +10,13 @@ bool Vehicle::Move(Hex *newPos) {
     return true;
 }
 
-void Vehicle::Update(int health, Hex *newPos, int capture) {
+void Vehicle::Update(int hp, Hex *newPos, int capture) {
     if (currentPosition)
         currentPosition->Free();
     currentPosition = newPos;
     currentPosition->Occupy();
-    this->health = health;
+    health = hp;
     capturePoints = capture;
-}
-
-void Vehicle::InitSpawn(Hex *p) {
-    spawnPosition = p;
-    currentPosition = spawnPosition;
 }
 
 void Vehicle::Respawn() {
@@ -30,8 +25,8 @@ void Vehicle::Respawn() {
     capturePoints = 0;
 }
 
-int Vehicle::GetHit(int damage) {
-    this->health -= damage;
+int Vehicle::GetHit(int hp) {
+    this->health -= hp;
     if (health <= 0)
         return destructionPoints;
     return 0;

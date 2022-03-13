@@ -4,7 +4,7 @@
 
 class MediumTank : public Vehicle {
 public:
-    explicit MediumTank(int playerId) : Vehicle(playerId, 2, 2){};
+    explicit MediumTank(Hex *spawn, int playerId) : Vehicle(spawn, playerId, 2, 2){};
 
     bool IsAvailableForShoot(Vehicle *enemy) override;
 
