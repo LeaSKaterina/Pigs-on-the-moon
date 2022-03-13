@@ -21,11 +21,6 @@ public:
 
     // Inits
 
-    // must be called once and first.
-    bool InitGame(const std::string &name, const std::string &password = "",
-                  const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
-                  bool isObserver = false);
-
     // must be called once and only when all players are connected
     void InitIds();
 
@@ -41,7 +36,7 @@ public:
 
     // starts magit in cycle
     // requires connection to the game
-    void StartAI();
+    void StartAI(); // TODO!
 
     [[nodiscard]] Game *GetGame() const { return game; } // TODO! const Game*
 
@@ -52,12 +47,14 @@ protected:
     Client *client;
 
     // init methods
+
+    // must be called once and first.
+    bool InitGame(const std::string &name, const std::string &password = "",
+                  const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
+                  bool isObserver = false);
+
     bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
                int numPlayers, bool isObserver);
-
-    void InitPlayersIds(const nlohmann::ordered_json &am);
-
-    void InitVehiclesIds(const nlohmann::ordered_json &vehicles);
 
     void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
 };

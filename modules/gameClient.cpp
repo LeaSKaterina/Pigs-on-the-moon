@@ -61,58 +61,22 @@ void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>> 
 }
 
 void GameClient::InitIds() {
-    auto answer = client->GameState();
-    while (answer.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
+    auto state = client->GameState();
+    while (state.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
         client->Turn();
-        answer = client->GameState();
+        state = client->GameState();
     }
-    std::cout << answer.answer.value("players", nlohmann::ordered_json(""));
+    std::cout << state.answer.value("players", nlohmann::ordered_json(""));
 #ifdef _DEBUG
     cerr << "Attack Matrix: "
-         << answer.answer.value("attack_matrix", nlohmann::ordered_json(""))
+         << state.answer.value("attack_matrix", nlohmann::ordered_json(""))
          << " :Attack Matrix" << endl;
     cerr << "Vehicles: "
-         << answer.answer.value("vehicles", nlohmann::ordered_json(""))
+         << state.answer.value("vehicles", nlohmann::ordered_json(""))
          << " :Vehicles" << endl;
 #endif
-    // players id
-    InitPlayersIds(answer.answer.value("attack_matrix", nlohmann::ordered_json("")));
-
-    // vehicle id
-    InitVehiclesIds(answer.answer.value("vehicles", nlohmann::ordered_json("")));
+    game->InitIds(state.answer);
 }
-
-void GameClient::InitPlayersIds(const nlohmann::ordered_json &am) {
-    vector<int> realIds;
-    for (auto &pm : am.items()) {
-        realIds.push_back(stoi(pm.key()));
-    }
-    game->InitPlayersId(realIds);
-}
-
-void GameClient::InitVehiclesIds(const nlohmann::ordered_json &vehicles) {
-    // TODO! do we need all players?
-    // copy strings ...
-    unordered_map<string, vector<int>> vehiclesIds;
-    int currentPlayerId = -1;
-    for (auto &v : vehicles.items()) {
-        auto &vehicleInfo = v.value();
-        int playerId = vehicleInfo.value("player_id", -1);
-        string vehicleType = vehicleInfo.value("vehicle_type", "unknown");
-        int vehicleId = stoi(v.key());
-        if (currentPlayerId == -1)
-            currentPlayerId = playerId;
-        if (currentPlayerId != playerId) {
-            game->InitVehiclesIds(currentPlayerId, vehiclesIds);
-            vehiclesIds.clear();
-            currentPlayerId = playerId;
-        }
-        vehiclesIds[vehicleType].push_back(vehicleId);
-    }
-    if (!vehiclesIds.empty())
-        game->InitVehiclesIds(currentPlayerId, vehiclesIds);
-}
-
 
 void GameClient::StartAI() {
     InitIds();

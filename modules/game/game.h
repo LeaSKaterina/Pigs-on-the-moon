@@ -35,9 +35,7 @@ public:
     // all inits must be called firstly!
     void InitMap(int size) { map = new Map(size); }
 
-    void InitPlayersId(const std::vector<int> &realId);
-
-    void InitVehiclesIds(int playerId, const std::unordered_map<std::string, std::vector<int>> &realId);
+    void InitIds(const nlohmann::ordered_json &state);
 
     // add methods
 
@@ -112,11 +110,20 @@ private:
 
     [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
 
-    void InitVariables(int playersNum);
+    // Update methods
+
     void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
     void UpdateAttackMatrix(const nlohmann::ordered_json &am);
     void UpdateVehicles(const nlohmann::ordered_json &vehicles);
+
+    // Init methods
+
+    void InitVariables(int playersNum);
     void _InitMap(const nlohmann::json &mapInfo);
     void InitContent(const nlohmann::ordered_json &contentInfo);
     void InitSpawns(const nlohmann::ordered_json &spawnInfo);
+    void InitPlayersIds(const nlohmann::ordered_json &am);
+    void InitVehiclesIds(const nlohmann::ordered_json &veh);
+    void InitPlayersId(const std::vector<int> &realId);
+    void InitVehiclesIds(int playerId, const std::unordered_map<std::string, std::vector<int>> &realId);
 };
