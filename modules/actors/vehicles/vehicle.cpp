@@ -32,12 +32,10 @@ int Vehicle::GetHit(int hp) {
     return 0;
 }
 
-Hex *Vehicle::GetAvailableMovePoint(const std::vector<Hex *> &minPath) {
-    for (int i = std::min(this->speedPoints, (int) minPath.size() - 1); i > 0; --i) {
-        if (minPath[i]->IsEmpty())
-            return minPath[i];
-    }
-    return nullptr;
+//minPath = currentPosition -> neighbor -> neighbor -> ...
+//return index
+int Vehicle::GetAvailableMovePoints(const std::vector<Hex *> &minPath) const {
+    return std::min(this->speedPoints, (int) minPath.size() - 1);
 }
 
 Point3D Vehicle::Shoot(Vehicle &enemy) {

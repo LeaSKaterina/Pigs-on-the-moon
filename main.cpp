@@ -4,7 +4,7 @@
 
 int main() {
 
-    Controller controller("Pings-on-the-moon-gui2", 2);
+    Controller controller("Pings-on-the-moon-gui3", 0);
 
     return 0;
 }

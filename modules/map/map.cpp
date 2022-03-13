@@ -38,7 +38,7 @@ ConstructionsTypes::Type Map::GetType(const Hex &hex) {
 std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::vector<Hex *> &blockHexes) const {
     std::unordered_map<Point3D, Hex *> visitedHexes;// first unique key (hex), second - previous hex on path
     for (const auto &blockHex : blockHexes) {
-        visitedHexes[blockHex->GetCoordinates()] = nullptr;
+        visitedHexes[blockHex->GetCoordinates()] = &startHex;
     }
     std::stack<Hex *> zeroPathChange;
     std::stack<Hex *> onePathChange;
@@ -79,7 +79,7 @@ std::vector<Hex *> Map::GetShortestWay(Hex &startHex, Hex &endHex, const std::ve
         }
     }
     std::vector<Hex *> path;
-    if (visitedHexes.count(endHex.GetCoordinates()) == 1) {
+    if (visitedHexes.count(endHex.GetCoordinates()) == 1 && visitedHexes[endHex.GetCoordinates()] != nullptr) {
         Hex *currentHex = &endHex;
         path.push_back(currentHex);
         while (currentHex != &startHex) {

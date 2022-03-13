@@ -19,9 +19,9 @@ public:
 
     virtual ~Vehicle() = default;
 
-    //based on the minimum path form point(Hex) available to move most priority. Consider hex.IsEmpty
+    //based on the minimum path form point(Hex) available to move most priority.
     //minPath = currentPosition -> neighbor -> neighbor -> ...
-    Hex *GetAvailableMovePoint(const std::vector<Hex *> &minPath);
+    int GetAvailableMovePoints(const std::vector<Hex *> &minPath) const;
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 
