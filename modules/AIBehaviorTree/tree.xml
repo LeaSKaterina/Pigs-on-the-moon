@@ -1,33 +1,15 @@
 <root main_tree_to_execute = "MainTree" >
     <BehaviorTree ID="MainTree">
-<!--        <Fallback name="moving_to_base">-->
-<!--            <Sequence name="is_not_on_base">-->
-<!--                <GetAvailableForMoveAndCloseForBaseHexes/>-->
-<!--                <DiscardHexesOnFire/>-->
-<!--                <MoveOnHex/>-->
-<!--            </Sequence>-->
-<!--            <Sequence name="can_not_move_to_base_and_is_not_on_base">-->
-<!--                <ConditionNode name="is_not_on_base"/>-->
-<!--                <ShootGripper/>-->
-<!--            </Sequence>-->
-<!--            <Fallback name="on_base">-->
-<!--                <Sequence name="is_not_on_fire">-->
-<!--                    <ConditionNode name="is_not_on_fire"/>-->
-<!--                    <ShootGripper/>-->
-<!--                </Sequence>-->
-<!--                <Fallback name="is_on_fire">-->
-<!--                    <Sequence name="move_in_base">-->
-<!--                        <GetEmptyNotOnFireHexOnBase name="g"/>-->
-<!--                        <MoveOnHex/>-->
-<!--                    </Sequence>-->
-<!--                    <Fallback name="can_not_move_in_base>-->
-<!--                     </Fallback>-->
-<!--            </Fallback>-->
-<!--        </Fallback>-->
 
+        <!-- move to the base in priority. if we can't do it (is on the base already || the base is occupied || the base is under the fire), then we shoot.
+        if we can't get to the base, then we check whether should we run away.
+        if we shouldn't, we shoot. if we should, we go to another hex, preferably without moving out of the base-->
         <Fallback name="root_fallback">
-            <SimpleShootGripper    name="shoot_gripper"/>
-            <SimpleMoveGripper name="simple_move"/>
+            <Sequence name="do_not_need_to_run_then_shoot">
+<!--                <ConditionNodeDoNotNeedToRun name="do_not_need_to_run"/>-->
+                <SimpleShootGripper    name="shoot_gripper"/>
+            </Sequence>
+            <SimpleMoveGripper name="move_gripper"/> <!-- move to the base -->
 
         </Fallback>
     </BehaviorTree>

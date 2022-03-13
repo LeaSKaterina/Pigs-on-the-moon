@@ -6,7 +6,7 @@ class Spg : public Vehicle {
 public:
     explicit Spg(Hex* spawn, int playerId) : Vehicle(spawn, playerId, 1, 1){};
 
-    bool IsAvailableForShoot(Vehicle *enemy) override;
+    bool IsAvailableToShoot(const Point3D &point3D) override;
 
     [[nodiscard]] Action PriorityAction() const override { return Action::SHOOT; }
 

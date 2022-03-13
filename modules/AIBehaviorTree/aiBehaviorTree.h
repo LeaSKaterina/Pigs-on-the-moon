@@ -10,7 +10,10 @@ public:
     AIBehaviorTree() {
         BT::BehaviorTreeFactory factory;
 
-        factory.registerSimpleAction("SimpleShootGripper", std::bind(&AIBehaviorTree::SimpleShoot, this));
+
+        factory.registerSimpleAction("ConditionNodeDoNotNeedToRun", std::bind (&AIBehaviorTree::DoNotNeedToRun, this));
+
+        factory.registerSimpleAction("SimpleShootGripper", std::bind (&AIBehaviorTree::SimpleShoot, this));
 
         factory.registerSimpleAction("SimpleMoveGripper", std::bind(&AIBehaviorTree::SimpleMove, this));
 
@@ -99,6 +102,11 @@ public:
         return BT::NodeStatus::FAILURE;
     }
 
+    BT::NodeStatus DoNotNeedToRun(){
+        if (aiClient->GetAIPlayer()->CanDieOnPoint(*currentVehicle, currentVehicle->GetCurrentPosition()))
+            return BT::NodeStatus::FAILURE;
+        return BT::NodeStatus::SUCCESS;
+    }
 
     void ProcessAllTanks() {
         for (auto vehicle : *playerVehicles) {

@@ -6,7 +6,7 @@ class HeavyTank : public Vehicle {
 public:
     explicit HeavyTank(Hex *spawn, int playerId) : Vehicle(spawn, playerId, 3, 1){};
 
-    bool IsAvailableForShoot(Vehicle *enemy) override;
+    bool IsAvailableToShoot(const Point3D &point3D) override;
 
     [[nodiscard]] Action PriorityAction() const override { return Action::MOVE; }
 

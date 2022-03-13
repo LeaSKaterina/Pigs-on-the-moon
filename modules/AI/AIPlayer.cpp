@@ -2,68 +2,11 @@
 
 using namespace std;
 
-vector<tuple<Action, int, Point3D>> AIPlayer::Play() const {
-//    Point3D targetPoint{0, 0, 0};
-    vector<tuple<Action, int, Point3D>> res;
-//    const auto &playerVehicles = game->GetVehicles(game->GetAdaptedPlayerId());
-//
-//    std::vector<std::vector<Hex *>> paths(game->GetPlayerVehiclesNum());
-//
-//    const auto *map = game->GetMap();
-//    for (int i = 0; i < game->GetPlayerVehiclesNum(); i++) {
-//
-//        if (!map->IsBasePoint(playerVehicles[i]->GetCurrentPosition()))
-//            paths[i] = map->GetShortestWay(
-//                    *playerVehicles[i]->GetCurrentHex(),
-//                    *map->GetHexByPoint(targetPoint));
-//    }
-//
-//    unordered_map<Vehicle *, vector<Vehicle *>> priorityShootTargets =
-//            move(GetPointsForShoot(game->GetAdaptedPlayerId()));
-//
-//    ProcessAttackPossibility(priorityShootTargets);// Check if it's ok
-//
-//    bool round = false;
-//    for (int i = 0; i < game->GetPlayerVehiclesNum();) {
-//        auto *currentVehicle = playerVehicles[i];
-//        bool satisfied = false;
-//        if (currentVehicle->PriorityAction() == Action::MOVE || round) {
-//            auto hex = currentVehicle->GetAvailableMovePoints(paths[i]);
-//            if (hex != nullptr) {
-//                res.emplace_back(Action::MOVE, game->GetVehicleServerId(i), hex->GetCoordinates());
-//                satisfied = true;
-//                hex->Occupy();
-//            }
-//        }
-//        if (!satisfied && !priorityShootTargets.empty() && currentVehicle->PriorityAction() == Action::SHOOT) {
-//            if (!priorityShootTargets[currentVehicle].empty()) {
-//                for (auto *vToAttack : priorityShootTargets.at(currentVehicle)) {
-//                    if (vToAttack->IsAlive()) {
-//                        vToAttack->GetHit();
-//                        satisfied = true;
-//                        res.emplace_back(Action::SHOOT, game->GetVehicleServerId(i), currentVehicle->Shoot(*vToAttack));
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//
-//        if (satisfied || round) {
-//            i++;
-//            round = false;
-//        } else {
-//            round = true;
-//        }
-//    }
-    return res;
-}
-
-
 void AIPlayer::ProcessAttackPossibility(unordered_map<Vehicle *, vector<Vehicle *>> &priorityShootTargets) {
-    for (auto &[attackedV, playerV] : priorityShootTargets) {
+    for (auto &[attackedV, playerV]: priorityShootTargets) {
         if (attackedV->GetHp() > playerV.size())
             continue;
-        for (auto *v : playerV) {
+        for (auto *v: playerV) {
             priorityShootTargets[v].push_back(attackedV);
         }
     }
@@ -97,12 +40,12 @@ AIPlayer::GetPointsForShoot(int playerId) const {
 
     vector<bool> canAttack = NeutralityRuleCheck(playerId);
     std::unordered_map<Vehicle *, vector<Vehicle *>> res;// key - enemy tank, value - who can attack
-    for (auto &our : playerVehicles) {
+    for (auto &our: playerVehicles) {
         for (int i = 0; i < v.size(); i++) {
             if (v[i][0]->GetPlayerId() == playerId || !canAttack[i])
                 continue;
-            for (auto enemy : v[i]) {
-                if (our->IsAvailableForShoot(enemy)) {
+            for (auto enemy: v[i]) {
+                if (our->IsAvailableToShoot(enemy->GetCurrentPosition())) {
                     if (our->GetType() != VehiclesTypes::Type::AT_SPG ||
                         !game->GetMap()->HasObstacleBetween(*(our->GetCurrentHex()), (*enemy->GetCurrentHex())))
                         res[enemy].push_back(our);
@@ -114,3 +57,29 @@ AIPlayer::GetPointsForShoot(int playerId) const {
     return res;
 }
 
+
+int AIPlayer::GetPossibleDamageForPoint(const Point3D &point3D) {
+    int res = 0;
+    vector<bool> canAttack = NeutralityRuleCheck(game->GetAdaptedPlayerId());
+    for (int i = 0; i < game->GetNumPlayers(); i++) {
+        if (canAttack[i]) {
+            for (auto vehicle: game->GetVehicles(i, true)) {
+                if (vehicle->IsAvailableToShoot(point3D)) {
+                    if (vehicle->GetType() != VehiclesTypes::Type::AT_SPG ||
+                        !game->GetMap()->HasObstacleBetween(*(vehicle->GetCurrentHex()),
+                                                            *(game->GetMap()->GetHexByPoint(point3D))))
+                        res++;
+
+                }
+            }
+        }
+    }
+    return res;
+}
+
+bool AIPlayer::CanDieOnPoint(const Vehicle &vehicle, const Point3D& point3D) {
+    return vehicle.GetHp() <= GetPossibleDamageForPoint(point3D);
+}
+std::vector<std::tuple<Action, int, Point3D>> AIPlayer::Play() const {
+    return std::vector<std::tuple<Action, int, Point3D>>();
+}

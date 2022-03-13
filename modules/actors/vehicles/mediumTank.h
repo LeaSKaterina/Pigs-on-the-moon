@@ -6,7 +6,7 @@ class MediumTank : public Vehicle {
 public:
     explicit MediumTank(Hex *spawn, int playerId) : Vehicle(spawn, playerId, 2, 2){};
 
-    bool IsAvailableForShoot(Vehicle *enemy) override;
+    bool IsAvailableToShoot(const Point3D &point3D) override;
 
     [[nodiscard]] Action PriorityAction() const override { return Action::MOVE; }
 
