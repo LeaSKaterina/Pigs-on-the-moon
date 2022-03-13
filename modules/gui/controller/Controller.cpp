@@ -28,7 +28,7 @@ Controller::~Controller() {
 }
 
 void Controller::ObserverThread() {
-    observer.gc->InitIds();
+    observer.gc->ConnectPlayer();
     while (!observer.gc->GameIsFinished() && !GetIsWindowClose()) {
         sf::Lock lock(observerMutex);
         observer.gc->UpdateGameState();

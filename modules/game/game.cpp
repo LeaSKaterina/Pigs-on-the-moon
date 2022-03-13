@@ -13,7 +13,7 @@ Game::~Game() {
     }
 }
 
-Game::Game(int playerId, std::string& name, std::string& password, bool isObserver, int playersNum,
+Game::Game(int playerId, const std::string &name, const std::string &password, bool isObserver, int playersNum,
            const nlohmann::ordered_json &mapInfo) {
     player = new Player(playerId, name, password, isObserver);
     InitVariables(playersNum);

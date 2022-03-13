@@ -22,7 +22,7 @@
 
 class Game {
 public:
-    Game(int playerId, std::string& name, std::string& password, bool isObserver, int playersNum,
+    Game(int playerId, const std::string &name, const std::string &password, bool isObserver, int playersNum,
          const nlohmann::ordered_json &mapInfo);
 
     ~Game();

@@ -22,7 +22,7 @@ public:
     // Inits
 
     // must be called once and only when all players are connected
-    void InitIds();
+    void ConnectPlayer();
 
     // Game process
 
@@ -49,10 +49,10 @@ private:
     // init methods
 
     // must be called once and first.
-    bool InitGame(const std::string &name, const std::string &password = "",
+    bool CreateConnection(const std::string &name, const std::string &password = "",
                   const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
                   bool isObserver = false);
 
-    bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
+    int Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
                int numPlayers, bool isObserver);
 };

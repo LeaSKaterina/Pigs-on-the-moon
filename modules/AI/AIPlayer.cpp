@@ -43,7 +43,10 @@ vector<tuple<Action, int, Point3D>> AIPlayer::Play() const {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
-                        res.emplace_back(Action::SHOOT, game->GetVehicleServerId(i), playerVehicles[i]->Shoot(vToAttack));
+                        res.emplace_back(
+                                Action::SHOOT,
+                                game->GetVehicleServerId(i),
+                                playerVehicles[i]->Shoot(*vToAttack));
 
                         break;
                     }

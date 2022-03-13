@@ -5,7 +5,7 @@ using namespace std;
 GameClient::GameClient(const string &name, const string &password, const string &gameName,
                        int numTurns, int numPlayers, bool isObserver) {
     client = new Client();
-    InitGame(name, password, gameName, numTurns, numPlayers, isObserver);
+    CreateConnection(name, password, gameName, numTurns, numPlayers, isObserver);
 }
 
 GameClient::~GameClient() {
@@ -18,7 +18,7 @@ GameClient::~GameClient() {
 
 // Init methods
 
-bool GameClient::Login(const string &name, const string &password, const string &gameName, int numTurns,
+int GameClient::Login(const string &name, const string &password, const string &gameName, int numTurns,
                        int numPlayers, bool isObserver) {
     // Login
     auto answer = client->Login(name, password, gameName, numTurns, numPlayers, isObserver);
@@ -28,23 +28,20 @@ bool GameClient::Login(const string &name, const string &password, const string 
     if (answer.result != Result::OKEY)
         return false;
 
-    int id = answer.answer.value("idx", -1);
-
-    game = new Game(id, name, password, isObserver, numPlayers, client->Map().answer);
-
-    return true;
+    return answer.answer.value("idx", -1);
 }
 
 
-bool GameClient::InitGame(const string &name, const string &password, const string &gameName, int numTurns,
+bool GameClient::CreateConnection(const string &name, const string &password, const string &gameName, int numTurns,
                           int numPlayers, bool isObserver) {
-    if (!Login(name, password, gameName, numTurns, numPlayers, isObserver))
+    int id = Login(name, password, gameName, numTurns, numPlayers, isObserver);
+    if (id == -1)
         return false;
-
+    game = new Game(id, name, password, isObserver, numPlayers, client->Map().answer);
     return true;
 }
 
-void GameClient::InitIds() {
+void GameClient::ConnectPlayer() {
     auto state = client->GameState();
     while (state.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
         client->Turn();

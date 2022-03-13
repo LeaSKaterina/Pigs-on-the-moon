@@ -25,7 +25,7 @@ public:
 
     virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
 
-    virtual Point3D Shoot(Vehicle *enemy);
+    virtual Point3D Shoot(Vehicle &enemy);
 
     // getters
 

@@ -12,5 +12,5 @@ public:
 
     [[nodiscard]] VehiclesTypes::Type GetType() const override { return VehiclesTypes::AT_SPG; }
 
-    Point3D Shoot(Vehicle *enemy) override;
+    Point3D Shoot(Vehicle &enemy) override;
 };
