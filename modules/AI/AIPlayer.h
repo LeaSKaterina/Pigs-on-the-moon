@@ -16,6 +16,10 @@ public:
 
     static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
 
+    int GetPossibleDamageForPoint(const Point3D& point3D);
+
+    bool CanDieOnPoint(const Vehicle& vehicle, const Point3D& point3D);
+
 private:
     const Game *game;
 
