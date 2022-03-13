@@ -77,6 +77,7 @@ void Game::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
             }
         }
         index++;
+        if (index == numPlayers) break;
     }
 }
 

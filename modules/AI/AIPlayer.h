@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_AIPLAYER_H
-#define PIGS_ON_THE_MOON_AIPLAYER_H
+#pragma once
 
 #include "../game/game.h"
 
@@ -19,6 +18,3 @@ private:
 
     static void ProcessAttackPossibility(std::unordered_map<Vehicle *, std::vector<Vehicle *>> &priorityShootTargets);
 };
-
-
-#endif//PIGS_ON_THE_MOON_AIPLAYER_H
