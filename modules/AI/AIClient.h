@@ -12,6 +12,7 @@ public:
                   bool isObserver = false) override;
     void SendAction() const override;
 
+    AIPlayer* GetAIPlayer(){ return ai; }
 
 private:
     AIPlayer *ai;

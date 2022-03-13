@@ -66,6 +66,10 @@ public:
         return {Point3D(+1, -1, 0), Point3D(+1, 0, -1), Point3D(0, +1, -1),
                 Point3D(-1, +1, 0), Point3D(-1, 0, +1), Point3D(0, -1, +1)};
     }
+
+    [[nodiscard]] std::string ToString() const{
+        return std::to_string(x) + std::to_string(y) + std::to_string(z);
+    }
 };
 
 template<>

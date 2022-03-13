@@ -26,9 +26,9 @@
 <!--            </Fallback>-->
 <!--        </Fallback>-->
 
-        <Sequence name="root_sequence">
-            <OpenGripper    name="open_gripper"/>
+        <Fallback name="root_fallback">
             <SimpleMoveGripper name="simple_move"/>
-        </Sequence>
+            <SimpleShootGripper    name="shoot_gripper"/>
+        </Fallback>
     </BehaviorTree>
 </root>
