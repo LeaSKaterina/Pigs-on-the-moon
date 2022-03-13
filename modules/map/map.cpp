@@ -2,10 +2,6 @@
 
 using namespace std;
 
-Map::Map(int size) : size(size) {
-    InitGrid();
-    content.resize(ConstructionsTypes::typesNum);
-}
 
 void Map::InitGrid() {
     for (int x = -size + 1; x < size; x++) {
@@ -21,26 +17,17 @@ Map::~Map() {
     for (auto &[k, h] : grid) {
         delete h;
     }
-
-    for (auto c : content)
-        delete c;
-}
-
-bool Map::IsBasePoint(const Hex *point) const {
-    return false;
 }
 
 bool Map::IsBasePoint(const Point3D &point) const {
-    // TODO!
-    return this->GetHexByPoint(point)->IsSpecial();
+    return GetHexByPoint(point)->GetType() == ConstructionsTypes::BASE;
 }
 
 void Map::AddConstruction(ConstructionsTypes::Type type, vector<Point3D> &points) {
-    vector<Hex *> basis(points.size());
-    for (int i = 0; i < points.size(); i++) {
-        basis[i] = grid[points[i]];
+    for (auto & point : points) {
+        auto* hex = grid[point];
+        hex->SetOwnerId(type);
     }
-    content[type] = new Construction(type, basis);
 }
 
 ConstructionsTypes::Type Map::GetType(const Hex &hex) {
