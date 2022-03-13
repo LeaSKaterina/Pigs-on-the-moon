@@ -15,9 +15,6 @@ public:
 
     [[nodiscard]] bool IsObserver() const { return isObserver; }
 
-//    [[nodiscard]] int GetServerIdForTank(int index) const {return tanksIdAdapter[index];}
-
-
 private:
     const std::string name;
     const std::string password;

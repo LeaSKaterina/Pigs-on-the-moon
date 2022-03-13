@@ -23,7 +23,7 @@ private:
 
     sf::CircleShape CreateFigure(int pointCount, float rotation, int separatorCount);
 
-    sf::RectangleShape *CreateDetail(int separatorCount) const;
+    [[nodiscard]] sf::RectangleShape *CreateDetail(int separatorCount) const;
 
     void SetColor(const sf::Color &color);
 };

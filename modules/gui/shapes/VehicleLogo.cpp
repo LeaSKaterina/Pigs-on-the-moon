@@ -17,13 +17,7 @@ sf::CircleShape VehicleLogo::CreateFigure(int pointCount, float rotation, int se
     return shape;
 }
 
-//ToDo order????
 VehicleLogo::VehicleLogo(float radius) : r(radius) {
-    //    SPG,
-    //    LIGHT_TANK,
-    //    HEAVY_TANK,
-    //    MEDIUM_TANK,
-    //    AT_SPG
     logos.push_back(CreateFigure(4, 45.f, 0)); //spg
     logos.push_back(CreateFigure(4, 0.f, 0));  //light
     logos.push_back(CreateFigure(4, 0.f, 2));  //hard
@@ -90,8 +84,6 @@ void VehicleLogo::SetRadius(float radius) {
 }
 VehicleLogo::~VehicleLogo() {
     for (auto &detail : details){
-        if(detail.second){
-            delete detail.second;
-        }
+        delete detail.second;
     }
 }
