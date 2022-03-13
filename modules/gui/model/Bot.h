@@ -18,6 +18,6 @@ public:
 
 private:
     Controller &controller;
-//    AIBehaviorTree tree;
+    AIBehaviorTree tree;
 
 };

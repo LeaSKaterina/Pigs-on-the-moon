@@ -19,7 +19,7 @@ public:
     }
 
     void Init(AIClient *aiClient) {
-            aiClient = aiClient;
+            this->aiClient = aiClient;
             game = aiClient->GetGame();
             playerVehicles = &game->GetVehicles(game->GetAdaptedPlayerId());
     }
@@ -45,9 +45,9 @@ public:
     }
 
     BT::NodeStatus SimpleShoot(){
-        std::unordered_map<Vehicle *, std::vector<Vehicle *>> priorityShootTarget =
-                std::move(GetPointsForShoot(game->GetAdaptedPlayerId()));
-        if (!priorityShootTargets[currentVehicle].empty()) {
+//        std::unordered_map<Vehicle *, std::vector<Vehicle *>> priorityShootTarget =
+//                std::move(GetPointsForShoot(game->GetAdaptedPlayerId()));
+//        if (!priorityShootTargets[currentVehicle].empty()) {
 //                        // TODO: priority.
 //                        for (auto *vToAttack : priorityShootTargets.at(currentVehicle)) {
 //                            if (vToAttack->IsAlive()) {
