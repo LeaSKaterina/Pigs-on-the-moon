@@ -47,8 +47,6 @@ public:
 
     [[nodiscard]] const Map *GetMap() const { return map; }
 
-    [[nodiscard]] const Player *GetPlayer() const { return player; }
-
     [[nodiscard]] int GetAdaptedPlayerId() const { return playersIdAdapter.at(player->GetId()); }
 
     [[nodiscard]] int GetVehicleServerId(int index) const { return tanksIdAdapter[index]; }
@@ -92,7 +90,9 @@ private:
     // Update methods
 
     void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
+
     void UpdateAttackMatrix(const nlohmann::ordered_json &am);
+
     void UpdateVehicles(const nlohmann::ordered_json &veh);
 
     // Init methods
@@ -107,11 +107,9 @@ private:
 
     void InitPlayersIds(const nlohmann::ordered_json &am);
 
-    void InitPlayersId(const std::vector<int> &realId);
+    void InitVehiclesIds(const nlohmann::ordered_json &veh);
 
-    void InitVehiclesIdsTest(const nlohmann::ordered_json &veh);
-
-    void InitVehiclesIdsTest(const std::unordered_map<std::string, std::vector<int>> &realId);
+    void InitVehiclesIds(const std::unordered_map<std::string, std::vector<int>> &realId);
 
     // add methods
 
@@ -120,14 +118,10 @@ private:
     // update methods
     // game state
 
-    void UpdateState(int currPlayer, bool finished);
-
-    void UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
+    void UpdateVehicleState(int parentId, const Point3D &spawn, const Point3D &pos, int health,
                             int capturePoints);
 
     void UpdateAttackMatrix(int playerId, const std::vector<int> &attacked);
-
-    void UpdateWinPoints(int playerId, int capture, int kill);
 
     // game action
     // ...

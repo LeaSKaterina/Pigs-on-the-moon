@@ -85,25 +85,18 @@ void Game::InitIds(const nlohmann::ordered_json &state) {
     InitPlayersIds(state.value("attack_matrix", nlohmann::ordered_json("")));
 
     // vehicle id
-    InitVehiclesIdsTest(state.value("vehicles", nlohmann::ordered_json("")));
+    InitVehiclesIds(state.value("vehicles", nlohmann::ordered_json("")));
 }
 
 void Game::InitPlayersIds(const nlohmann::ordered_json &am) {
-    // TODO!
-    vector<int> realIds;
+    int next = 0;
     for (auto &pm : am.items()) {
-        realIds.push_back(stoi(pm.key()));
-    }
-    InitPlayersId(realIds);
-}
-
-void Game::InitPlayersId(const vector<int> &realId) {
-    for (int i = 0; i < realId.size(); i++) {
-        playersIdAdapter[realId[i]] = i;
+        int realId = stoi(pm.key());
+        playersIdAdapter[realId] = next++;
     }
 }
 
-void Game::InitVehiclesIdsTest(const nlohmann::ordered_json &veh) {
+void Game::InitVehiclesIds(const nlohmann::ordered_json &veh) {
     // observer has no own vehicles
     if (player->IsObserver()) return;
 
@@ -125,10 +118,10 @@ void Game::InitVehiclesIdsTest(const nlohmann::ordered_json &veh) {
         if (counter == numPlayerVehicles) break;
     }
 
-    InitVehiclesIdsTest(vehiclesIds);
+    InitVehiclesIds(vehiclesIds);
 }
 
-void Game::InitVehiclesIdsTest(const unordered_map<std::string, vector<int>> &realId) {
+void Game::InitVehiclesIds(const unordered_map<std::string, vector<int>> &realId) {
     int next = 0;
     for (int i = 0; i < VehiclesTypes::typesNum; i++) {
         auto &tanks = realId.at(VehiclesTypes::sTypes[i]);
@@ -165,42 +158,13 @@ void Game::AddVehicle(int playerId, Type type, Point3D spawn) {
 
 // Update methods
 
-void Game::UpdateState(int currPlayer, bool finished) {
-    currentPlayerId = currPlayer;
-    isFinished = finished;
-}
-
-void Game::UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
-                              int capturePoints) {
-    Vehicle *v = FindVehicle(playersIdAdapter.at(parentId), spawn);
-    v->Update(health, map->GetHexByPoint(pos), capturePoints);
-}
-
-void Game::UpdateWinPoints(int playerId, int capture, int kill) {
-    int adaptedPlayerId = playersIdAdapter.at(playerId);
-    captures[adaptedPlayerId] = capture;
-    kills[adaptedPlayerId] = kill;
-}
-
-void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
-    int customId = playersIdAdapter.at(playerId);
-    for (int i = 0; i < numPlayers; i++) {
-        attackMatrix[customId][i] = false;
-    }
-
-    for (const int &i : attacked) {
-        attackMatrix[customId][playersIdAdapter.at(i)] = true;
-    }
-}
-
 void Game::UpdateGameState(const nlohmann::ordered_json &state) {
     // attack matrix
     UpdateAttackMatrix(state.value("attack_matrix", nlohmann::ordered_json("")));
 
-    // current turn | player | finished
-    UpdateState(
-            state.value("current_player_idx", -1),
-            state.value("finished", 0));
+    // state | player | finished
+    currentPlayerId = state.value("current_player_idx", -1);
+    isFinished = state.value("finished", 0);
 
     // vehicles
     UpdateVehicles(state.value("vehicles", nlohmann::ordered_json("")));
@@ -209,26 +173,6 @@ void Game::UpdateGameState(const nlohmann::ordered_json &state) {
     UpdateWinPoints(state.value("win_points", nlohmann::ordered_json("")));
 }
 
-void Game::UpdateWinPoints(const nlohmann::ordered_json &winPoints) {
-    cerr << "DEBUG: " << winPoints << endl;
-    for (auto &p : winPoints.items()) {
-        auto &winPointsInfo = p.value();
-        UpdateWinPoints(
-                stoi(p.key()),
-                winPointsInfo.value("capture", 0),
-                winPointsInfo.value("kill", 0));
-    }
-}
-
-void Game::UpdateAttackMatrix(const nlohmann::ordered_json &am) {
-    for (auto &pm : am.items()) {
-        vector<int> vAttacked;
-        for (int i : pm.value()) {
-            vAttacked.push_back(i);
-        }
-        UpdateAttackMatrix(stoi(pm.key()), vAttacked);
-    }
-}
 
 void Game::UpdateVehicles(const nlohmann::ordered_json &veh) {
     for (auto &v : veh.items()) {
@@ -244,7 +188,45 @@ void Game::UpdateVehicles(const nlohmann::ordered_json &veh) {
                 pos,
                 vehicleInfo.value("health", -1),
                 vehicleInfo.value("capture_points", -1));
-        // TODO? mb ref in uvs;
+    }
+}
+
+void Game::UpdateVehicleState(int parentId, const Point3D &spawn, const Point3D &pos, int health,
+                              int capturePoints) {
+    Vehicle *v = FindVehicle(playersIdAdapter.at(parentId), spawn);
+    v->Update(health, map->GetHexByPoint(pos), capturePoints);
+}
+
+
+void Game::UpdateWinPoints(const nlohmann::ordered_json &winPoints) {
+    cerr << "DEBUG: " << winPoints << endl;
+    for (auto &p : winPoints.items()) {
+        auto &winPointsInfo = p.value();
+
+        int adaptedPlayerId = playersIdAdapter.at(stoi(p.key()));
+        captures[adaptedPlayerId] = winPointsInfo.value("capture", 0);
+        kills[adaptedPlayerId] = winPointsInfo.value("kill", 0);
+    }
+}
+
+void Game::UpdateAttackMatrix(const nlohmann::ordered_json &am) {
+    for (auto &pm : am.items()) {
+        vector<int> vAttacked;
+        for (int i : pm.value()) {
+            vAttacked.push_back(i);
+        }
+        UpdateAttackMatrix(stoi(pm.key()), vAttacked);
+    }
+}
+
+void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
+    int customId = playersIdAdapter.at(playerId);
+    for (int i = 0; i < numPlayers; i++) {
+        attackMatrix[customId][i] = false;
+    }
+
+    for (const int &i : attacked) {
+        attackMatrix[customId][playersIdAdapter.at(i)] = true;
     }
 }
 
