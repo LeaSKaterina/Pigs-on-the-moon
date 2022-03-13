@@ -3,14 +3,6 @@
 using namespace std;
 using namespace VehiclesTypes;
 
-Vehicle *Game::FindVehicle(int adaptedPlayerId, const Point3D &spawn) const {
-    for (auto *p : vehicles[adaptedPlayerId]) {
-        if (p->GetSpawn() == spawn)
-            return p;
-    }
-    return nullptr;
-}
-
 Game::~Game() {
     delete player;
     delete map;
@@ -26,13 +18,13 @@ Game::Game(int playerId, std::string name, std::string password, int playersNum,
            const nlohmann::ordered_json &gameState) {
     player = new Player(playerId, std::move(name), std::move(password));
     InitVariables(playersNum);
-    _InitMap(mapInfo);
+    InitMap(mapInfo);
 }
+
+// Init methods
 
 void Game::InitVariables(int playersNum) {
     numPlayers = playersNum;
-    numTurns = numRounds * numPlayers;
-    currentTurn = 0;
 
     vehicles.resize(playersNum);
     attackMatrix.resize(playersNum);
@@ -40,6 +32,7 @@ void Game::InitVariables(int playersNum) {
         v.resize(playersNum);
     captures.resize(playersNum);
     kills.resize(playersNum);
+    tanksIdAdapter.resize(numPlayerVehicles);
 }
 
 void Game::InitPlayersId(const vector<int> &realId) {
@@ -49,7 +42,6 @@ void Game::InitPlayersId(const vector<int> &realId) {
 }
 
 void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector<int>> &realId) {
-    std::vector<int> tanksIdAdapter(5);
     if (playerId != player->GetId())
         return;
     int next = 0;
@@ -59,10 +51,94 @@ void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector
             tanksIdAdapter[next++] = id;
         }
     }
-    player->SetIdAdapter(std::move(tanksIdAdapter));
 }
 
-// Add
+void Game::InitMap(const nlohmann::json &mapInfo) {
+    // Map
+    int size = mapInfo.value("size", -1);
+    map = new Map(size);
+
+#ifdef _DEBUG
+    cout << "Map request:\n"
+         << mapInfo << "\n:Map request" << endl;
+#endif
+
+    InitSpawns(mapInfo.value("spawn_points", nlohmann::ordered_json("")));
+
+    InitContent(mapInfo.value("content", nlohmann::ordered_json("")));
+}
+
+void Game::InitContent(const nlohmann::ordered_json &contentInfo) {
+    for (int i = 0; i < ConstructionsTypes::typesNum; i++) {
+        auto cInfo = contentInfo
+                             .value(
+                                     ConstructionsTypes::sTypes[i],
+                                     nlohmann::ordered_json(""));
+        vector<Point3D> basePoints;
+        for (auto &point : cInfo) {
+            basePoints.push_back(MakePosTuple(point));
+        }
+        AddConstruct(ConstructionsTypes::Type(i), basePoints);
+    }
+}
+
+void Game::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
+    int index = 0;
+    for (auto &playerInfo : spawnInfo.items()) {
+        for (int i = 0; i < VehiclesTypes::typesNum; i++) {
+            const auto &type = VehiclesTypes::sTypes[i];
+            auto spawns = playerInfo.value().value(type, nlohmann::ordered_json(""));
+            for (auto &spawn : spawns.items()) {
+                auto &point = spawn.value();
+                AddVehicle(index,
+                           VehiclesTypes::Type(i),
+                           MakePosTuple(point));
+            }
+        }
+        index++;
+    }
+}
+
+void Game::InitIds(const nlohmann::ordered_json &state) {
+    // players id
+    InitPlayersIds(state.value("attack_matrix", nlohmann::ordered_json("")));
+
+    // vehicle id
+    InitVehiclesIds(state.value("vehicles", nlohmann::ordered_json("")));
+}
+
+void Game::InitPlayersIds(const nlohmann::ordered_json &am) {
+    vector<int> realIds;
+    for (auto &pm : am.items()) {
+        realIds.push_back(stoi(pm.key()));
+    }
+    InitPlayersId(realIds);
+}
+
+void Game::InitVehiclesIds(const nlohmann::ordered_json &veh) {
+    // TODO! do we need all players?
+    // copy strings ...
+    unordered_map<string, vector<int>> vehiclesIds;
+    int currPlayerId = -1;
+    for (auto &v : veh.items()) {
+        auto &vehicleInfo = v.value();
+        int playerId = vehicleInfo.value("player_id", -1);
+        string vehicleType = vehicleInfo.value("vehicle_type", "unknown");
+        int vehicleId = stoi(v.key());
+        if (currPlayerId == -1)
+            currPlayerId = playerId;
+        if (currPlayerId != playerId) {
+            InitVehiclesIds(currPlayerId, vehiclesIds);
+            vehiclesIds.clear();
+            currPlayerId = playerId;
+        }
+        vehiclesIds[vehicleType].push_back(vehicleId);
+    }
+    if (!vehiclesIds.empty())
+        InitVehiclesIds(currPlayerId, vehiclesIds);
+}
+
+// Add methods
 
 void Game::AddVehicle(int playerId, Type type, Point3D spawn) {
     // there choose type of tanks
@@ -87,9 +163,9 @@ void Game::AddVehicle(int playerId, Type type, Point3D spawn) {
     vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
 }
 
-// get state
-void Game::UpdateState(int currTurn, int currPlayer, bool finished) {
-    currentTurn = currTurn;
+// Update methods
+
+void Game::UpdateState(int currPlayer, bool finished) {
     currentPlayerId = currPlayer;
     isFinished = finished;
 }
@@ -117,20 +193,12 @@ void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
     }
 }
 
-Map *Game::GetMap() const {
-    return map;
-}
-const std::vector<Vehicle *> &Game::GetVehicles(int playerId, bool adapted) const {
-    return vehicles[(adapted ? playerId : playersIdAdapter.at(playerId))];
-}
-
 void Game::UpdateGameState(const nlohmann::ordered_json &state) {
     // attack matrix
     UpdateAttackMatrix(state.value("attack_matrix", nlohmann::ordered_json("")));
 
     // current turn | player | finished
     UpdateState(
-            state.value("current_turn", -1),
             state.value("current_player_idx", -1),
             state.value("finished", 0));
 
@@ -162,8 +230,8 @@ void Game::UpdateAttackMatrix(const nlohmann::ordered_json &am) {
     }
 }
 
-void Game::UpdateVehicles(const nlohmann::ordered_json &vehicles) {
-    for (auto &v : vehicles.items()) {
+void Game::UpdateVehicles(const nlohmann::ordered_json &veh) {
+    for (auto &v : veh.items()) {
         auto &vehicleInfo = v.value();
 
         auto pos = MakePosTuple(
@@ -180,94 +248,22 @@ void Game::UpdateVehicles(const nlohmann::ordered_json &vehicles) {
     }
 }
 
+// Getters
+
+const std::vector<Vehicle *> &Game::GetVehicles(int playerId, bool adapted) const {
+    return vehicles[(adapted ? playerId : playersIdAdapter.at(playerId))];
+}
+
 Point3D Game::MakePosTuple(const nlohmann::json &coordinate) {
     return {coordinate.value("x", -1),
             coordinate.value("y", -1),
             coordinate.value("z", -1)};
 }
 
-void Game::_InitMap(const nlohmann::json &mapInfo) {
-    // Map
-    int size = mapInfo.value("size", -1);
-    InitMap(size);
-
-#ifdef _DEBUG
-    cout << "Map request:\n"
-         << mapInfo << "\n:Map request" << endl;
-#endif
-
-    InitSpawns(mapInfo.value("spawn_points", nlohmann::ordered_json("")));
-
-    InitContent(mapInfo.value("content", nlohmann::ordered_json("")));
-}
-
-void Game::InitContent(const nlohmann::ordered_json &contentInfo) {
-    for (int i = 0; i < ConstructionsTypes::typesNum; i++) {
-        auto cInfo = contentInfo
-                             .value(
-                                     ConstructionsTypes::sTypes[i],
-                                     nlohmann::ordered_json(""));
-        vector<Point3D> basePoints;
-        for (auto &point : cInfo) {
-            basePoints.push_back(MakePosTuple(point));
-        }
-        AddConstruct(ConstructionsTypes::Type(i), basePoints);
+Vehicle *Game::FindVehicle(int adaptedPlayerId, const Point3D &spawn) const {
+    for (auto *p : vehicles[adaptedPlayerId]) {
+        if (p->GetSpawn() == spawn)
+            return p;
     }
+    return nullptr;
 }
-
-void Game::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
-    int index = 0;
-    for (auto &player : spawnInfo.items()) {
-        for (int i = 0; i < VehiclesTypes::typesNum; i++) {
-            const auto &type = VehiclesTypes::sTypes[i];
-            auto spawns = player.value().value(type, nlohmann::ordered_json(""));
-            for (auto &spawn : spawns.items()) {
-                auto &point = spawn.value();
-                AddVehicle(index,
-                                 VehiclesTypes::Type(i),
-                                 MakePosTuple(point));
-            }
-        }
-        index++;
-    }
-}
-
-void Game::InitIds(const nlohmann::ordered_json &state) {
-    // players id
-    InitPlayersIds(state.value("attack_matrix", nlohmann::ordered_json("")));
-
-    // vehicle id
-    InitVehiclesIds(state.value("vehicles", nlohmann::ordered_json("")));
-}
-
-void Game::InitPlayersIds(const nlohmann::ordered_json &am) {
-    vector<int> realIds;
-    for (auto &pm : am.items()) {
-        realIds.push_back(stoi(pm.key()));
-    }
-    InitPlayersId(realIds);
-}
-
-void Game::InitVehiclesIds(const nlohmann::ordered_json &veh) {
-    // TODO! do we need all players?
-    // copy strings ...
-    unordered_map<string, vector<int>> vehiclesIds;
-    int currentPlayerId = -1;
-    for (auto &v : veh.items()) {
-        auto &vehicleInfo = v.value();
-        int playerId = vehicleInfo.value("player_id", -1);
-        string vehicleType = vehicleInfo.value("vehicle_type", "unknown");
-        int vehicleId = stoi(v.key());
-        if (currentPlayerId == -1)
-            currentPlayerId = playerId;
-        if (currentPlayerId != playerId) {
-            InitVehiclesIds(currentPlayerId, vehiclesIds);
-            vehiclesIds.clear();
-            currentPlayerId = playerId;
-        }
-        vehiclesIds[vehicleType].push_back(vehicleId);
-    }
-    if (!vehiclesIds.empty())
-        InitVehiclesIds(currentPlayerId, vehiclesIds);
-}
-

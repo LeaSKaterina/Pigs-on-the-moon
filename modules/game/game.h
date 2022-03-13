@@ -33,31 +33,8 @@ public:
 
     // init methods
     // all inits must be called firstly!
-    void InitMap(int size) { map = new Map(size); }
 
     void InitIds(const nlohmann::ordered_json &state);
-
-    // add methods
-
-    void AddVehicle(int playerId, VehiclesTypes::Type type, Point3D spawn);
-
-    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point3D> &points) {
-        map->AddConstruction(type, points);
-    }
-
-
-    // game state
-    void UpdateState(int currTurn, int currPlayer, bool finished = false);
-
-    void UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
-                            int capturePoints);
-
-    void UpdateAttackMatrix(int playerId, const std::vector<int> &attacked);
-
-    void UpdateWinPoints(int playerId, int capture, int kill);
-
-    // game action
-    // ...
 
     // Getters
 
@@ -69,11 +46,13 @@ public:
 
     [[nodiscard]] const std::vector<Vehicle *> &GetVehicles(int playerId, bool adapted = true) const;
 
-    [[nodiscard]] Map *GetMap() const;// TODO! const Map*
+    [[nodiscard]] Map *GetMap() const { return map; }// TODO! const Map*
 
     [[nodiscard]] const Player *GetPlayer() const { return player; }
 
     [[nodiscard]] int GetAdaptedPlayerId() const { return playersIdAdapter.at(player->GetId()); }
+
+    [[nodiscard]] int GetVehicleServerId(int index) const {return tanksIdAdapter[index];}
 
     [[nodiscard]] auto &GetAttackMatrix() const { return attackMatrix; }
 
@@ -84,29 +63,28 @@ public:
     static Point3D MakePosTuple(const nlohmann::json &coordinate);
 
 private:
+    Map *map;
+    Player *player;
+
     std::vector<std::vector<Vehicle *>> vehicles;
 
     // new: custom id start from 0 to numPlayers - 1
     std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]
+    std::vector<int> tanksIdAdapter;    // custom id -> server id
 
+    // dynamic info
+
+    std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
     std::vector<int> captures;
     std::vector<int> kills;
 
-    const int numRounds = 15;
-    static constexpr int numPlayerVehicles = 5;
+    // consts
 
-    int numTurns{};
-    int currentTurn{};
-
-    int numPlayers{};
-    int currentPlayerId{};
+    const int numPlayerVehicles = 5;
+    int numPlayers;
+    int currentPlayerId;
 
     bool isFinished = false;
-
-    std::vector<std::vector<bool>> attackMatrix;// {"id" : "whom attack"}
-    Map *map{};
-
-    Player *player;
 
     [[nodiscard]] Vehicle *FindVehicle(int adaptedPlayerId, const Point3D &spawn) const;
 
@@ -114,16 +92,45 @@ private:
 
     void UpdateWinPoints(const nlohmann::ordered_json &winPoints);
     void UpdateAttackMatrix(const nlohmann::ordered_json &am);
-    void UpdateVehicles(const nlohmann::ordered_json &vehicles);
+    void UpdateVehicles(const nlohmann::ordered_json &veh);
 
     // Init methods
 
     void InitVariables(int playersNum);
-    void _InitMap(const nlohmann::json &mapInfo);
+
+    void InitMap(const nlohmann::json &mapInfo);
+
     void InitContent(const nlohmann::ordered_json &contentInfo);
+
     void InitSpawns(const nlohmann::ordered_json &spawnInfo);
+
     void InitPlayersIds(const nlohmann::ordered_json &am);
+
     void InitVehiclesIds(const nlohmann::ordered_json &veh);
+
     void InitPlayersId(const std::vector<int> &realId);
+
     void InitVehiclesIds(int playerId, const std::unordered_map<std::string, std::vector<int>> &realId);
+
+
+    // add methods
+
+    void AddVehicle(int playerId, VehiclesTypes::Type type, Point3D spawn);
+
+    void AddConstruct(ConstructionsTypes::Type type, std::vector<Point3D> &points) { map->AddConstruction(type, points); }
+
+    // update methods
+    // game state
+
+    void UpdateState(int currPlayer, bool finished);
+
+    void UpdateVehicleState(int parentId, Point3D spawn, Point3D pos, int health,
+                            int capturePoints);
+
+    void UpdateAttackMatrix(int playerId, const std::vector<int> &attacked);
+
+    void UpdateWinPoints(int playerId, int capture, int kill);
+
+    // game action
+    // ...
 };

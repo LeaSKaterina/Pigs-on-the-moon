@@ -13,7 +13,7 @@ public:
 
     void SetIdAdapter(std::vector<int> idAdapter) {tanksIdAdapter = std::move(idAdapter);}
 
-    [[nodiscard]] int GetServerId(int index) const {return tanksIdAdapter[index];}
+    [[nodiscard]] int GetVehicleServerId(int index) const {return tanksIdAdapter[index];}
 
 private:
     const std::string name;

@@ -40,9 +40,14 @@ public:
 
     [[nodiscard]] Game *GetGame() const { return game; } // TODO! const Game*
 
-
 protected:
+
+    void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
+
+private:
+
     // entities
+
     Game *game;
     Client *client;
 
@@ -55,6 +60,4 @@ protected:
 
     bool Login(const std::string &name, const std::string &password, const std::string &gameName, int numTurns,
                int numPlayers, bool isObserver);
-
-    void SendAction(const std::vector<std::tuple<Action, int, Point3D>> &actions) const;
 };
