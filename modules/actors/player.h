@@ -5,7 +5,7 @@
 
 struct Player {
 public:
-    Player(int id, std::string name, std::string pass, bool isObserver = false) : id(id),
+    Player(int id, std::string& name, std::string& pass, bool isObserver = false) : id(id),
                                                                                   name(std::move(name)),
                                                                                   password(std::move(pass)),
                                                                                   isObserver(isObserver) {}

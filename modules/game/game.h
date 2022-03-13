@@ -22,7 +22,7 @@
 
 class Game {
 public:
-    Game(int playerId, std::string name, std::string password, bool isObserver, int playersNum,
+    Game(int playerId, std::string& name, std::string& password, bool isObserver, int playersNum,
          const nlohmann::ordered_json &mapInfo);
 
     ~Game();
@@ -81,7 +81,7 @@ private:
 
     const int numPlayerVehicles = 5;
     int numPlayers;
-    int currentPlayerId;
+    int currentPlayerId = 0;
 
     bool isFinished = false;
 

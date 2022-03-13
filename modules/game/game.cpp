@@ -13,9 +13,9 @@ Game::~Game() {
     }
 }
 
-Game::Game(int playerId, std::string name, std::string password, bool isObserver, int playersNum,
+Game::Game(int playerId, std::string& name, std::string& password, bool isObserver, int playersNum,
            const nlohmann::ordered_json &mapInfo) {
-    player = new Player(playerId, std::move(name), std::move(password), isObserver);
+    player = new Player(playerId, name, password, isObserver);
     InitVariables(playersNum);
     InitMap(mapInfo);
 }
@@ -77,6 +77,7 @@ void Game::InitSpawns(const nlohmann::ordered_json &spawnInfo) {
             }
         }
         index++;
+        if (index == numPlayers) break;
     }
 }
 
