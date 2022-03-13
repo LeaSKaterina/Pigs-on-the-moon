@@ -13,10 +13,10 @@ Game::~Game() {
     }
 }
 
-Game::Game(int playerId, std::string name, std::string password, int playersNum,
+Game::Game(int playerId, std::string name, std::string password, bool isObserver, int playersNum,
            const nlohmann::ordered_json &mapInfo,
            const nlohmann::ordered_json &gameState) {
-    player = new Player(playerId, std::move(name), std::move(password));
+    player = new Player(playerId, std::move(name), std::move(password), isObserver);
     InitVariables(playersNum);
     InitMap(mapInfo);
 }
@@ -33,24 +33,6 @@ void Game::InitVariables(int playersNum) {
     captures.resize(playersNum);
     kills.resize(playersNum);
     tanksIdAdapter.resize(numPlayerVehicles);
-}
-
-void Game::InitPlayersId(const vector<int> &realId) {
-    for (int i = 0; i < realId.size(); i++) {
-        playersIdAdapter[realId[i]] = i;
-    }
-}
-
-void Game::InitVehiclesIds(int playerId, const unordered_map<std::string, vector<int>> &realId) {
-    if (playerId != player->GetId())
-        return;
-    int next = 0;
-    for (int i = 0; i < VehiclesTypes::typesNum; i++) {
-        auto &tanks = realId.at(VehiclesTypes::sTypes[i]);
-        for (const auto &id : tanks) {
-            tanksIdAdapter[next++] = id;
-        }
-    }
 }
 
 void Game::InitMap(const nlohmann::json &mapInfo) {
@@ -104,10 +86,11 @@ void Game::InitIds(const nlohmann::ordered_json &state) {
     InitPlayersIds(state.value("attack_matrix", nlohmann::ordered_json("")));
 
     // vehicle id
-    InitVehiclesIds(state.value("vehicles", nlohmann::ordered_json("")));
+    InitVehiclesIdsTest(state.value("vehicles", nlohmann::ordered_json("")));
 }
 
 void Game::InitPlayersIds(const nlohmann::ordered_json &am) {
+    // TODO!
     vector<int> realIds;
     for (auto &pm : am.items()) {
         realIds.push_back(stoi(pm.key()));
@@ -115,27 +98,45 @@ void Game::InitPlayersIds(const nlohmann::ordered_json &am) {
     InitPlayersId(realIds);
 }
 
-void Game::InitVehiclesIds(const nlohmann::ordered_json &veh) {
-    // TODO! do we need all players?
-    // copy strings ...
+void Game::InitPlayersId(const vector<int> &realId) {
+    for (int i = 0; i < realId.size(); i++) {
+        playersIdAdapter[realId[i]] = i;
+    }
+}
+
+void Game::InitVehiclesIdsTest(const nlohmann::ordered_json &veh) {
+    // observer has no own vehicles
+    if (player->IsObserver()) return;
+
     unordered_map<string, vector<int>> vehiclesIds;
-    int currPlayerId = -1;
+    int counter = 0;
     for (auto &v : veh.items()) {
         auto &vehicleInfo = v.value();
+        // search for our player
         int playerId = vehicleInfo.value("player_id", -1);
-        string vehicleType = vehicleInfo.value("vehicle_type", "unknown");
+        if (playerId != player->GetId())
+            continue;
+        // process only player's vehicles
         int vehicleId = stoi(v.key());
-        if (currPlayerId == -1)
-            currPlayerId = playerId;
-        if (currPlayerId != playerId) {
-            InitVehiclesIds(currPlayerId, vehiclesIds);
-            vehiclesIds.clear();
-            currPlayerId = playerId;
-        }
+        string vehicleType = vehicleInfo.value("vehicle_type", "unknown");
         vehiclesIds[vehicleType].push_back(vehicleId);
+        counter++;
+
+        // when we find all player vehicles, just go out
+        if (counter == numPlayerVehicles) break;
     }
-    if (!vehiclesIds.empty())
-        InitVehiclesIds(currPlayerId, vehiclesIds);
+
+    InitVehiclesIdsTest(vehiclesIds);
+}
+
+void Game::InitVehiclesIdsTest(const unordered_map<std::string, vector<int>> &realId) {
+    int next = 0;
+    for (int i = 0; i < VehiclesTypes::typesNum; i++) {
+        auto &tanks = realId.at(VehiclesTypes::sTypes[i]);
+        for (const auto &id : tanks) {
+            tanksIdAdapter[next++] = id;
+        }
+    }
 }
 
 // Add methods

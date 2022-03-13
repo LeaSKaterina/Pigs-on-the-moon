@@ -16,7 +16,7 @@ bool GameClient::Login(const string &name, const string &password, const string 
     int id = answer.answer.value("idx", -1);
 
     // Always init game for _3_ players
-    game = new Game(id, name, password, numPlayers,
+    game = new Game(id, name, password, isObserver, numPlayers,
                     client->Map().answer, client->GameState().answer);
 
     return true;
@@ -96,5 +96,5 @@ GameClient::GameClient(const string &name, const string &password, const string 
                        int numTurns, int numPlayers, bool isObserver) {
     client = new Client();
     InitGame(name, password, gameName, numTurns, numPlayers, isObserver);
-//    InitIds();
+    //    InitIds();
 }

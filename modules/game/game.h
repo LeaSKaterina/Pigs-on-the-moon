@@ -22,7 +22,7 @@
 
 class Game {
 public:
-    Game(int playerId, std::string name, std::string password, int playersNum,
+    Game(int playerId, std::string name, std::string password, bool isObserver, int playersNum,
          const nlohmann::ordered_json &mapInfo,
          const nlohmann::ordered_json &gameState);
 
@@ -52,7 +52,7 @@ public:
 
     [[nodiscard]] int GetAdaptedPlayerId() const { return playersIdAdapter.at(player->GetId()); }
 
-    [[nodiscard]] int GetVehicleServerId(int index) const {return tanksIdAdapter[index];}
+    [[nodiscard]] int GetVehicleServerId(int index) const { return tanksIdAdapter[index]; }
 
     [[nodiscard]] auto &GetAttackMatrix() const { return attackMatrix; }
 
@@ -70,7 +70,9 @@ private:
 
     // new: custom id start from 0 to numPlayers - 1
     std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]
-    std::vector<int> tanksIdAdapter;    // custom id -> server id
+
+    // save real ids of tanks to interact with the server
+    std::vector<int> tanksIdAdapter;// custom id -> server id
 
     // dynamic info
 
@@ -106,12 +108,11 @@ private:
 
     void InitPlayersIds(const nlohmann::ordered_json &am);
 
-    void InitVehiclesIds(const nlohmann::ordered_json &veh);
-
     void InitPlayersId(const std::vector<int> &realId);
 
-    void InitVehiclesIds(int playerId, const std::unordered_map<std::string, std::vector<int>> &realId);
+    void InitVehiclesIdsTest(const nlohmann::ordered_json &veh);
 
+    void InitVehiclesIdsTest(const std::unordered_map<std::string, std::vector<int>> &realId);
 
     // add methods
 
