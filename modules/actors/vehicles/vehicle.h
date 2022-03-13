@@ -23,7 +23,7 @@ public:
     //minPath = currentPosition -> neighbor -> neighbor -> ...
     Hex *GetAvailableMovePoint(const std::vector<Hex *> &minPath);
 
-    virtual bool IsAvailableForShoot(Vehicle *enemy) = 0;
+    virtual bool IsAvailableToShoot(const Point3D &point3D) = 0;
 
     virtual Point3D Shoot(Vehicle &enemy);
 
