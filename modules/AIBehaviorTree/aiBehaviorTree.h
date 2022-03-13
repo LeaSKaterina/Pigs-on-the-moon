@@ -10,9 +10,9 @@ public:
     AIBehaviorTree() {
         BT::BehaviorTreeFactory factory;
 
-        factory.registerSimpleAction("SimpleMoveGripper", std::bind (&AIBehaviorTree::SimpleMove, this));
-
         factory.registerSimpleAction("SimpleShootGripper", std::bind (&AIBehaviorTree::SimpleShoot, this));
+
+        factory.registerSimpleAction("SimpleMoveGripper", std::bind (&AIBehaviorTree::SimpleMove, this));
 
         tree = factory.createTreeFromFile("./tree.xml");
     }
@@ -49,18 +49,19 @@ public:
 
     BT::NodeStatus SimpleShoot(){
         std::unordered_map<Vehicle *, std::vector<Vehicle *>> priorityShootTargets =
-                std::move(aiClient->GetAIPlayer()->GetPointsForShoot(game->GetAdaptedPlayerId()));
+                aiClient->GetAIPlayer()->GetPointsForShoot(game->GetAdaptedPlayerId());
+        aiClient->GetAIPlayer()->ProcessAttackPossibility(priorityShootTargets);
         if (!priorityShootTargets[currentVehicle].empty()) {
             // TODO: priority.
             for (auto *vToAttack : priorityShootTargets.at(currentVehicle)) {
                 if (vToAttack->IsAlive()) {
                     vToAttack->GetHit();
                     actions.push(std::make_tuple(Action::SHOOT, game->GetPlayer()->GetServerIdForTank(currentVehicleId), vToAttack->GetCurrentPosition()));
-                    break;
+                    return BT::NodeStatus::SUCCESS;
                 }
             }
         }
-        return BT::NodeStatus::SUCCESS;
+        return BT::NodeStatus::FAILURE;
     }
 
 

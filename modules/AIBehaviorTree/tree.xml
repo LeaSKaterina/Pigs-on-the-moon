@@ -21,14 +21,14 @@
 <!--                        <MoveOnHex/>-->
 <!--                    </Sequence>-->
 <!--                    <Fallback name="can_not_move_in_base>-->
-
 <!--                     </Fallback>-->
 <!--            </Fallback>-->
 <!--        </Fallback>-->
 
         <Fallback name="root_fallback">
-            <SimpleMoveGripper name="simple_move"/>
             <SimpleShootGripper    name="shoot_gripper"/>
+            <SimpleMoveGripper name="simple_move"/>
+
         </Fallback>
     </BehaviorTree>
 </root>
