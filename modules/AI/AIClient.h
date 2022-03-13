@@ -1,5 +1,4 @@
-#ifndef PIGS_ON_THE_MOON_AICLIENT_H
-#define PIGS_ON_THE_MOON_AICLIENT_H
+#pragma once
 
 #include "gameClient.h"
 #include "AIPlayer.h"
@@ -20,4 +19,3 @@ private:
 };
 
 
-#endif//PIGS_ON_THE_MOON_AICLIENT_H

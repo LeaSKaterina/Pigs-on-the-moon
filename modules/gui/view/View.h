@@ -2,7 +2,6 @@
 
 #include "MapView.h"
 #include "gameClient.h"
-#include "gui/model/Bot.h"
 #include "gui/screen.h"
 #include "gui/shapes/VehicleLogo.h"
 #include <SFML/Audio.hpp>

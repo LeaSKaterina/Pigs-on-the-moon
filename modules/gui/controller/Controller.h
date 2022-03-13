@@ -3,7 +3,7 @@
 #include "gui/model/Bot.h"
 #include "gui/view/View.h"
 
-#include "AIBehaviorTree/aiBehaviorTree.h"
+//#include "AIBehaviorTree/aiBehaviorTree.h"
 
 class Controller {
 public:
@@ -25,16 +25,16 @@ public:
 private:
     std::string game;
     const int waitTime;
-    Bot bot1;
-    Bot bot2;
-    Bot bot3;
-    Bot observer;
-    sf::Thread thread1;
-    sf::Thread thread2;
-    sf::Thread thread3;
-    sf::Thread observerThread;
-    sf::Mutex observerMutex;
+//    Bot bot1;
+//    Bot bot2;
+//    Bot bot3;
+//    Bot observer;
+//    sf::Thread thread1;
+//    sf::Thread thread2;
+//    sf::Thread thread3;
+//    sf::Thread observerThread;
     View view;
+    sf::Mutex observerMutex;
     bool isWindowClose = false;
     sf::Mutex closeMutex;
 

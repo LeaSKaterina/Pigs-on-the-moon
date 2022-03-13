@@ -4,6 +4,7 @@
 #include "game/game.h"
 #include "AI/AIClient.h"
 #include <tuple>
+#include "AI/AIPlayer.h"
 
 class AIBehaviorTree {
 public:
@@ -34,6 +35,7 @@ public:
         std::vector<Hex*> path = game->GetMap()->GetShortestWay(*playerVehicles[currentVehicleId]->GetCurrentHex(), *game->GetMap()->GetHexByPoint(targetPoint));
         auto hex = currentVehicle->GetAvailableMovePoint(path);
         if (hex != nullptr){
+            currentVehicle->GetCurrentHex()->Free();
             actions.push(std::make_tuple(Action::MOVE, game->GetPlayer()->GetServerIdForTank(currentVehicleId), hex->GetCoordinates()));
             currentVehicleId++;
             hex->Occupy();
@@ -43,11 +45,21 @@ public:
     }
 
     BT::NodeStatus SimpleShoot(){
-
-        return BT::NodeStatus::SUCCESS;
+        std::unordered_map<Vehicle *, std::vector<Vehicle *>> priorityShootTarget =
+                std::move(GetPointsForShoot(game->GetAdaptedPlayerId()));
+        if (!priorityShootTargets[currentVehicle].empty()) {
+//                        // TODO: priority.
+//                        for (auto *vToAttack : priorityShootTargets.at(currentVehicle)) {
+//                            if (vToAttack->IsAlive()) {
+//                                vToAttack->GetHit();
+//                                res.emplace_back(Action::SHOOT, game->GetPlayer()->GetServerIdForTank(i), playerVehicles[i]->Shoot(vToAttack));
+//
+//                                break;
+//                            }
+//                        }}
+//                      }
+            return BT::NodeStatus::SUCCESS;
     }
-
-    BT::Tree &GetTree() { return tree; }
 
     void ProcessAllTanks(){
         for (auto vehicle : *playerVehicles){
@@ -78,5 +90,5 @@ private:
     const std::vector<Vehicle *> *playerVehicles;
     Vehicle *currentVehicle;
     int currentVehicleId = 0;
-    std::queue<std::tuple<Action, int, Point3D>> actions;// Action = Move | SHOOT, int = id, point = point
+    std::queue<std::tuple<Action, int, Point3D>> actions;// Action = Move | SHOOT, int = tankId, point = point
 };
