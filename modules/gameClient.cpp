@@ -41,6 +41,7 @@ bool GameClient::CreateConnection(const string &name, const string &password, co
     return true;
 }
 
+
 void GameClient::ConnectPlayer() {
     auto state = client->GameState();
     while (state.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
@@ -81,3 +82,6 @@ void GameClient::SendAction(const std::vector<std::tuple<Action, int, Point3D>> 
 #endif
     }
 }
+
+
+

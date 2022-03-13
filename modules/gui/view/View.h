@@ -2,7 +2,6 @@
 
 #include "MapView.h"
 #include "gameClient.h"
-#include "gui/model/Bot.h"
 #include "gui/screen.h"
 #include "gui/shapes/VehicleLogo.h"
 #include <SFML/Audio.hpp>
@@ -47,6 +46,6 @@ private:
     void PlayStartMusic(sf::Music &music) {
         if (!music.openFromFile("resources/music/Intro.ogg"))
             std::cerr << "can't load Intro music" << '\n';
-        music.play();
+//        music.play();
     }
 };

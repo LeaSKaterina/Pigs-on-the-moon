@@ -233,6 +233,7 @@ void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
 
 // Getters
 
+
 const std::vector<Vehicle *> &Game::GetVehicles(int playerId, bool adapted) const {
     return vehicles[(adapted ? playerId : playersIdAdapter.at(playerId))];
 }

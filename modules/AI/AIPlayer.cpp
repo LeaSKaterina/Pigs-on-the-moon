@@ -43,11 +43,7 @@ vector<tuple<Action, int, Point3D>> AIPlayer::Play() const {
                     if (vToAttack->IsAlive()) {
                         vToAttack->GetHit();
                         satisfied = true;
-                        res.emplace_back(
-                                Action::SHOOT,
-                                game->GetVehicleServerId(i),
-                                playerVehicles[i]->Shoot(*vToAttack));
-
+                        res.emplace_back(Action::SHOOT, game->GetVehicleServerId(i), currentVehicle->Shoot(*vToAttack));
                         break;
                     }
                 }
@@ -101,7 +97,7 @@ AIPlayer::GetPointsForShoot(int playerId) const {
     auto &v = game->GetVehicles();
     const vector<Vehicle *> &playerVehicles = v[playerId];
 
-    vector<bool> canAttack = move(NeutralityRuleCheck(playerId));
+    vector<bool> canAttack = NeutralityRuleCheck(playerId);
     std::unordered_map<Vehicle *, vector<Vehicle *>> res;// key - enemy tank, value - who can attack
     for (auto &our : playerVehicles) {
         for (int i = 0; i < v.size(); i++) {
@@ -119,3 +115,4 @@ AIPlayer::GetPointsForShoot(int playerId) const {
 
     return res;
 }
+

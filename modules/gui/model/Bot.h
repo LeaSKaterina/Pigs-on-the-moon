@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AI/AIClient.h"
+#include "AIBehaviorTree/aiBehaviorTree.h"
 
 class Controller;
 
@@ -19,4 +20,6 @@ public:
 
 private:
     Controller &controller;
+    AIBehaviorTree tree;
+
 };

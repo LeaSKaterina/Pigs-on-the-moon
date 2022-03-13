@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../gameClient.h"
+#include "gameClient.h"
 #include "AIPlayer.h"
 
 class AIClient : public GameClient {
@@ -13,8 +13,15 @@ public:
 
     ~AIClient() { delete ai; }
 
+    bool InitGame(const std::string &name, const std::string &password = "",
+                  const std::string &gameName = "", int numTurns = 0, int numPlayers = 1,
+                  bool isObserver = false);
     void SendAction() const;
+
+    AIPlayer* GetAIPlayer(){ return ai; }
 
 private:
     AIPlayer *ai;
+
 };
+

@@ -1,6 +1,7 @@
 #include "Controller.h"
 
-Controller::Controller(const std::string &gameName, int waitTime) : bot1(*this, "Den-Pig1", "", game, 0, 3),
+Controller::Controller(const std::string &gameName, int waitTime) :
+                                                                    bot1(*this, "Den-Pig1", "", game, 0, 3),
                                                                     bot2(*this, "Den-Pig2", "", game, 0, 3),
                                                                     bot3(*this, "Den-Pig3", "", game, 0, 3),
                                                                     observer(*this, "Den-obs", "", game, 0, 3, true),
@@ -15,7 +16,6 @@ Controller::Controller(const std::string &gameName, int waitTime) : bot1(*this, 
     thread3.launch();
 
     observerThread.launch();
-
 
     view.Show();
 }

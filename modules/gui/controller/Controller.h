@@ -3,6 +3,8 @@
 #include "gui/model/Bot.h"
 #include "gui/view/View.h"
 
+//#include "AIBehaviorTree/aiBehaviorTree.h"
+
 class Controller {
 public:
     Controller(const std::string &gameName, int waitTime);
@@ -31,8 +33,8 @@ private:
     sf::Thread thread2;
     sf::Thread thread3;
     sf::Thread observerThread;
-    sf::Mutex observerMutex;
     View view;
+    sf::Mutex observerMutex;
     bool isWindowClose = false;
     sf::Mutex closeMutex;
 

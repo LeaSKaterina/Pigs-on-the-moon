@@ -20,6 +20,7 @@ public:
     ~GameClient();
 
     // Inits
+    
 
     // must be called once and only when all players are connected
     void ConnectPlayer();

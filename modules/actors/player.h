@@ -12,7 +12,11 @@ public:
 
     [[nodiscard]] int GetId() const { return id; }
 
+
     [[nodiscard]] bool IsObserver() const { return isObserver; }
+
+//    [[nodiscard]] int GetServerIdForTank(int index) const {return tanksIdAdapter[index];}
+
 
 private:
     const std::string name;
