@@ -7,7 +7,7 @@
 
 class Controller {
 public:
-    Controller(const std::string &gameName, int waitTime);
+    Controller(const std::string &gameName, int waitTime, int playersNum);
 
     virtual ~Controller();
 
@@ -25,13 +25,13 @@ public:
 private:
     std::string game;
     const int waitTime;
-    Bot bot1;
-    Bot bot2;
-    Bot bot3;
+//    Bot bot1;
+//    Bot bot2;
+//    Bot bot3;
     Bot observer;
-    sf::Thread thread1;
-    sf::Thread thread2;
-    sf::Thread thread3;
+//    sf::Thread thread1;
+//    sf::Thread thread2;
+//    sf::Thread thread3;
     sf::Thread observerThread;
     View view;
     sf::Mutex observerMutex;

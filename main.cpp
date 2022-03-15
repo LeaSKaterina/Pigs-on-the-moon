@@ -31,10 +31,13 @@ int main(int argc, char **argv) {
 
 
     AIClient bot(name, password, gameName, numberTurns, numberPlayers, observer);
-    bot.StartAI();
+    sf::Thread thread(&AIClient::StartAI, &bot);
+    thread.launch();
+//    bot.StartAI();
 
-    //Gui with 3 our bots
-//        Controller controller("Pings-on-the-moon-gui3", 0);
+//    Gui with 3 our bots
+    Controller controller(gameName, 0, numberPlayers);
+    thread.wait();
 
     return 0;
 }
