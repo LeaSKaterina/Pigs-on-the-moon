@@ -4,17 +4,14 @@ using namespace std;
 
 GameClient::GameClient(const string &name, const string &password, const string &gameName,
                        int numTurns, int numPlayers, bool isObserver) {
-    client = new Client();
+    client = make_unique<Client>();
     CreateConnection(name, password, gameName, numTurns, numPlayers, isObserver);
 }
 
-GameClient::~GameClient() {
-    //we don't use logout because, otherwise reconnection brings throw game is full,
-    //but logically we should do this
-    //    client->Logout();
-    delete game;
-    delete client;
-}
+//we don't use logout because, otherwise reconnection brings throw game is full,
+//but logically we should do this
+//    client->Logout();
+GameClient::~GameClient() = default;
 
 // Init methods
 
@@ -37,7 +34,7 @@ bool GameClient::CreateConnection(const string &name, const string &password, co
     int id = Login(name, password, gameName, numTurns, numPlayers, isObserver);
     if (id == -1)
         return false;
-    game = new Game(id, name, password, isObserver, numPlayers, client->Map().answer);
+    game = make_unique<Game>(id, name, password, isObserver, numPlayers, client->Map().answer);
     return true;
 }
 

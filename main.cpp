@@ -14,17 +14,17 @@ int main(int argc, char **argv) {
         std::string key(argv[i]);
         char *value = argv[i + 1];
 
-        if(key == "-n"){
+        if (key == "-n") {
             name = value;
-        }else if(key == "-pa"){
+        } else if (key == "-pa") {
             password = value;
-        }else if(key == "-g"){
+        } else if (key == "-g") {
             gameName = value;
-        }else if(key == "-t"){
+        } else if (key == "-t") {
             numberTurns = std::stoi(value);
-        }else if(key == "-pl"){
+        } else if (key == "-pl") {
             numberPlayers = std::stoi(value);
-        }else if(key == "-o"){
+        } else if (key == "-o") {
             observer = std::stoi(value);
         }
     }
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     bot.StartAI();
 
     //Gui with 3 our bots
-        Controller controller("Pings-on-the-moon-gui3", 0);
+//    Controller controller("Pings-on-the-moon-gui3", 0);
 
     return 0;
 }

@@ -39,13 +39,13 @@ public:
 
     [[nodiscard]] bool GameIsFinished() const { return game->IsFinished(); }
 
-    [[nodiscard]] const Game *GetGame() const { return game; }
+    [[nodiscard]] const Game *GetGame() const { return game.get(); }
 
 private:
     // entities
 
-    Game *game;
-    Client *client;
+    std::unique_ptr<Game> game;
+    std::unique_ptr<Client> client;
 
     // init methods
 
