@@ -4,6 +4,7 @@
 #include "hex.h"
 #include <algorithm>
 #include <map>
+#include <memory>
 #include <stack>
 #include <unordered_map>
 
@@ -11,11 +12,13 @@ class Map {
 public:
     explicit Map(int size) : size(size) { InitGrid(); }
 
+    ~Map() = default;
+
     void AddConstruction(ConstructionsTypes::Type type, std::vector<Point3D> &points);
 
     [[nodiscard]] bool IsHexAreExistForPoint(const Point3D &point) const { return grid.count(point) != 0; }
 
-    [[nodiscard]] Hex *GetHexByPoint(const Point3D &p) const { return grid.at(p); }
+    [[nodiscard]] Hex *GetHexByPoint(const Point3D &p) const { return grid.at(p).get(); }
 
     [[nodiscard]] bool IsBasePoint(const Point3D &point) const;
 
@@ -23,13 +26,9 @@ public:
 
     [[nodiscard]] bool BaseIsOccupy() const { return GetFreePointsOfBase().empty(); }
 
-    [[nodiscard]] static ConstructionsTypes::Type GetType(const Hex &hex);
-
     [[nodiscard]] bool HasObstacleBetween(const Hex &f, const Hex &s) const;
 
-    ~Map();
-
-    [[nodiscard]] const std::map<Point3D, Hex *> &GetGrid() const { return grid; }
+    [[nodiscard]] const std::map<Point3D, std::unique_ptr<Hex>> &GetGrid() const { return grid; }
 
 
     //function return shortest way between two hexes considering specific map and blockHexes as variable.
@@ -43,7 +42,7 @@ public:
 
 private:
     int size;
-    std::map<Point3D, Hex *> grid;
+    std::map<Point3D, std::unique_ptr<Hex>> grid;
 
     void InitGrid();
 

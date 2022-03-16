@@ -22,11 +22,11 @@ MapView::MapView(const Game *game, sf::Mutex &gameMutex, const Point2D &leftTopP
 }
 
 void MapView::DrawGrid(sf::RenderWindow &window) {
-    for (const auto point : map->GetGrid()) {
+    for (const auto& point : map->GetGrid()) {
         int x = size * 3. / 2 * point.first.x + center.x;
         int y = size * (sqrt(3) / 2 * point.first.x + std::sqrt(3) * point.first.z) + center.y;
 
-        if (map->GetType(*point.second) == ConstructionsTypes::EMPTY) {
+        if (point.second->GetType() == ConstructionsTypes::EMPTY) {
             hex.setOutlineColor(sf::Color::Green);
             hex.setFillColor(sf::Color::Transparent);
         } else if (point.second->GetType() == ConstructionsTypes::BASE) {
