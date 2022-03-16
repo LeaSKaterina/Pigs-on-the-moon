@@ -34,7 +34,7 @@ private:
     BT::Tree tree;
 
     //shared data between tree nodes
-    const std::vector<Vehicle *> *playerVehicles;
+    const std::vector<std::unique_ptr<Vehicle>> *playerVehicles;
     Vehicle *currentVehicle;
     int currentVehicleId = 0;
     std::queue<std::tuple<Action, int, Point3D>> actions;// Action = Move | SHOOT, int = tankId, point = point

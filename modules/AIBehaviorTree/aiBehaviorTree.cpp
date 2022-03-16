@@ -119,8 +119,8 @@ BT::NodeStatus AIBehaviorTree::NeedToRun() {
     return BT::NodeStatus::FAILURE;
 }
 void AIBehaviorTree::ProcessAllTanks() {
-    for (auto vehicle : *playerVehicles) {
-        currentVehicle = vehicle;
+    for (auto& vehicle : *playerVehicles) {
+        currentVehicle = vehicle.get();
         this->tree.tickRoot();
         currentVehicleId++;
     }

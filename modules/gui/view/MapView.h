@@ -34,7 +34,6 @@ private:
     const Game *game;
     sf::Mutex &gameMutex;
     //ToDo: thread problem chance.
-    std::vector<std::vector<Vehicle *>> vehiclesVectors = game->GetVehicles();
     const Map *map = game->GetMap();
 
     //health

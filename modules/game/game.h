@@ -24,7 +24,7 @@ public:
     Game(int playerId, const std::string &name, const std::string &password, bool isObserver, int playersNum,
          const nlohmann::ordered_json &mapInfo);
 
-    ~Game();
+    ~Game() = default;
 
     // update methods
     void UpdateGameState(const nlohmann::ordered_json &state);
@@ -42,9 +42,9 @@ public:
 
     [[nodiscard]] auto &GetVehicles() const { return vehicles; }
 
-    [[nodiscard]] const std::vector<Vehicle *> &GetVehicles(int playerId, bool adapted = true) const;
+    [[nodiscard]] const std::vector<std::unique_ptr<Vehicle>> &GetVehicles(int playerId, bool adapted = true) const;
 
-    [[nodiscard]] const Map *GetMap() const { return map; }
+    [[nodiscard]] const Map *GetMap() const { return map.get(); }
 
     [[nodiscard]] int GetAdaptedPlayerId() const { return playersIdAdapter.at(player->GetId()); }
 
@@ -59,10 +59,10 @@ public:
     static Point3D MakePosTuple(const nlohmann::json &coordinate);
 
 private:
-    Map *map;
-    Player *player;
+    std::unique_ptr<Map> map;
+    std::unique_ptr<Player> player;
 
-    std::vector<std::vector<Vehicle *>> vehicles;
+    std::vector<std::vector<std::unique_ptr<Vehicle>>> vehicles;
 
     // new: custom id start from 0 to numPlayers - 1
     std::map<int, int> playersIdAdapter;// [real id 1, ..]->[0, 1, 2]

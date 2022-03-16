@@ -53,6 +53,7 @@ void MapView::DrawGrid(sf::RenderWindow &window) {
 }
 
 void MapView::DrawVehicles(sf::RenderWindow &window) {
+    const auto & vehiclesVectors = game->GetVehicles();
     for (int i = 0; i < vehiclesVectors.size(); i++) {
         vehicleLogo.ChangeColorById(i);
         for (auto &vehicle : vehiclesVectors[i]) {
@@ -104,8 +105,6 @@ void MapView::Resize(const sf::Vector2<unsigned int> &windowSize) {
 
 void MapView::Draw(sf::RenderWindow &window) {
     sf::Lock lock(gameMutex);
-
-    vehiclesVectors = game->GetVehicles();
 
     this->DrawGrid(window);
     this->DrawVehicles(window);

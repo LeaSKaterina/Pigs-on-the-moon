@@ -3,19 +3,10 @@
 using namespace std;
 using namespace VehiclesTypes;
 
-Game::~Game() {
-    delete player;
-    delete map;
-    for (auto &vehicle : vehicles) {
-        for (auto v : vehicle) {
-            delete v;
-        }
-    }
-}
 
 Game::Game(int playerId, const std::string &name, const std::string &password, bool isObserver, int playersNum,
            const nlohmann::ordered_json &mapInfo) {
-    player = new Player(playerId, name, password, isObserver);
+    player = make_unique<Player>(playerId, name, password, isObserver);
     InitVariables(playersNum);
     InitMap(mapInfo);
 }
@@ -37,7 +28,7 @@ void Game::InitVariables(int playersNum) {
 void Game::InitMap(const nlohmann::json &mapInfo) {
     // Map
     int size = mapInfo.value("size", -1);
-    map = new Map(size);
+    map = make_unique<Map>(size);
 
 #ifdef _DEBUG
     cout << "Map request:\n"
@@ -154,7 +145,7 @@ void Game::AddVehicle(int playerId, Type type, Point3D spawn) {
         case SPG:
             t = new Spg(spawnPoint, playerId);
     }
-    vehicles[playerId].push_back(t);// there player id passed from 0 to 2 (GameClient)
+    vehicles[playerId].push_back(unique_ptr<Vehicle>(t));// there player id passed from 0 to 2 (GameClient)
 }
 
 // Update methods
@@ -234,7 +225,7 @@ void Game::UpdateAttackMatrix(int playerId, const std::vector<int> &attacked) {
 // Getters
 
 
-const std::vector<Vehicle *> &Game::GetVehicles(int playerId, bool adapted) const {
+const std::vector<unique_ptr<Vehicle>> &Game::GetVehicles(int playerId, bool adapted) const {
     return vehicles[(adapted ? playerId : playersIdAdapter.at(playerId))];
 }
 
@@ -245,9 +236,9 @@ Point3D Game::MakePosTuple(const nlohmann::json &coordinate) {
 }
 
 Vehicle *Game::FindVehicle(int adaptedPlayerId, const Point3D &spawn) const {
-    for (auto *p : vehicles[adaptedPlayerId]) {
+    for (auto& p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
-            return p;
+            return p.get();
     }
     return nullptr;
 }
