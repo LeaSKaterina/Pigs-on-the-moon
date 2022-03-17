@@ -10,6 +10,7 @@ public:
     Bot(Controller &controller, const std::string &name, const std::string &password = "", const std::string &gameName = "", int numTurns = 0,
         int numPlayers = 1, bool isObserver = false) : controller(controller) {
         gc = new AIClient(name, password, gameName, numTurns, numPlayers, isObserver);
+        tree = new AIBehaviorTree(gc->GetAIPlayer());
     }
 
     void StartAI();
@@ -20,5 +21,5 @@ public:
 
 private:
     Controller &controller;
-    AIBehaviorTree tree;
+    AIBehaviorTree* tree;
 };
