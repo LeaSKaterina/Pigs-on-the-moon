@@ -8,7 +8,6 @@ void Map::InitGrid() {
         for (int y = -size + 1; y < size; y++) {
             int z = -x - y;
             if (x + y + z == 0 && abs(z) < size)
-                //                grid[Point3D(x, y, z)] = new Hex(x, y, z);
                 grid[Point3D(x, y, z)] = make_unique<Hex>(x, y, z);
         }
     }
