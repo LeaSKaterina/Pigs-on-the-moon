@@ -10,12 +10,16 @@ public:
                       const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
                       bool isObserver = false)
         : GameClient(name, password, gameName, numTurns, numPlayers, isObserver),
-          ai(new AIPlayer(GetGame())) {
-    }
+          ai(new AIPlayer(GetGame())),
+          onlyObserve(isObserver) {}
 
     ~AIClient() { delete ai; }
 
     AIPlayer *GetAIPlayer() { return ai; }
+
+    void Start() {
+        onlyObserve ? StartObserver() : StartAI();
+    }
 
     void StartAI() {
         this->ConnectPlayer();
@@ -33,7 +37,20 @@ public:
         }
     }
 
+    void StartObserver() {
+        this->ConnectPlayer();
+        while (!this->GameIsFinished()) {
+            std::cout << "Observer\n";
+            this->UpdateGameState();
+#ifdef _DEBUG
+            std::cerr << "\n---------------------------------------\n";
+#endif
+            this->SendTurn();
+        }
+    }
+
 private:
     AIPlayer *ai;
     AIBehaviorTree tree;
+    bool onlyObserve;
 };

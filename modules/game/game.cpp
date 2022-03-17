@@ -77,7 +77,9 @@ void Game::InitIds(const nlohmann::ordered_json &state) {
     InitPlayersIds(state.value("attack_matrix", nlohmann::ordered_json("")));
 
     // vehicle id
-    InitVehiclesIds(state.value("vehicles", nlohmann::ordered_json("")));
+    // observer has no own vehicles
+    if (!player->IsObserver())
+        InitVehiclesIds(state.value("vehicles", nlohmann::ordered_json("")));
 }
 
 void Game::InitPlayersIds(const nlohmann::ordered_json &am) {
@@ -89,9 +91,6 @@ void Game::InitPlayersIds(const nlohmann::ordered_json &am) {
 }
 
 void Game::InitVehiclesIds(const nlohmann::ordered_json &veh) {
-    // observer has no own vehicles
-    if (player->IsObserver()) return;
-
     unordered_map<string, vector<int>> vehiclesIds;
     int counter = 0;
     for (auto &v : veh.items()) {
@@ -236,7 +235,7 @@ Point3D Game::MakePosTuple(const nlohmann::json &coordinate) {
 }
 
 Vehicle *Game::FindVehicle(int adaptedPlayerId, const Point3D &spawn) const {
-    for (auto& p : vehicles[adaptedPlayerId]) {
+    for (auto &p : vehicles[adaptedPlayerId]) {
         if (p->GetSpawn() == spawn)
             return p.get();
     }

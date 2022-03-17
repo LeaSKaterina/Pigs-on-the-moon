@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
 
-    std::string name = "team";
+    std::string name = "Pigs-on-the-Moon";
     std::string password;
     std::string gameName;
     int numberTurns = 45;
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
 
     AIClient bot(name, password, gameName, numberTurns, numberPlayers, observer);
-    bot.StartAI();
+    bot.Start();
 
     //Gui with 3 our bots
 //    Controller controller("Pings-on-the-moon-gui3", 0);
