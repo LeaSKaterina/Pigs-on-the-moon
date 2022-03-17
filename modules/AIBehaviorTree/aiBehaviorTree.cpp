@@ -1,9 +1,8 @@
 #include "aiBehaviorTree.h"
 #include "AI/AIClient.h"
 
-AIBehaviorTree::AIBehaviorTree() {
+AIBehaviorTree::AIBehaviorTree(const AIPlayer *pl) : player(pl) {
     BT::BehaviorTreeFactory factory;
-
 
     factory.registerSimpleAction("ConditionNodeNeedToRun", std::bind(&AIBehaviorTree::NeedToRun, this));
 
@@ -14,12 +13,15 @@ AIBehaviorTree::AIBehaviorTree() {
     factory.registerSimpleAction("SimpleMoveFromDangerGripper", std::bind(&AIBehaviorTree::SimpleMoveFromDanger, this));
 
     tree = factory.createTreeFromFile("./tree.xml");
+
+    Init();
 }
-void AIBehaviorTree::Init(AIClient *aiClient) {
-    this->aiClient = aiClient;
-    game = aiClient->GetGame();
+
+void AIBehaviorTree::Init() {
+    game = player->GetGame();
     playerVehicles = &game->GetVehicles(game->GetAdaptedPlayerId());
 }
+
 BT::NodeStatus AIBehaviorTree::SimpleMoveToTarget(const Point3D &targetPoint) {
     std::vector<Hex *> oldPath;
     std::vector<Hex *> path;
@@ -66,41 +68,46 @@ BT::NodeStatus AIBehaviorTree::SimpleMoveToTarget(const Point3D &targetPoint) {
 
     return BT::NodeStatus::FAILURE;
 }
+
 BT::NodeStatus AIBehaviorTree::SimpleMoveToBase() {
     if (!game->GetMap()->BaseIsOccupy())
         return SimpleMoveToTarget(Point3D(0, 0, 0));
     //            return SimpleMoveToTarget(game->GetMap()->GetFreePointsOfBase()[0]);
     return BT::NodeStatus::FAILURE;
 }
+
 std::vector<Point3D> AIBehaviorTree::GetPointsToRun() {
+    const Map *map = game->GetMap();
     auto ring = Hex::GetRing(currentVehicle->GetCurrentPosition(), 1);
     std::vector<Point3D> res;
     for (auto point : ring) {
-        if (!game->GetMap()->IsHexAreExistForPoint(point)) {
-            Hex *hex = game->GetMap()->GetHexByPoint(point);
+        if (!map->IsHexAreExistForPoint(point)) {
+            Hex *hex = map->GetHexByPoint(point);
             if (hex->IsEmpty() && hex->GetType() != ConstructionsTypes::OBSTACLE) {
                 res.push_back(point);
             }
         }
     }
-    std::sort(res.begin(), res.end(), [this](Point3D left, Point3D right) {
-        auto baseHex = game->GetMap()->GetFreePointsOfBase()[0];
-        int lengthLeft = game->GetMap()->GetShortestWay(*game->GetMap()->GetHexByPoint(left), *baseHex).size();
-        int lengthRight = game->GetMap()->GetShortestWay(*game->GetMap()->GetHexByPoint(right), *baseHex).size();
+    std::sort(res.begin(), res.end(), [this, &map](Point3D left, Point3D right) {
+        auto baseHex = map->GetFreePointsOfBase()[0];
+        int lengthLeft = map->GetShortestWay(*map->GetHexByPoint(left), *baseHex).size();
+        int lengthRight = map->GetShortestWay(*map->GetHexByPoint(right), *baseHex).size();
         return lengthLeft < lengthRight;
     });
     return res;
 }
+
 BT::NodeStatus AIBehaviorTree::SimpleMoveFromDanger() {
     for (auto point : GetPointsToRun()) {
         return SimpleMoveToTarget(point);
     }
     return BT::NodeStatus::FAILURE;
 }
+
 BT::NodeStatus AIBehaviorTree::SimpleShoot() {
     std::unordered_map<Vehicle *, std::vector<Vehicle *>> priorityShootTargets =
-            aiClient->GetAIPlayer()->GetPointsForShoot(game->GetAdaptedPlayerId());
-    aiClient->GetAIPlayer()->ProcessAttackPossibility(priorityShootTargets);
+            std::move(player->GetPointsForShoot(game->GetAdaptedPlayerId()));
+    AIPlayer::ProcessAttackPossibility(priorityShootTargets);
     if (!priorityShootTargets[currentVehicle].empty()) {
         // TODO: priority.
         for (auto *vToAttack : priorityShootTargets.at(currentVehicle)) {
@@ -113,20 +120,14 @@ BT::NodeStatus AIBehaviorTree::SimpleShoot() {
     }
     return BT::NodeStatus::FAILURE;
 }
+
 BT::NodeStatus AIBehaviorTree::NeedToRun() {
-    if (aiClient->GetAIPlayer()->CanDieOnPoint(*currentVehicle, currentVehicle->GetCurrentPosition()))
+    if (player->CanDieOnPoint(*currentVehicle, currentVehicle->GetCurrentPosition()))
         return BT::NodeStatus::SUCCESS;
     return BT::NodeStatus::FAILURE;
 }
-void AIBehaviorTree::ProcessAllTanks() {
-    for (auto& vehicle : *playerVehicles) {
-        currentVehicle = vehicle.get();
-        this->tree.tickRoot();
-        currentVehicleId++;
-    }
-    SendActionsToServer();
-}
-void AIBehaviorTree::SendActionsToServer() {
+
+std::vector<std::tuple<Action, int, Point3D>> AIBehaviorTree::GetActionsToServer() {
     std::vector<std::tuple<Action, int, Point3D>> actionsVector;
     while (!actions.empty()) {
         actionsVector.push_back(actions.front());
@@ -135,4 +136,13 @@ void AIBehaviorTree::SendActionsToServer() {
 
     aiClient->GameClient::SendAction(actionsVector);
     currentVehicleId = 0;
+    return actionsVector;
+}
+
+void AIBehaviorTree::ProcessAllTanks() {
+    for (auto &vehicle : *playerVehicles) {
+        currentVehicle = vehicle.get();
+        this->tree.tickRoot();
+        currentVehicleId++;
+    }
 }

@@ -57,8 +57,7 @@ AIPlayer::GetPointsForShoot(int playerId) const {
     return res;
 }
 
-
-int AIPlayer::GetPossibleDamageForPoint(const Point3D &point3D) {
+int AIPlayer::GetPossibleDamageForPoint(const Point3D &point3D) const {
     int res = 0;
     vector<bool> canAttack = NeutralityRuleCheck(game->GetAdaptedPlayerId());
     for (int i = 0; i < game->GetNumPlayers(); i++) {
@@ -76,6 +75,6 @@ int AIPlayer::GetPossibleDamageForPoint(const Point3D &point3D) {
     return res;
 }
 
-bool AIPlayer::CanDieOnPoint(const Vehicle &vehicle, const Point3D &point3D) {
+bool AIPlayer::CanDieOnPoint(const Vehicle &vehicle, const Point3D &point3D) const {
     return vehicle.GetHp() <= GetPossibleDamageForPoint(point3D);
 }

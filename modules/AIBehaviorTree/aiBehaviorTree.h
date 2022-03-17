@@ -4,13 +4,14 @@
 #include "game/game.h"
 #include <tuple>
 
+class AIPlayer;
 class AIClient;
 
 class AIBehaviorTree {
 public:
-    AIBehaviorTree();
+    explicit AIBehaviorTree(const AIPlayer *p);
 
-    void Init(AIClient *aiClient);
+    void Init();
 
     BT::NodeStatus SimpleMoveToTarget(const Point3D &targetPoint);
 
@@ -24,12 +25,13 @@ public:
 
     BT::NodeStatus NeedToRun();
 
-    void ProcessAllTanks();
+    std::vector<std::tuple<Action, int, Point3D>> GetActionsToServer();
 
-    void SendActionsToServer();
+    void ProcessAllTanks();
 
 private:
     AIClient *aiClient;
+    const AIPlayer *player;
     const Game *game;
     BT::Tree tree;
 
