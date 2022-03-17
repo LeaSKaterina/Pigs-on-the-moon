@@ -134,7 +134,7 @@ std::vector<std::tuple<Action, int, Point3D>> AIBehaviorTree::GetActionsToServer
         actions.pop();
     }
 
-    aiClient->GameClient::SendAction(actionsVector);
+//    aiClient->GameClient::SendAction(actionsVector);
     currentVehicleId = 0;
     return actionsVector;
 }

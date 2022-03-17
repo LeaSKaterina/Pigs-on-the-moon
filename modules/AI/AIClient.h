@@ -9,7 +9,6 @@ public:
                       const std::string &gameName = "", int numTurns = 45, int numPlayers = 3,
                       bool isObserver = false)
         : GameClient(name, password, gameName, numTurns, numPlayers, isObserver),
-          ai(std::make_unique<AIPlayer>(GetGame())),
           onlyObserve(isObserver) {}
 
     ~AIClient() = default;
@@ -18,6 +17,7 @@ public:
 
     void StartAI() {
         this->ConnectPlayer();
+        ai = std::make_unique<AIPlayer>(GetGame());
 
         while (!this->GameIsFinished()) {
             std::cout << "Bot\n";
