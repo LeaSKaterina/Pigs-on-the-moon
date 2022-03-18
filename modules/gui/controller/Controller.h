@@ -1,13 +1,13 @@
 #pragma once
 
 
-#include "gui/model/Bot.h"
 #include "gui/view/View.h"
+#include "AI/AIClient.h"
 
 
 class Controller {
 public:
-    Controller(std::string gameName, int waitTime);
+    Controller(std::string gameName, int waitTime, int numberPlayers = 3);
 
     virtual ~Controller();
 
@@ -25,13 +25,7 @@ public:
 private:
     std::string game;
     const int waitTime;
-    Bot bot1;
-    Bot bot2;
-    Bot bot3;
-    Bot observer;
-    sf::Thread thread1;
-    sf::Thread thread2;
-    sf::Thread thread3;
+    AIClient observer;
     sf::Thread observerThread;
     View view;
     sf::Mutex observerMutex;

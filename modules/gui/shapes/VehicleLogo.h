@@ -24,7 +24,7 @@ private:
 
     sf::CircleShape CreateFigure(int pointCount, float rotation, int separatorCount);
 
-    [[nodiscard]] sf::RectangleShape *CreateDetail(int separatorCount) const;
+    [[nodiscard]] std::unique_ptr<sf::RectangleShape> CreateDetail(int separatorCount) const;
 
     void SetColor(const sf::Color &color);
 };

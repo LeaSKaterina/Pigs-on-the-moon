@@ -126,25 +126,25 @@ void Game::InitVehiclesIds(const unordered_map<std::string, vector<int>> &realId
 
 void Game::AddVehicle(int playerId, Type type, Point3D spawn) {
     // there choose type of tanks
-    Vehicle *t;
-    Hex *spawnPoint = map->GetHexByPoint(spawn);
+    std::unique_ptr<Vehicle> t;
+    Hex *spawnPoint = this->map->GetHexByPoint(spawn);
     switch (type) {
         case MEDIUM_TANK:
-            t = new MediumTank(spawnPoint, playerId);
+            t = std::make_unique<MediumTank>(spawnPoint, playerId);
             break;
         case LIGHT_TANK:
-            t = new LightTank(spawnPoint, playerId);
+            t = std::make_unique<LightTank>(spawnPoint, playerId);
             break;
         case HEAVY_TANK:
-            t = new HeavyTank(spawnPoint, playerId);
+            t = std::make_unique<HeavyTank>(spawnPoint, playerId);
             break;
         case AT_SPG:
-            t = new AtSpg(spawnPoint, playerId);
+            t = std::make_unique<AtSpg>(spawnPoint, playerId);
             break;
         case SPG:
-            t = new Spg(spawnPoint, playerId);
+            t = std::make_unique<Spg>(spawnPoint, playerId);
     }
-    vehicles[playerId].push_back(unique_ptr<Vehicle>(t));// there player id passed from 0 to 2 (GameClient)
+    vehicles[playerId].push_back(std::move(t));// there player id passed from 0 to 2 (GameClient)
 }
 
 // Update methods

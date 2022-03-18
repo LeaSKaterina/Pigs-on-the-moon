@@ -61,8 +61,8 @@ std::tuple<sf::CircleShape, sf::RectangleShape *> VehicleLogo::GetLogoByType(Veh
     return std::make_tuple(logos[type], details.find(type)->second.get());
 }
 
-sf::RectangleShape *VehicleLogo::CreateDetail(int separatorCount) const {
-    auto *detail = new sf::RectangleShape(sf::Vector2f(2 * r / std::sqrt(2.f), r * 0.15 * (separatorCount - 1)));
+std::unique_ptr<sf::RectangleShape> VehicleLogo::CreateDetail(int separatorCount) const {
+    auto detail = std::make_unique<sf::RectangleShape>(sf::Vector2f(2 * r / std::sqrt(2.f), r * 0.15 * (separatorCount - 1)));
     detail->setOutlineThickness(2.f);
     detail->setOutlineColor(sf::Color::Black);
     detail->setFillColor(sf::Color::Transparent);

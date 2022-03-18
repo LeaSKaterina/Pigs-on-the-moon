@@ -52,7 +52,7 @@ Conan profiles example from our team:
 
 ### What can our bot do?
 
-:white_check_mark: We have a graphical view that is currently off. We use sfml.\
+:white_check_mark: We have GUI. Using sfml.\
 :white_check_mark: Our bot connects to the game and plays it to the end.
 He makes decisions based on behavior tree.
 
@@ -61,13 +61,12 @@ He makes decisions based on behavior tree.
 Just run Pigs_on_the_moon application in the build\bin folder.\
 Use key -n (name) -pa (password) -g (game name) -t (number turns) -pl (players number) -o (is observer 0/1)
 ```
-Pigs_on_the_moon.exe -t 31 -n bot
-```
-or
+Pigs_on_the_moon.exe -h
+````
+Example
 ```
 Pigs_on_the_moon.exe -n Pigs -g finalBattle -t 45 -pl 3
 ```
-##### Please build release version
 
 ### A few words about build
 

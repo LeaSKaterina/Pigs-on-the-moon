@@ -1,4 +1,5 @@
 #include "gui/controller/Controller.h"
+#include "AI/AIClient.h"
 
 int main(int argc, char **argv) {
 
@@ -6,8 +7,9 @@ int main(int argc, char **argv) {
     std::string password;
     std::string gameName;
     int numberTurns = 45;
-    int numberPlayers = 1;
-    bool observer = false;
+    int numberPlayers = 3;
+    bool isObserver = false;
+    bool isGui = false;
 
     //parsing arguments
     for (int i = 1; i < argc; i += 2) {
@@ -25,16 +27,29 @@ int main(int argc, char **argv) {
         } else if (key == "-pl") {
             numberPlayers = std::stoi(value);
         } else if (key == "-o") {
-            observer = std::stoi(value);
+            isObserver = std::stoi(value);
+        }else if (key == "--gui") {
+            isGui = std::stoi(value);
+        }else if (key == "-h") {
+            std::cout << "-h keys info" << '\n';
+            std::cout << "-n name default: Pigs-on-the-Moon" << '\n';
+            std::cout << "-pa password" << '\n';
+            std::cout << "-g gameName" << '\n';
+            std::cout << "-t  numberTurns default: 45" << '\n';
+            std::cout << "-pl  numberPlayers default: 3" << '\n';
+            std::cout << "-o isObserver 0 (false) 1(true) default: false" << '\n';
+            std::cout << "--gui isGui 0 (false) 1(true) default: false" << '\n';
+            return 0;
         }
     }
 
 
-    AIClient bot(name, password, gameName, numberTurns, numberPlayers, observer);
-    bot.StartAI();
+    AIClient bot(name, password, gameName, numberTurns, numberPlayers, isObserver);
+    sf::Thread thread(&AIClient::StartAI, &bot);
+    thread.launch();
 
-    //Gui with 3 our bots
-//    Controller controller("Pings-on-the-moon-gui", 0);
+    if(isGui) Controller controller(gameName, 0, numberPlayers);
+    thread.wait();
 
     return 0;
 }
