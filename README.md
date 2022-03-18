@@ -65,7 +65,7 @@ Pigs_on_the_moon.exe -t 31 -n bot
 ```
 or
 ```
-Pigs_on_the_moon.exe -n bot -g finalBattle -t 45 -pl 3
+Pigs_on_the_moon.exe -n Pigs -g finalBattle -t 45 -pl 3
 ```
 ##### Please build release version
 

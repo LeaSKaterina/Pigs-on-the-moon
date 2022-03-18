@@ -1,13 +1,13 @@
 #pragma once
 
+
 #include "gui/model/Bot.h"
 #include "gui/view/View.h"
 
-//#include "AIBehaviorTree/aiBehaviorTree.h"
 
 class Controller {
 public:
-    Controller(const std::string &gameName, int waitTime);
+    Controller(std::string gameName, int waitTime);
 
     virtual ~Controller();
 
