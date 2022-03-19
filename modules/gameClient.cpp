@@ -42,7 +42,7 @@ bool GameClient::CreateConnection(const string &name, const string &password, co
 void GameClient::ConnectPlayer() {
     auto state = client->GameState();
     while (state.answer.value("players", nlohmann::ordered_json("")).size() != game->GetNumPlayers()) {
-        client->Turn();
+        sf::sleep(sf::milliseconds(50));
         state = client->GameState();
     }
     std::cout << state.answer.value("players", nlohmann::ordered_json("")) << '\n';
