@@ -3,7 +3,7 @@
 #include <utility>
 
 Controller::Controller(std::string gameName, int waitTime, int numberPlayers) :
-                                                             observer("Den-obs", "", game, 0, numberPlayers, true),
+                                                             observer("observer", "", game, 0, numberPlayers, true),
                                                              observerThread(&Controller::ObserverThread, this),
                                                              view(*this, observer.GetGame(), observerMutex),
                                                              waitTime(waitTime), game(std::move(gameName)) {

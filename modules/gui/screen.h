@@ -6,7 +6,7 @@ struct Screen {
     unsigned int width;
     unsigned int height;
 
-    Screen() {}
+    Screen() = default;
 
     Screen(unsigned int width, unsigned int height) : width(width), height(height) {}
 };
@@ -20,6 +20,6 @@ struct Point2D {
     }
 
     Point2D operator/(int right) const {
-        return {this->x / right, this->y / right};
+        return {this->x / (float) right, this->y / (float) right};
     }
 };

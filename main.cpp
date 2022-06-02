@@ -3,13 +3,13 @@
 
 int main(int argc, char **argv) {
 
-    std::string name = "Pigs-on-the-Moon";
+    std::string name = "bot-unique-name";
     std::string password;
-    std::string gameName;
+    std::string gameName = "test-game";
     int numberTurns = 45;
-    int numberPlayers = 3;
+    int numberPlayers = 1;
     bool isObserver = false;
-    bool isGui = false;
+    bool isGui = true;
 
     //parsing arguments
     for (int i = 1; i < argc; i += 2) {

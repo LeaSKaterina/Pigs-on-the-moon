@@ -157,6 +157,11 @@ void Game::UpdateGameState(const nlohmann::ordered_json &state) {
     currentPlayerId = state.value("current_player_idx", -1);
     isFinished = state.value("finished", 0);
 
+#ifdef _DEBUG
+    int current_turn = state.value("current_turn", -1);
+    cerr << "\n======TURN " << current_turn << " ========" << std::endl;
+#endif
+
     // vehicles
     UpdateVehicles(state.value("vehicles", nlohmann::ordered_json("")));
 

@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(ConanFolder conanBuild)
 
+#Debug
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
+#!Debug
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/${ConanFolder}/conanbuildinfo.cmake)
 conan_basic_setup()
 
