@@ -39,15 +39,12 @@ void Menu::Run() {
 }
 
 void Menu::RunGame() {
-    for (int i = 0; i < 100; i++)
-        std::cerr <<"THIS:::" << GenerateName() << std::endl;
     gameName = GenerateName();
-    std::cerr <<"THIS:::" << gameName << std::endl;
     AIClient bot(playerName, password, gameName, numTurns, numPlayers);
     sf::Thread thread(&AIClient::StartAI, &bot);
     thread.launch();
 
-    Controller controller(gameName, 0, numPlayers);
+    Controller controller(gameName, waitTime, numPlayers, window, muteMusic);
     thread.wait();
 }
 
@@ -83,9 +80,8 @@ void Menu::InitWindow() {
     height = screen.height * scale_height;
 
     // init window
-    window = std::make_unique<sf::RenderWindow>(
+    window = std::make_shared<sf::RenderWindow>(
             sf::VideoMode(width, height), "Best Course Work");
-
     // position
     float xPosition = json["position"]["x"];
     float yPosition = json["position"]["y"];
@@ -123,6 +119,7 @@ std::string Menu::GenerateName(std::string&& prefix) {
     static std::random_device rd;
     static std::mt19937 mt(rd());
     static std::uniform_real_distribution<double> dist(1., 1000.);
+
     double generated_value = dist(mt);
     size_t value = generated_value * 1000000.;
     return prefix + std::to_string(value);

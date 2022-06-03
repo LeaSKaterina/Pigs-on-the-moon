@@ -2,15 +2,29 @@
 
 #include <utility>
 
-Controller::Controller(std::string gameName, int waitTime, int numberPlayers) :
-                                                             observer("observer", "", game, 0, numberPlayers, true),
-                                                             observerThread(&Controller::ObserverThread, this),
-                                                             view(*this, observer.GetGame(), observerMutex),
-                                                             waitTime(waitTime), game(std::move(gameName)) {
-    observerThread.launch();
+Controller::Controller(const std::string &gameName, int waitTime, int numberPlayers)
+    : Controller(gameName, waitTime, numberPlayers, true) {
 
-    view.Show();
+    view = std::make_unique<View>(*this, observer.GetGame(), observerMutex);
+
+    observerThread.launch();
+    view->Show();
 }
+
+Controller::Controller(const std::string &gameName, int waitTime, int numberPlayers,
+                       std::shared_ptr<sf::RenderWindow> &window, bool mute_music)
+    : Controller(gameName, waitTime, numberPlayers, true) {
+    view = std::make_unique<View>(*this, observer.GetGame(), observerMutex,
+                                  window, mute_music);
+
+    observerThread.launch();
+    view->Show();
+}
+
+Controller::Controller(const std::string &gameName, int waitTime, int numberPlayers, bool)
+    : observer("observer", "", gameName, 0, numberPlayers, true),
+      observerThread(&Controller::ObserverThread, this),
+      waitTime(waitTime) {}
 
 Controller::~Controller() {
     observerThread.wait();

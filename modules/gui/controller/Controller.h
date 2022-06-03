@@ -1,13 +1,19 @@
 #pragma once
 
 
-#include "gui/view/View.h"
 #include "AI/AIClient.h"
+#include "gui/view/View.h"
 
 
 class Controller {
 public:
-    Controller(std::string gameName, int waitTime, int numberPlayers = 3);
+    // Basic constructor
+    Controller(const std::string &gameName, int waitTime, int numberPlayers, bool basic);
+    // Console run
+    Controller(const std::string &gameName, int waitTime, int numberPlayers);
+    // Menu run
+    Controller(const std::string &gameName, int waitTime, int numberPlayers,
+               std::shared_ptr<sf::RenderWindow> &window, bool mute_music);
 
     virtual ~Controller();
 
@@ -23,11 +29,10 @@ public:
 
 
 private:
-    std::string game;
     const int waitTime;
     AIClient observer;
     sf::Thread observerThread;
-    View view;
+    std::unique_ptr<View> view;
     sf::Mutex observerMutex;
     bool isWindowClose = false;
     sf::Mutex closeMutex;

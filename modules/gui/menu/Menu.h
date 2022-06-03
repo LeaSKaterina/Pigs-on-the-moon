@@ -19,11 +19,11 @@ public:
 private:
     // view elements
     const Screen screen;
-    std::unique_ptr<sf::RenderWindow> window;
+    std::shared_ptr<sf::RenderWindow> window;
     std::unique_ptr<MenuButton> battle_but;
 
     // consts
-    const std::string config_view_file_path = "resources/config/view.json";
+    const std::string config_view_file_path = "resources/config/menu.json";
     const std::string background_file_path = "resources/image/menu_background.jpg";
     const std::string battle_but_file_path = "resources/image/battle_button.jpg";
     const int waitTime = 0;
