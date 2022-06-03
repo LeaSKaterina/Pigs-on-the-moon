@@ -7,6 +7,7 @@
 #include <fstream>
 #include <memory>
 #include <nlohmann/json.hpp>
+#include <random>
 
 
 class Menu {
@@ -45,6 +46,8 @@ private:
     bool muteMusic;
     int numPlayers;
     std::string gameName;
+    std::string playerName;
+    std::string password;
 
     // methods
 
@@ -64,4 +67,8 @@ private:
     void InitTextures();
     void InitWindow();
     void InitButtons();
+
+    // Other
+
+    static std::string GenerateName(std::string&& prefix = "Game");
 };

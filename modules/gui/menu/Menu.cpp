@@ -2,7 +2,8 @@
 #include "Menu.h"
 
 Menu::Menu()
-    : screen(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height) {
+    : screen(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height),
+      playerName(GenerateName("Player")) {
     InitVariables();
     InitTextures();
     InitWindow();
@@ -38,6 +39,16 @@ void Menu::Run() {
 }
 
 void Menu::RunGame() {
+    for (int i = 0; i < 100; i++)
+        std::cerr <<"THIS:::" << GenerateName() << std::endl;
+    gameName = GenerateName();
+    std::cerr <<"THIS:::" << gameName << std::endl;
+    AIClient bot(playerName, password, gameName, numTurns, numPlayers);
+    sf::Thread thread(&AIClient::StartAI, &bot);
+    thread.launch();
+
+    Controller controller(gameName, 0, numPlayers);
+    thread.wait();
 }
 
 // Init Methods
@@ -105,5 +116,14 @@ void Menu::RenderButtons() {
 
 void Menu::UpdateButtons(sf::Vector2f mousePosition) {
     if (battle_but->GetBoundingRect().contains(mousePosition))
-        std::cerr << "OK" << std::endl;
+        RunGame();
+}
+
+std::string Menu::GenerateName(std::string&& prefix) {
+    static std::random_device rd;
+    static std::mt19937 mt(rd());
+    static std::uniform_real_distribution<double> dist(1., 1000.);
+    double generated_value = dist(mt);
+    size_t value = generated_value * 1000000.;
+    return prefix + std::to_string(value);
 }
