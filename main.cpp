@@ -1,15 +1,18 @@
-#include "gui/controller/Controller.h"
 #include "AI/AIClient.h"
+#include "gui/controller/Controller.h"
+#include "gui/menu/Menu.h"
+#include <random>
 
 int main(int argc, char **argv) {
 
-    std::string name = "bot-unique-name";
+    std::string name = "Pigs-on-the-Moon";
     std::string password;
     std::string gameName = "test-game";
     int numberTurns = 45;
     int numberPlayers = 1;
     bool isObserver = false;
     bool isGui = true;
+    bool appMode = true;
 
     //parsing arguments
     for (int i = 1; i < argc; i += 2) {
@@ -28,28 +31,40 @@ int main(int argc, char **argv) {
             numberPlayers = std::stoi(value);
         } else if (key == "-o") {
             isObserver = std::stoi(value);
-        }else if (key == "--gui") {
+        } else if (key == "--gui") {
             isGui = std::stoi(value);
-        }else if (key == "-h") {
+        } else if (key == "--app") {
+            appMode = std::stoi(value);
+        } else if (key == "-h") {
             std::cout << "-h keys info" << '\n';
             std::cout << "-n name default: Pigs-on-the-Moon" << '\n';
             std::cout << "-pa password" << '\n';
-            std::cout << "-g gameName" << '\n';
+            std::cout << "-g gameName default: test-game" << '\n';
             std::cout << "-t  numberTurns default: 45" << '\n';
-            std::cout << "-pl  numberPlayers default: 3" << '\n';
+            std::cout << "-pl  numberPlayers default: 1" << '\n';
             std::cout << "-o isObserver 0 (false) 1(true) default: false" << '\n';
             std::cout << "--gui isGui 0 (false) 1(true) default: false" << '\n';
+            std::cout << "--app appMode 0 (false) 1(true) default: true" << '\n';
             return 0;
         }
     }
 
+    if (appMode) {
+//        std::random_device rd;
+//        std::mt19937 mt(rd());
+//        std::uniform_real_distribution<double> dist(1.0, 10.0);
+//        for (int i=0; i<16; ++i)
+//            std::cout << dist(mt) << "\n";
+        Menu menu;
+        menu.Run();
+    } else {
+        AIClient bot(name, password, gameName, numberTurns, numberPlayers, isObserver);
+        sf::Thread thread(&AIClient::StartAI, &bot);
+        thread.launch();
 
-    AIClient bot(name, password, gameName, numberTurns, numberPlayers, isObserver);
-    sf::Thread thread(&AIClient::StartAI, &bot);
-    thread.launch();
-
-    if(isGui) Controller controller(gameName, 0, numberPlayers);
-    thread.wait();
+        if (isGui) Controller controller(gameName, 0, numberPlayers);
+        thread.wait();
+    }
 
     return 0;
 }

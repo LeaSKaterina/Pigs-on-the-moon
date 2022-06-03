@@ -24,7 +24,7 @@ private:
     Controller &controller;
     const std::string music_file_path = "resources/music/Intro.ogg";
     const std::string config_view_file_path = "resources/config/view.json";
-    const std::string background_file_path = "resources/image/background.jpg";
+    const std::string background_file_path = "resources/image/view_background.jpg";
     bool play_music;
 
     void PlayStartMusic(sf::Music &music);
