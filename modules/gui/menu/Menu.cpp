@@ -54,11 +54,11 @@ void Menu::RunGame() {
 
 void Menu::InitVariables() {
     muteMusic = true;
-    numPlayers = 2;
+    numPlayers = 1;
 }
 
 void Menu::InitTextures() {
-    textures.resize(numTextures);
+    textures.resize(numTextures + numOtherButtons * 2);
 
     if (!textures[Texture::MAIN_BACKGROUND].loadFromFile(background_file_path))
         std::cerr << "ERROR::MENU:TEXTURE:" << background_file_path << std::endl;
@@ -66,6 +66,15 @@ void Menu::InitTextures() {
 
     if (!textures[Texture::BATTLE_BUTTON].loadFromFile(battle_but_file_path))
         std::cerr << "ERROR::MENU:TEXTURE:" << battle_but_file_path << std::endl;
+
+    for (int i = 0, j = OTHER_BUTTONS; i < numOtherButtons; i++, j+=2) {
+        std::string source_on = number_but_on_template + std::to_string(i + 1) + number_but_file_template;
+        std::string source_off = number_but_off_template + std::to_string(i + 1) + number_but_file_template;
+        if (!textures[j].loadFromFile(source_on))
+            std::cerr << "ERROR::MENU:TEXTURE:" << source_on << std::endl;
+        if (!textures[j + 1].loadFromFile(source_off))
+            std::cerr << "ERROR::MENU:TEXTURE:" << source_off << std::endl;
+    }
 }
 
 void Menu::InitWindow() {
@@ -76,10 +85,10 @@ void Menu::InitWindow() {
     nlohmann::json json = nlohmann::json::parse(str);
 
     // size
-    float scale_width = json["sizeScale"]["width"];
-    float scale_height = json["sizeScale"]["height"];
-    width = screen.width * scale_width;
-    height = screen.height * scale_height;
+    float scaleWidth = json["sizeScale"]["width"];
+    float scaleHeight = json["sizeScale"]["height"];
+    width = screen.width * scaleWidth;
+    height = screen.height * scaleHeight;
 
     // init window
     window = std::make_shared<sf::RenderWindow>(
@@ -96,6 +105,19 @@ void Menu::InitWindow() {
 void Menu::InitButtons() {
     battle_but = std::make_unique<MenuButton>(textures[Texture::BATTLE_BUTTON]);
     battle_but->SetPosition(20., 20.);
+
+    auto w = window->getSize();
+    float x_pos = w.x - 20 - 84 * numOtherButtons;
+    float y_pos = w.y - 84;
+
+    for (int i = 0, j = OTHER_BUTTONS; i < numOtherButtons; i++, j+=2) {
+        number_buttons.push_back(std::make_unique<MenuButton>(textures[j], textures[j + 1], i + 1));
+        number_buttons[i]->SetPosition(x_pos, y_pos);
+        x_pos += 84;
+    }
+
+    // default numValue = 1
+    number_buttons[0]->Click();
 }
 
 // Render
@@ -108,6 +130,8 @@ void Menu::Render() {
 
 void Menu::RenderButtons() {
     battle_but->Draw(*window);
+    for(auto& but : number_buttons)
+        but->Draw(*window);
 }
 
 // Update
@@ -115,6 +139,14 @@ void Menu::RenderButtons() {
 void Menu::UpdateButtons(sf::Vector2f mousePosition) {
     if (battle_but->GetBoundingRect().contains(mousePosition))
         RunGame();
+
+    for (auto& but: number_buttons) {
+        but->Click(false);
+        if (but->GetBoundingRect().contains(mousePosition)) {
+            but->Click(true);
+            numPlayers = but->Value();
+        }
+    }
 }
 
 std::string Menu::GenerateName(std::string&& prefix) {
