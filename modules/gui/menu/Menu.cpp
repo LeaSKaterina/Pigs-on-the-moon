@@ -40,11 +40,13 @@ void Menu::Run() {
 
 void Menu::RunGame() {
     gameName = GenerateName();
+    std::cout << "|=============GAME NAME=============|\t" << gameName << std::endl;
     AIClient bot(playerName, password, gameName, numTurns, numPlayers);
     sf::Thread thread(&AIClient::StartAI, &bot);
     thread.launch();
 
     Controller controller(gameName, waitTime, numPlayers, window, muteMusic);
+    controller.Run();
     thread.wait();
 }
 
@@ -52,7 +54,7 @@ void Menu::RunGame() {
 
 void Menu::InitVariables() {
     muteMusic = true;
-    numPlayers = 1;
+    numPlayers = 2;
 }
 
 void Menu::InitTextures() {

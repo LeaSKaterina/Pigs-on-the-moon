@@ -50,11 +50,6 @@ int main(int argc, char **argv) {
     }
 
     if (appMode) {
-//        std::random_device rd;
-//        std::mt19937 mt(rd());
-//        std::uniform_real_distribution<double> dist(1.0, 10.0);
-//        for (int i=0; i<16; ++i)
-//            std::cout << dist(mt) << "\n";
         Menu menu;
         menu.Run();
     } else {
@@ -62,7 +57,10 @@ int main(int argc, char **argv) {
         sf::Thread thread(&AIClient::StartAI, &bot);
         thread.launch();
 
-        if (isGui) Controller controller(gameName, 0, numberPlayers);
+        if (isGui) {
+            Controller controller(gameName, 0, numberPlayers);
+            controller.Run();
+        }
         thread.wait();
     }
 

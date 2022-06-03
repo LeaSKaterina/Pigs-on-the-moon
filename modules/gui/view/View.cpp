@@ -42,24 +42,26 @@ View::View(Controller &controller, const Game *game, sf::Mutex &gameMutex, bool 
       mapViewModel(game, gameMutex, {0, 0}, {1, 1}),
       play_music(!mute_music),
       game(game) {
+    InitTextures();
+    InitSprites();
 }
+
+
+void View::Wait() {
+    window->clear();
+    window->draw(waiting_background);
+}
+
 
 void View::Show() {
     sf::Music music;
     this->PlayStartMusic(music);
 
-    sf::Texture texture;
-    if (!texture.loadFromFile(background_file_path)) {
-        std::cerr << "can't load texture" << '\n';
-    }
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-
     sf::View view = window->getDefaultView();
 
     while (window->isOpen() && !game->IsFinished()) {
         window->clear();
-        window->draw(sprite);
+        window->draw(background);
 
         mapViewModel.Draw(*window);
 
@@ -88,4 +90,18 @@ void View::PlayStartMusic(sf::Music &music) {
     if (!music.openFromFile(music_file_path))
         std::cerr << "can't load Intro music" << '\n';
     music.play();
+}
+
+// Init
+
+void View::InitTextures() {
+    if (!background_texture.loadFromFile(background_file_path))
+        std::cerr << "ERROR::VIEW:TEXTURE:" << background_file_path << std::endl;
+    if (!waiting_texture.loadFromFile(wait_image_file_path))
+        std::cerr << "ERROR::VIEW:TEXTURE:" << wait_image_file_path << std::endl;
+}
+
+void View::InitSprites() {
+    background.setTexture(background_texture);
+    waiting_background.setTexture(waiting_texture);
 }

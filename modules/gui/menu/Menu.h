@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MenuButton.h"
 #include "gui/controller/Controller.h"
+#include "gui/elements/MenuButton.h"
 #include "gui/screen.h"
 #include <SFML/Graphics.hpp>
 #include <fstream>

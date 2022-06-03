@@ -27,6 +27,8 @@ public:
         isWindowClose = true;
     }
 
+    void Run();
+
 
 private:
     const int waitTime;

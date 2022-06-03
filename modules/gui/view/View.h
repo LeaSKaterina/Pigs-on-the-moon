@@ -25,6 +25,7 @@ public:
     View(Controller &controller, const Game *game, sf::Mutex &gameMutex, bool mute_music, bool basic);
 
     void Show();
+    void Wait();
 
 private:
     // elements
@@ -37,9 +38,18 @@ private:
     const std::string music_file_path = "resources/music/Intro.ogg";
     const std::string config_view_file_path = "resources/config/view.json";
     const std::string background_file_path = "resources/image/view_background.jpg";
+    const std::string wait_image_file_path = "resources/image/wait_for_connection.jpg";
+
+    sf::Texture background_texture;
+    sf::Texture waiting_texture;
+    sf::Sprite background;
+    sf::Sprite waiting_background;
 
     // controls
     bool play_music;
 
     void PlayStartMusic(sf::Music &music);
+
+    void InitTextures();
+    void InitSprites();
 };

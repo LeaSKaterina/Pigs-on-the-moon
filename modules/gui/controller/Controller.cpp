@@ -1,14 +1,13 @@
 #include "Controller.h"
 
-#include <utility>
 
 Controller::Controller(const std::string &gameName, int waitTime, int numberPlayers)
     : Controller(gameName, waitTime, numberPlayers, true) {
 
     view = std::make_unique<View>(*this, observer.GetGame(), observerMutex);
 
-    observerThread.launch();
-    view->Show();
+//    observerThread.launch();
+//    view->Show();
 }
 
 Controller::Controller(const std::string &gameName, int waitTime, int numberPlayers,
@@ -17,8 +16,8 @@ Controller::Controller(const std::string &gameName, int waitTime, int numberPlay
     view = std::make_unique<View>(*this, observer.GetGame(), observerMutex,
                                   window, mute_music);
 
-    observerThread.launch();
-    view->Show();
+//    observerThread.launch();
+//    view->Show();
 }
 
 Controller::Controller(const std::string &gameName, int waitTime, int numberPlayers, bool)
@@ -30,8 +29,18 @@ Controller::~Controller() {
     observerThread.wait();
 }
 
-void Controller::ObserverThread() {
+void Controller::Run() {
+    // waiting for connection all players
+    view->Wait();
     observer.ConnectPlayer();
+
+    // playing process
+    observerThread.launch();
+    view->Show();
+}
+
+void Controller::ObserverThread() {
+//    observer.ConnectPlayer();
     while (!observer.GameIsFinished() && !GetIsWindowClose()) {
         sf::Lock lock(observerMutex);
         observer.UpdateGameState();
