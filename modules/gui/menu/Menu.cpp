@@ -6,6 +6,7 @@ Menu::Menu()
     InitVariables();
     InitTextures();
     InitWindow();
+    InitButtons();
 }
 
 void Menu::Run() {
@@ -19,11 +20,16 @@ void Menu::Run() {
                 window->close();
             }
             if (event.type == sf::Event::Resized) {
-                sf::FloatRect visibleArea(0, 0, (float) event.size.width, (float) event.size.height);
+                sf::FloatRect visibleArea(
+                        0, 0,
+                        (float) event.size.width,
+                        (float) event.size.height);
                 window->setView(sf::View(visibleArea));
             }
-            if (event.type == sf::Event::MouseButtonPressed) {
-                // upd buttons
+            if (event.type == sf::Event::MouseButtonPressed &&
+                event.mouseButton.button == sf::Mouse::Left) {
+                auto mousePos = sf::Mouse::getPosition(*window);
+                UpdateButtons(sf::Vector2f(mousePos.x, mousePos.y));
             }
         }
 
@@ -32,20 +38,24 @@ void Menu::Run() {
 }
 
 void Menu::RunGame() {
-
 }
 
 // Init Methods
 
 void Menu::InitVariables() {
     muteMusic = true;
-    numPlayers = 3;
+    numPlayers = 1;
 }
 
 void Menu::InitTextures() {
-    if (!main_background_texture.loadFromFile(background_file_path))
-        std::cerr << "ERROR::MENU:TEXTURE" << background_file_path << std::endl;
-    background.setTexture(main_background_texture);
+    textures.resize(numTextures);
+
+    if (!textures[Texture::MAIN_BACKGROUND].loadFromFile(background_file_path))
+        std::cerr << "ERROR::MENU:TEXTURE:" << background_file_path << std::endl;
+    background.setTexture(textures[Texture::MAIN_BACKGROUND]);
+
+    if (!textures[Texture::BATTLE_BUTTON].loadFromFile(battle_but_file_path))
+        std::cerr << "ERROR::MENU:TEXTURE:" << battle_but_file_path << std::endl;
 }
 
 void Menu::InitWindow() {
@@ -54,14 +64,16 @@ void Menu::InitWindow() {
     std::string str((std::istreambuf_iterator<char>(config)), std::istreambuf_iterator<char>());
     config.close();
     nlohmann::json json = nlohmann::json::parse(str);
-    float width = json["sizeScale"]["width"];
-    float height = json["sizeScale"]["height"];
+
+    // size
+    float scale_width = json["sizeScale"]["width"];
+    float scale_height = json["sizeScale"]["height"];
+    width = screen.width * scale_width;
+    height = screen.height * scale_height;
 
     // init window
-    window = std::make_unique<sf::RenderWindow>(sf::VideoMode(
-                                                        (unsigned int) (screen.width * width),
-                                                        (unsigned int) (screen.height * height)),
-                                                "Best Course Work");
+    window = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(width, height), "Best Course Work");
 
     // position
     float xPosition = json["position"]["x"];
@@ -70,6 +82,11 @@ void Menu::InitWindow() {
     window->setPosition(sf::Vector2i(screen.width * xPosition, screen.height * yPosition));
     window->setFramerateLimit(30);
     window->setVerticalSyncEnabled(true);
+}
+
+void Menu::InitButtons() {
+    battle_but = std::make_unique<MenuButton>(textures[Texture::BATTLE_BUTTON]);
+    battle_but->SetPosition(20., 20.);
 }
 
 // Render
@@ -81,5 +98,12 @@ void Menu::Render() {
 }
 
 void Menu::RenderButtons() {
-    // TODO!
+    battle_but->Draw(*window);
+}
+
+// Update
+
+void Menu::UpdateButtons(sf::Vector2f mousePosition) {
+    if (battle_but->GetBoundingRect().contains(mousePosition))
+        std::cerr << "OK" << std::endl;
 }
